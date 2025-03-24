@@ -15,6 +15,7 @@ body {
 }
 
 .header {
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;   
     padding: 1.25rem 0;
@@ -46,7 +47,7 @@ body {
     margin: 2.5rem auto;
     border-radius: 2rem;
     padding: 2.5rem;
-    box-shadow: 0 0 0.625rem rgba(0,0,0,0.1);
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
 }
 
 .main-container h2 {
@@ -110,13 +111,8 @@ body {
     background-color: #6c5ce7;
 }
 
-/* hr {
-    margin: 1.8rem 0;
-    border: 0;
-    border-top: 1px solid #eee;
-} */
-
 .footer {
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: space-between;
