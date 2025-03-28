@@ -11,12 +11,17 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to top, #dfae8e, #867eaf);
+    background: 
+        radial-gradient(circle at 70% 20%, rgba(255, 145, 60, 0.8), transparent 30%),
+        radial-gradient(circle at 30% 80%, rgba(220, 120, 50, 0.7), transparent 35%),
+        linear-gradient(to bottom, #867eaf, #dfae8e);
+    background-attachment: fixed;
+    background-blend-mode: overlay;
 }
 
 .header {
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #2b2735;
     width: 100%;   
     padding: 1.25rem 0;
     text-align: center;
@@ -36,18 +41,26 @@ body {
 }
 
 .main-container {
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
     flex: 1;
-    background-color: rgba(0, 0, 0, 0.5);
+
+    background: rgba(0, 0, 0, 0.5);
+
     width: 80%;
     max-width: 90%;
     margin: 2.5rem auto;
     border-radius: 2rem;
     padding: 2.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+
+    color: white;
 }
 
 .main-container h2 {
@@ -87,15 +100,18 @@ body {
     max-width: 31.25rem;
     margin: 1.8rem auto;
     display: flex;
-    gap: 0.625rem;
 }
 
 .searchbar input {
     flex: 1;
     padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5rem;
+    border: 0px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.5);
+    color: black;
+    border-radius: 5rem 0 0 5rem;
     font-size: 1rem;
+    border-right: none;
+    outline: none;
 }
 
 .search-btn {
@@ -106,18 +122,21 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     border: none;
-    border-radius: 50%;
+    border-radius: 0 5rem 5rem 0;
     cursor: pointer;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.5);
     transition: all 0.3s;
 }
 
 .search-btn:hover {
-    background-color: #6c5ce7;
-    transform: scale(1.05);
+    background-color: white;
 }
 
 .footer {
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
