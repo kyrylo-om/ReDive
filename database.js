@@ -43,3 +43,55 @@ function renderAccounts(accounts) {
 document.addEventListener("DOMContentLoaded", () => {
     renderAccounts(accountsData);
 });
+
+// Filter popup functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const filtersBtn = document.getElementById('filters-btn');
+    const filterPopup = document.getElementById('filter-popup');
+    const applyBtn = document.getElementById('apply-filters');
+    const resetBtn = document.getElementById('reset-filters');
+    
+    // Toggle popup visibility
+    filtersBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent immediate close when clicking button
+        filterPopup.classList.toggle('active');
+    });
+    
+    // Close popup when clicking outside
+    filterPopup.addEventListener('click', (e) => {
+        if (e.target === filterPopup) {
+            filterPopup.classList.remove('active');
+        }
+    });
+    
+    // Apply filters
+    applyBtn.addEventListener('click', () => {
+        const selectedFilters = [];
+        document.querySelectorAll('input[name="filter"]:checked').forEach(checkbox => {
+            selectedFilters.push(checkbox.value);
+        });
+        
+        // Here you would implement your actual filtering logic
+        console.log('Applied filters:', selectedFilters);
+        filterPopup.classList.remove('active');
+        
+        // Example: filterAccounts(selectedFilters);
+    });
+    
+    // Reset filters
+    resetBtn.addEventListener('click', () => {
+        document.querySelectorAll('input[name="filter"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        // Here you would reset your filtered view
+        console.log('Filters reset');
+        // Example: resetAccountFilters();
+    });
+    
+    // Close with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && filterPopup.classList.contains('active')) {
+            filterPopup.classList.remove('active');
+        }
+    });
+});
