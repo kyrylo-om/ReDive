@@ -4,15 +4,20 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="analysis.css">
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+	<script src="analysis.js" defer></script>
 	<title>u/username User Analysis</title>
 </head>
 <body>
+	<header class="header">
+		<h1><span class="re">Re</span><span class="dive">Dive</span></h1>
+	</header>
 	<div class="section-title">
 		<h2 class="section-text">ACCOUNT OVERVIEW</h2>
 		<div class="section-line"></div>
 	</div>
 
-	<div class="overview">
+	<div class="overview width-responsive">
 		<div class="flex-container", style="flex-direction: column;">
 			<div class="box profile">
 				<div class="profile-picture"></div>
@@ -80,9 +85,52 @@
 		</div>
 	</div>
 	<div class="section-title">
+		<h2 class="section-text">ACTIVITY MONITOR</h2>
+		<div class="section-line"></div>
+	</div>
+	<div class="flex-container width-responsive">
+		<div class="box chart-div">
+			<p class="title", style="line-height: 1.8rem;">Activity history</p>
+			<div id="chart" class="chart"></div>
+		</div>
+		<div class="box", style="flex-grow: 0;">
+			<p class="title", style="line-height: 1.8rem; margin-bottom: 0.5rem;">Activity by subreddits</p>
+			<div class="table-container">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Posts</th>
+							<th>Comments</th>
+							<th>Upvotes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>r/politics</td><td>12</td><td>102</td><td class="orange">11021</td></tr>
+						<tr><td>r/law</td><td>7</td><td>51</td><td class="orange">3004</td></tr>
+						<tr><td>r/blowjobgirl</td><td>0</td><td>563</td><td class="orange">-103</td></tr>
+						<tr><td>r/worldpolitics</td><td>4</td><td>30</td><td class="orange">947</td></tr>
+						<tr><td>r/europe</td><td>3</td><td>12</td><td class="orange">548</td></tr>
+						<tr><td>r/askreddit</td><td>1</td><td>51</td><td class="orange">306</td></tr>
+						<tr><td>r/beamazed</td><td>0</td><td>12</td><td class="orange">120</td></tr>
+						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
+						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
+						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="subreddit-count">Showed activity in 35 subreddits total</p>
+		</div>
+	</div>
+	<div class="section-title">
 		<h2 class="section-text">BEHAVIOUR ANALYSIS</h2>
 		<div class="section-line"></div>
 	</div>
-	<div style="height: 100px;"></div>
+	<div class="flex-container", style="flex-direction: row;">
+		<div class="box">
+		</div>
+		<div class="box">
+		</div>
+	</div>
 </body>
 </html>
