@@ -1,14 +1,32 @@
 """Module about requesting info from Reddit"""
 
+from datetime import datetime
 import praw
 import prawcore
+import requests
 
 
-class NotFound(Exception):
-    """Not Found error"""
+class RedditAPIError(Exception):
+    """Base class for Reddit API errors"""
 
-    def __init__(self, message):
-        self.message = message
+class NotFound(RedditAPIError):
+    """Raised when a user or resource is not found"""
+
+
+def handle_reddit_errors(func):
+    """Decorator to handle Reddit API errors."""
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except prawcore.exceptions.NotFound as e:
+            raise NotFound("Resource not found") from e
+        except prawcore.exceptions.Forbidden as e:
+            raise RedditAPIError("Access forbidden") from e
+        except Exception as e:
+            raise RedditAPIError(f"Unexpected error: {e}") from e
+
+    return wrapper
 
 
 class DataGetter:
@@ -24,76 +42,49 @@ class DataGetter:
     )
 
     def __init__(self):
+        pass
 
-        self._reddit_analyzed_users = {}
-
-    @property
-    def reddit_amount(self):
-        """Returns the amount of analyzed reddit users"""
-        return len(self._reddit_analyzed_users)
-
-    def store_user(self, username: str):
-        """Stores the user in the class.
-        later will be done through database probably"""
-        if not isinstance(username, str):
-            raise TypeError("Username must be a string")
-
-        try:
-            user = RedditUser(DataGetter._reddit.redditor(username))
-            _ = user.proxy_link.id  # Перевірка на існування користувача
-        except prawcore.exceptions.NotFound as exc:
-            raise NotFound(f"User '{username}' not found") from exc
-        except Exception as exc:
-            raise NotFound(f"Unexpected error: {exc}") from exc
-
-        self._reddit_analyzed_users[username] = user
-
+    @handle_reddit_errors
     def get_user_analysis(self, username: str):
-        """
-        Get the user analysis
-        """
-        if not isinstance(username, str):
-            raise TypeError("Username must be a string")
-
-        if username in self._reddit_analyzed_users:
-            return self.description_red(self._reddit_analyzed_users[username])
-
-        return self.store_user(username) or self.description_red(
-            self._reddit_analyzed_users[username]
-        )
+        """Get the analysis of a Reddit user"""
+        if not username or not isinstance(username, str):
+            raise ValueError("Username must be a non-empty string")
+        proxy_link = DataGetter._reddit.redditor(username)
+        _ = proxy_link.id
+        return self.description_red(proxy_link)
 
     @staticmethod
-    def description_red(user: "RedditUser"):
+    def description_red(proxy_link: praw.models.Redditor):
         """Return the description of a Reddit user"""
         try:
-            submissions = list(user.proxy_link.submissions.new(limit=3))
-            comments = list(user.proxy_link.comments.new(limit=3))
+            submissions = list(proxy_link.submissions.new(limit=5))
+            comments = list(proxy_link.comments.new(limit=5))
         except prawcore.exceptions.Forbidden:
             submissions, comments = [], []
 
         return {
-            "name": user.proxy_link.name,
-            "id": user.proxy_link.id,
-            "karma": user.proxy_link.link_karma + user.proxy_link.comment_karma,
-            "link_karma": user.proxy_link.link_karma,
-            "comment_karma": user.proxy_link.comment_karma,
-            "created_utc": user.proxy_link.created_utc,
-            "is_mod": user.proxy_link.is_mod,
-            "is_employee": user.proxy_link.is_employee,
-            "is_gold": user.proxy_link.is_gold,
-            "verified": user.proxy_link.verified,
-            "has_verified_email": user.proxy_link.has_verified_email,
+            "name": proxy_link.name,
+            "id": proxy_link.id,
+            "karma": proxy_link.link_karma + proxy_link.comment_karma,
+            "link_karma": proxy_link.link_karma,
+            "comment_karma": proxy_link.comment_karma,
+            "created_date": datetime.fromtimestamp(proxy_link.created_utc).date(),
+            "is_mod": proxy_link.is_mod,
+            "is_employee": proxy_link.is_employee,
+            "is_gold": proxy_link.is_gold,
+            "verified": proxy_link.verified,
+            "trophies": list(proxy_link.trophies()),
+            "has_verified_email": proxy_link.has_verified_email,
             "subreddit": (
-                user.proxy_link.subreddit.display_name
-                if user.proxy_link.subreddit
-                else None
+                proxy_link.subreddit.display_name if proxy_link.subreddit else None
             ),
             "recent_posts": [
                 {
                     "title": post.title,
                     "score": post.score,
+                    "subreddit": post.subreddit.display_name,
                     "url": post.url,
-                    "created_utc": post.created_utc,
+                    "created_date": datetime.fromtimestamp(post.created_utc).date(),
                 }
                 for post in submissions
                 if hasattr(post, "title")
@@ -103,16 +94,70 @@ class DataGetter:
                     "body": comment.body[:100],
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
-                    "created_utc": comment.created_utc,
+                    "url": comment.permalink,
+                    "created_date": datetime.fromtimestamp(comment.created_utc).date(),
                 }
                 for comment in comments
                 if hasattr(comment, "body")
             ],
         }
 
+    @handle_reddit_errors
+    def get_subreddit_info(self, subreddit_name: str):
+        """Отримати інформацію про сабреддіт"""
+        if not subreddit_name or not isinstance(subreddit_name, str):
+            raise ValueError("Subreddit name must be a non-empty string")
 
-class RedditUser:
-    """Class representing a Reddit user"""
+        subreddit = DataGetter._reddit.subreddit(subreddit_name)
+        _ = subreddit.id
 
-    def __init__(self, proxy_link: praw.models.Redditor):
-        self.proxy_link: praw.models.Redditor = proxy_link
+        return {
+            "name": subreddit.display_name,
+            "title": subreddit.title,
+            "description": subreddit.public_description,
+            "subscribers": subreddit.subscribers,
+            "active_users": subreddit.accounts_active,
+            "created_date": datetime.fromtimestamp(subreddit.created_utc).date(),
+            "over18": subreddit.over18,
+            "icon_url": subreddit.icon_img if subreddit.icon_img else None,
+            "banner_url": (
+                subreddit.banner_background_image
+                if subreddit.banner_background_image
+                else None
+            ),
+            "rules": (
+                [rule.short_name for rule in subreddit.rules]
+                if hasattr(subreddit, "rules")
+                else []
+            ),
+            "top_posts": [
+                {
+                    "title": post.title,
+                    "score": post.score,
+                    "url": post.url,
+                    "created_date": datetime.fromtimestamp(post.created_utc),
+                    "author": post.author.name if post.author else "[deleted]",
+                }
+                for post in subreddit.top(limit=5)
+            ],
+        }
+
+    @staticmethod
+    def get_reddit_avatar(username):
+        """Get the avatar of a Reddit user"""
+        if not username or not isinstance(username, str):
+            raise ValueError("Username must be a non-empty string")
+        headers = {"User-Agent": "windows:RedditAnalyzer:v1.0 (by /u/lukakerf)"}
+        api_url = f"https://www.reddit.com/user/{username}/about.json"
+        try:
+            response = requests.get(api_url, headers=headers, timeout=5)
+            response.raise_for_status()
+        except requests.exceptions.RequestException:
+            return None
+        if response.status_code == 200:
+            data = response.json()
+            avatar_url = data.get("data", {}).get("icon_img", "").split("?")[0]
+            if avatar_url:
+                return avatar_url
+
+        return None
