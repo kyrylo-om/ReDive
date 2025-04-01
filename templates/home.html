@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDive</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="{% static 'js/theme.js' %}" defer></script>
 </head>
 <body>
     <header class="header">
+        <button id="theme-toggle" class="theme-toggle">🌓</button>
         <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
     </header>
 
@@ -19,7 +21,7 @@
         <form action="{% url 'indexpage' %}" method="GET">
             <div class="searchbar">
                 <input type="text" name="query" placeholder="U/USERNAME" required>
-                <button type="submit">&#128269;</button>
+                <button type="submit" class="search-btn"></button>
             </div>
         </form>
 
@@ -27,7 +29,10 @@
     </div>
 
     <footer class="footer">
-        <p>©2025 All rights reserved</p>
+        <p>©2025 ReDive</p>
+        <p class="support">Contacts:  
+            <a href="mailto:redive_support@gmail.com">redive_support@gmail.com</a>
+        </p>
     </footer>
 </body>
 </html>
