@@ -74,13 +74,9 @@ body {
 
 .profile-picture {
 	width: 100px;
-	/* Ширина кола */
 	height: 100px;
-	/* Висота кола */
 	overflow: hidden;
-	/* Обрізає зображення, яке виходить за межі кола */
 	border-radius: 50%;
-	/* Робить контейнер круглим */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -90,7 +86,6 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	/* Обрізає зображення і заповнює весь контейнер */
 }
 
 .username {
