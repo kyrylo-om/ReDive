@@ -1,6 +1,7 @@
-const chart = echarts.init(document.getElementById('chart'));
+const plot = echarts.init(document.getElementById('plot'));
+var pie_chart = echarts.init(document.getElementById('pie_chart'));
 
-const options = {
+const plot_options = {
     tooltip: {
         trigger: 'item',
         backgroundColor: "rgba(20, 20, 20, 0.7)",
@@ -71,12 +72,92 @@ const options = {
         borderColor: 'rgba(161, 0, 0, 0.8)'
     },
 };
+
+const pie_options = {
+    title: {
+        text: 'ECharts Pie Chart',
+        left: 'center', 
+        textStyle: {
+            color: '#ffffff'
+        }
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: [
+        {
+            data: ['Search Engine', 'Direct', 'Union Ads', 'Email', 'Search Engine1', 'Direct1', 'Video Ads33333333333 333333333333333', 'Union Ads1', 'Email1','Search Engine2', 'Direct2', 'Union Ads2', 'Email2', 'Search Engine3', 'Direct3', 'Union Ads3', 'Email3'],
+            left: 'left',
+            orient: 'vertical',
+            textStyle: {
+                color: '#ffffff'
+            }
+        },
+        {
+            data: ['Union Ads', 'Email', 'Video Ads33333333333 333333333333333'],
+            right: 'right',
+            orient: 'vertical',
+            textStyle: {
+                color: '#ffffff'
+            }
+        }
+    ],
+    series: [
+        {
+            name: 'Main Categories',
+            type: 'pie',
+            radius: ['0%', '40%'],
+            center: ['50%', '50%'],
+            label: { show: false },
+            data: [
+                { value: 1048, name: 'Search Engine', itemStyle: {color: 'green'} },
+                { value: 735, name: 'Direct', itemStyle: {color: 'red'} },
+            ]
+        },
+        {
+            name: 'Main Categories',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '50%'],
+            label: { show: false },
+            data: [
+                { value: 1048, name: 'Search Engine', itemStyle: {color: 'white'} },
+                { value: 735, name: 'Direct', itemStyle: {color: 'white'} },
+                { value: 580, name: 'Email', itemStyle: {color: 'white'} },
+                { value: 484, name: 'Union Ads', itemStyle: {color: 'white'} },
+                { value: 300, name: 'Video Ads', itemStyle: {color: 'white'} },
+                { value: 1048, name: 'Search Engine1' },
+                { value: 735, name: 'Direct1' },
+                { value: 580, name: 'Email1' },
+                { value: 484, name: 'Union Ads1' },
+                { value: 300, name: 'Video Ads1' },
+                { value: 1048, name: 'Search Engine2' },
+                { value: 735, name: 'Direct2' },
+                { value: 580, name: 'Email2' },
+                { value: 484, name: 'Union Ads2' },
+                { value: 300, name: 'Video Ads2' },
+                { value: 1048, name: 'Search Engine3' },
+                { value: 735, name: 'Direct3' },
+                { value: 580, name: 'Email3' },
+                { value: 484, name: 'Union Ads3' },
+                { value: 300, name: 'Video Ads33333333333 333333333333333' }
+            ]
+        }
+    ],
+    grid: {
+        left: 0,
+        right: 0,
+        top: 0
+    }
+};
+
 window.addEventListener('resize', () => {
-    chart.resize();
+    plot.resize();
 });
 
-chart.setOption(options);
+plot.setOption(plot_options);
+pie_chart.setOption(pie_options);
 
-chart.on('click', function (params) {
+plot.on('click', function (params) {
     window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0");
 });
