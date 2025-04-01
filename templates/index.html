@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" type="text/css" href="analysis.css">
+	<link rel="stylesheet" href="{% static 'css/index.css' %}">
 	<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
-	<script src="analysis.js" defer></script>
-	<title>u/username User Analysis</title>
+	<script src="{% static 'js/analysis.js' %}" defer></script>
+	<title>ReDive analysis</title>
 </head>
 <body>
 	<header class="header">
@@ -16,15 +17,16 @@
 		<h2 class="section-text">ACCOUNT OVERVIEW</h2>
 		<div class="section-line"></div>
 	</div>
-
 	<div class="overview width-responsive">
 		<div class="flex-container", style="flex-direction: column;">
 			<div class="box profile">
-				<div class="profile-picture"></div>
+				<div class="profile-picture">
+					<img src={{ pic }} alt="Profile Picture" />
+				</div>
 				<div class="profile-info">
-					<p class="username">Full username</p>
-        			<p class="username2">u/username &#x21bb;</p>
-        			<p class="subtext">&#9716 Analyzed on <span class="bold">Mar 10, 2025</span>; 21:39</p>
+					<p class="username">{{ name }}</p>
+        			<p class="username2">u/{{ username }} &#x21bb;</p>
+        			<p class="subtext">&#9716 Analyzed on <span class="bold">{{ date_today }}</p>
 				</div>
 			</div>
 			<div class="flex-container", style="flex-direction: row;">
@@ -33,18 +35,18 @@
 						<p class="statistic-title">Trophies</p>
 						<button class="trophies-button">View</button>
 					</div>
-					<p class="statistic", style="color: gold;">3</p>
+					<p class="statistic", style="color: gold;">{{ trophies }}</p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Registration date</p>
-					<p class="date-statistic">Jul 10, 2020</p>
-					<p class="subtext">Account is <span class="bold">4</span> years old</p>
+					<p class="date-statistic">{{ date_of_creation }}</p>
+					<p class="subtext">Account is <span class="bold">{{ account_age }}</span> years old</p>
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">103〡<span class="orange">17082 ⏏</span></p>
+					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }} ⏏</span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">527〡<span class="orange">1838 ⏏</span></p>
+					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }} ⏏</span></p>
 					<p class="subtext"><span class="bold">25</span> comments on user's own posts</p>
 				</div>
 			</div>
@@ -67,7 +69,7 @@
 				<div class="statistic-line"></div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">98%</span></p>
+				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ up_v_down }}</span></p>
 				<div class="statistic-line"></div>
 			</div>
 			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
@@ -76,10 +78,10 @@
 				<button class="section-button">Detailed analysis ⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
-				<p class="subtext">r/politics</p>
-				<p class="subtext">r/politics</p>
-				<p class="subtext">r/politics</p>
-				<p class="subtext">and 31 more</p>
+				<p class="subtext">r/{{ subredits1 }}</p>
+				<p class="subtext">r/{{ subredits2 }}</p>
+				<p class="subtext">r/{{ subredits3 }}</p>
+				<p class="subtext">and 2 more</p>
 				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
 			</div>
 		</div>
