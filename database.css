@@ -44,6 +44,7 @@ body {
 }
 
 .main-container {
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(15px) saturate(160%);
     -webkit-backdrop-filter: blur(15px) saturate(160%);
     border-radius: 0 0 2rem 2rem;
@@ -100,6 +101,93 @@ body {
 
 .filters-btn:hover {
     background: rgba(255, 255, 255, 0.4);
+}
+
+/* Filter Popup Styles */
+.filter-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.filter-popup.active {
+    display: flex;
+    opacity: 1;
+}
+
+.filter-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.filter-popup.active .filter-content {
+    transform: translateY(0);
+}
+
+.filter-content h3 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.filter-actions button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#apply-filters {
+    background: #6c5ce7;
+    color: white;
+}
+
+#reset-filters {
+    background: #ddd;
+    color: #333;
+}
+
+#apply-filters:hover {
+    background: #5a4bd6;
+}
+
+#reset-filters:hover {
+    background: #ccc;
 }
 
 .searchbar-wrapper {
