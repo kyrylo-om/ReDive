@@ -10,7 +10,7 @@ def homepage(request):
 def datapage(request):
     return render(request, "database.html")
 
-def indexpage(request):
+def analysispage(request):
     d = DataGetter()
     query1 = request.GET.get('query', '')
     if query1[1]=="/":
@@ -39,7 +39,7 @@ def indexpage(request):
         up_v_down +=i['score']
         n+=1
 
-    return render(request, 'index.html', {
+    return render(request, 'analysis.html', {
         "pic":pic,
         "date_today":date_today,
         'date_of_creation': date_of_creation,
