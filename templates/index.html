@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="{% static 'css/index.css' %}">
+	<title>Flexible Layout</title>
+</head>
+<body>
+	<div class="section-title">
+		<h2 class="section-text">ACCOUNT OVERVIEW</h2>
+		<div class="section-line"></div>
+	</div>
+	<div class="overview">
+		<div class="flex-container", style="flex-direction: column;">
+			<div class="box profile">
+				<div class="profile-picture">
+					<img class="profile-picture-img" src={{ pic }} alt="Profile Picture" />
+				</div>
+				<div class="profile-info">
+					<p class="username">{{ name }}</p>
+        			<p class="username2">u/{{ username }} &#x21bb;</p>
+        			<p class="subtext">&#9716 Analyzed on <span class="bold">{{ date_today }}</p>
+				</div>
+			</div>
+			<div class="flex-container", style="flex-direction: row;">
+				<div class="box">
+					<div class="trophies-div">
+						<p class="statistic-title">Trophies</p>
+						<button class="trophies-button">View</button>
+					</div>
+					<p class="statistic", style="color: gold;">{{ trophies }}</p>
+					<div class="separator-line"></div>
+					<p class="statistic-title">Registration date</p>
+					<p class="date-statistic">{{ date_of_creation }}</p>
+					<p class="subtext">Account is <span class="bold">{{ account_age }}</span> years old</p>
+				</div>
+				<div class="box">
+					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
+					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }} ⏏</span></p>
+					<div class="separator-line"></div>
+					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
+					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }} ⏏</span></p>
+					<p class="subtext"><span class="bold">25</span> comments on user's own posts</p>
+				</div>
+			</div>
+		</div>
+		<div class="flex-container", style="flex-direction: row;">
+			<div class="box">
+				<p class="statistic-title">Posting frequency: <span class="orange bold">0.51</span> per day</p>
+				<div class="statistic-line"></div>
+				<div class="separator-line"></div>
+				
+				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">1192</span></p>
+				<div class="statistic-line"></div>
+				<div class="separator-line"></div>
+
+				<p class="statistic-title">Avarage comments per post: <span class="orange bold">52</span></p>
+				<div class="statistic-line"></div>
+				<div class="separator-line"></div>
+
+				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">3.1</span></p>
+				<div class="statistic-line"></div>
+				<div class="separator-line"></div>
+
+				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ up_v_down }}</span></p>
+				<div class="statistic-line"></div>
+			</div>
+			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
+				<p class="title">Bot rank</p>
+				<p class="statistic", style="color: lightgreen;">666%</p>
+				<button class="section-button">Detailed analysis ⬇</button>
+				<div class="separator-line"></div>
+				<p class="title">Subreddits</p>
+				<p class="subtext">r/{{ subredits1 }}</p>
+				<p class="subtext">r/{{ subredits2 }}</p>
+				<p class="subtext">r/{{ subredits3 }}</p>
+				<p class="subtext">and 2 more</p>
+				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
+			</div>
+		</div>
+	</div>
+	<div class="section-title">
+		<h2 class="section-text">BEHAVIOUR ANALYSIS</h2>
+		<div class="section-line"></div>
+	</div>
+	<div style="height: 100px;"></div>
+</body>
+</html>
