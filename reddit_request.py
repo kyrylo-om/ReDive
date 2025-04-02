@@ -53,11 +53,11 @@ class DataGetter:
         return self.description_red(proxy_link)
 
     @staticmethod
-    def description_red(proxy_link: praw.models.Redditor):
+    def description_red(proxy_link: praw.models.Redditor, limit_post = 5, limit_comment = 5):
         """Return the description of a Reddit user"""
         try:
-            submissions = list(proxy_link.submissions.new(limit=5))
-            comments = list(proxy_link.comments.new(limit=5))
+            submissions = list(proxy_link.submissions.new(limit=limit_post))
+            comments = list(proxy_link.comments.new(limit=limit_comment))
         except prawcore.exceptions.Forbidden:
             submissions, comments = [], []
 
@@ -80,10 +80,14 @@ class DataGetter:
             "recent_posts": [
                 {
                     "title": post.title,
-                    "score": post.score,
                     "subreddit": post.subreddit.display_name,
+                    "permalink": post.permalink,
                     "url": post.url,
+                    "score": post.score,
+                    "upvotes_ratio": post.upvote_ratio,
                     "created_date": datetime.fromtimestamp(post.created_utc).date(),
+                    "num_comments": post.num_comments,
+                    "over_18": post.over_18,
                 }
                 for post in submissions
                 if hasattr(post, "title")
@@ -95,6 +99,7 @@ class DataGetter:
                     "subreddit": comment.subreddit.display_name,
                     "url": comment.permalink,
                     "created_date": datetime.fromtimestamp(comment.created_utc).date(),
+
                 }
                 for comment in comments
                 if hasattr(comment, "body")
