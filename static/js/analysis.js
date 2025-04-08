@@ -1,5 +1,21 @@
 const plot = echarts.init(document.getElementById('plot'));
-var pie_chart = echarts.init(document.getElementById('pie_chart'));
+const pie_chart = echarts.init(document.getElementById('pie_chart'));
+
+function limit_text_width (text, max_width) {
+    let words = text.split(" ");
+    let result = words[0];
+    
+    for (let i = 1; i < words.length; i += 1) {
+        if (words[i-1].length + words[i].length > max_width) {
+            result += '\n' + words[i]
+        }
+        else {
+            result += " " + words[i]
+        }
+    }
+
+    return result
+}
 
 const plot_options = {
     tooltip: {
@@ -52,13 +68,17 @@ const plot_options = {
     }],
     dataZoom: [{
         type: 'slider',
+        zoomLock: false,
         xAxisIndex: [0],
         start: 0,
         end: 100,
         handleStyle: {
             color: 'rgb(255, 255, 255)',
-            borderColor: 'white',
+            borderColor: '#8ad184',
             borderWidth: 1
+        },
+        handleLabel: {
+            show: false
         },
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         fillerColor: 'rgba(255, 94, 0, 0.13)',
@@ -74,85 +94,116 @@ const plot_options = {
 };
 
 const pie_options = {
-    title: {
-        text: 'ECharts Pie Chart',
-        left: 'center', 
-        textStyle: {
-            color: '#ffffff'
-        }
-    },
     tooltip: {
-        trigger: 'item'
+        trigger: 'item',
+        confine: true,
+        // rich: {
+        //     a: {
+        //         lineHeight: 20,
+        //         width: 100
+        //     }
+        // },
+        // formatter: function (params) {
+        //     return `
+        //         <strong>${params.name}</strong><br/>
+        //         Value: ${params.value}<br/>
+        //         Upvotes: 1009<br/>
+        //         Comments: 93<br/>
+        //         Posted on 11.10.23<br/>
+        //         <span style="font-size:0.7rem">Click to see on Reddit</span>
+        //     `;
+        // }
     },
-    legend: [
-        {
-            data: ['Search Engine', 'Direct', 'Union Ads', 'Email', 'Search Engine1', 'Direct1', 'Video Ads33333333333 333333333333333', 'Union Ads1', 'Email1','Search Engine2', 'Direct2', 'Union Ads2', 'Email2', 'Search Engine3', 'Direct3', 'Union Ads3', 'Email3'],
-            left: 'left',
-            orient: 'vertical',
-            textStyle: {
-                color: '#ffffff'
-            }
-        },
-        {
-            data: ['Union Ads', 'Email', 'Video Ads33333333333 333333333333333'],
-            right: 'right',
-            orient: 'vertical',
-            textStyle: {
-                color: '#ffffff'
-            }
-        }
-    ],
+    // legend: [
+    //     {
+    //         type: "scroll",
+    //         pageButtonItemGap: 20,
+    //         pageIconColor: '#ccc',
+    //         pageIconInactiveColor: '#878787',
+    //         pageTextStyle: {
+    //             color: 'rgb(196, 196, 196)'
+    //           },
+    //         data: ['No profile picture', 'User is active in too many subreddits', 'Generic username'],
+    //         left: 'left',
+    //         orient: 'vertical',
+    //         textStyle: {
+    //             color: '#ffffff'
+    //         }, 
+    //         formatter: function (text) {
+    //             return limit_text_width(text, 10)
+    //         }
+    //     },
+    //     {
+    //         type: "scroll",
+    //         pageButtonItemGap: 20,
+    //         pageIconColor: '#ccc',
+    //         pageIconInactiveColor: '#878787',
+    //         pageTextStyle: {
+    //             color: 'rgb(196, 196, 196)'
+    //           },
+    //         data: ['User is a moderator', 'Many upvotes on posts', 'Many upvotes on comments', 'Each post is unique', 'Account is 4 years old', 'Account has 22 trophies'],
+    //         left: 'right',
+    //         orient: 'vertical',
+    //         textStyle: {
+    //             color: '#ffffff'
+    //         },
+    //         formatter: function (text) {
+    //             return limit_text_width(text, 10)
+    //         }
+    //     }
+    // ],
     series: [
         {
-            name: 'Main Categories',
+            selectedMode: 'single',
             type: 'pie',
-            radius: ['0%', '40%'],
+            radius: ['50%', '90%'],
             center: ['50%', '50%'],
             label: { show: false },
+            padAngle: 3,
+            itemStyle: {
+                borderRadius: 5
+            },
             data: [
-                { value: 1048, name: 'Search Engine', itemStyle: {color: 'green'} },
-                { value: 735, name: 'Direct', itemStyle: {color: 'red'} },
-            ]
-        },
-        {
-            name: 'Main Categories',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            center: ['50%', '50%'],
-            label: { show: false },
-            data: [
-                { value: 1048, name: 'Search Engine', itemStyle: {color: 'white'} },
-                { value: 735, name: 'Direct', itemStyle: {color: 'white'} },
-                { value: 580, name: 'Email', itemStyle: {color: 'white'} },
-                { value: 484, name: 'Union Ads', itemStyle: {color: 'white'} },
-                { value: 300, name: 'Video Ads', itemStyle: {color: 'white'} },
-                { value: 1048, name: 'Search Engine1' },
-                { value: 735, name: 'Direct1' },
-                { value: 580, name: 'Email1' },
-                { value: 484, name: 'Union Ads1' },
-                { value: 300, name: 'Video Ads1' },
-                { value: 1048, name: 'Search Engine2' },
-                { value: 735, name: 'Direct2' },
-                { value: 580, name: 'Email2' },
-                { value: 484, name: 'Union Ads2' },
-                { value: 300, name: 'Video Ads2' },
-                { value: 1048, name: 'Search Engine3' },
-                { value: 735, name: 'Direct3' },
-                { value: 580, name: 'Email3' },
-                { value: 484, name: 'Union Ads3' },
-                { value: 300, name: 'Video Ads33333333333 333333333333333' }
+                { value: 1048, name: 'User is a moderator', itemStyle: {color: '#8ad184'} },
+                { value: 735, name: 'Many upvotes on posts', itemStyle: {color: '#8ad184'} },
+                { value: 580, name: 'Many upvotes on comments', itemStyle: {color: '#8ad184'} },
+                { value: 484, name: 'Each post is unique', itemStyle: {color: '#8ad184'} },
+                { value: 300, name: 'Account is 4 years old', itemStyle: {color: '#8ad184'} },
+                { value: 1048, name: 'Account has 22 trophies', itemStyle: {color: '#8ad184'} },
+                { value: 300, name: 'No profile picture', itemStyle: {color: '#ffa8a8'} },
+                { value: 1048, name: 'User is active in too many subreddits', itemStyle: {color: '#ffa8a8'} },
+                { value: 735, name: 'Generic username', itemStyle: {color: '#ffa8a8'} }
             ]
         }
     ],
-    grid: {
-        left: 0,
-        right: 0,
-        top: 0
-    }
+    graphic: [{
+        type: 'text',
+        left: 'center',
+        top: '40%',
+        style: {
+            text: '18%',
+            textAlign: 'center',
+            fontSize: 48,
+            fontWeight: 'bold',
+            fill: '#fff'
+        }
+    }, 
+    {
+        type: 'text',
+        left: 'center',
+        top: '55%',
+        style: {
+            text: 'Very likely not a bot',
+            textAlign: 'center',
+            fontSize: 12,
+            fill: '#fff'
+        }
+    }],
 };
 
 window.addEventListener('resize', () => {
     plot.resize();
+    pie_chart.resize();
 });
 
 plot.setOption(plot_options);
@@ -160,4 +211,43 @@ pie_chart.setOption(pie_options);
 
 plot.on('click', function (params) {
     window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0");
+});
+
+
+
+// function adjustPiePosition() {
+//     const chartWidth = document.getElementById('pie_chart').clientWidth;
+//     const chartHeight = document.getElementById('pie_chart').clientHeight;
+//     const pieRadius = 0.9 * chartHeight; // Calculate radius based on width
+
+//     // Update the center position
+//     pie_chart.setOption({
+//         series: [{
+//             center: [pieRadius, '50%'] // Set center based on calculated offset
+//         }]
+//     });
+// }
+
+// // Call the function to adjust position initially
+// adjustPiePosition();
+
+// // Adjust position on window resize
+// window.addEventListener('resize', adjustPiePosition);
+
+document.querySelectorAll('.factor').forEach(factor => {
+    const itemName = factor.textContent.trim();
+    
+    factor.addEventListener('mouseenter', function () {
+        pie_chart.dispatchAction({
+          type: 'select',
+          name: itemName
+        });
+      });
+    
+      factor.addEventListener('mouseleave', function () {
+        pie_chart.dispatchAction({
+          type: 'unselect',
+          name: itemName
+        });
+      });
 });
