@@ -47,25 +47,25 @@
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
 					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }} ⏏</span></p>
-					<p class="subtext"><span class="bold">25</span> comments on user's own posts</p>
+					<p class="subtext"><span class="bold">{{ averal_comments }}</span> comments on user's own posts</p>
 				</div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: row;">
 			<div class="box">
-				<p class="statistic-title">Posting frequency: <span class="orange bold">0.51</span> per day</p>
+				<p class="statistic-title">Posting frequency: <span class="orange bold">{{posting_frequency}}</span> per day</p>
 				<div class="statistic-line"></div>
 				<div class="separator-line"></div>
 				
-				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">1192</span></p>
+				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">{{ up }}</span></p>
 				<div class="statistic-line"></div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage comments per post: <span class="orange bold">52</span></p>
+				<p class="statistic-title">Avarage comments per post: <span class="orange bold">{{ comment_amount }}</span></p>
 				<div class="statistic-line"></div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">3.1</span></p>
+				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold"></span></p>
 				<div class="statistic-line"></div>
 				<div class="separator-line"></div>
 
@@ -78,10 +78,10 @@
 				<button class="section-button">Detailed analysis ⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
-				<p class="subtext">r/{{ subredits1 }}</p>
-				<p class="subtext">r/{{ subredits2 }}</p>
-				<p class="subtext">r/{{ subredits3 }}</p>
-				<p class="subtext">and 2 more</p>
+				<p class="subtext">{{ subredits1 }}</p>
+				<p class="subtext">{{ subredits2 }}</p>
+				<p class="subtext">{{ subredits3 }}</p>
+				<p class="subtext">{{ j }}</p>
 				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
 			</div>
 		</div>
