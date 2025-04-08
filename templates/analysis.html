@@ -5,7 +5,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
-	<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+	<script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 	<script src="{% static 'js/analysis.js' %}" defer></script>
 	<title>ReDive analysis</title>
 </head>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="profile-info">
 					<p class="username">{{ name }}</p>
-        			<p class="username2">u/{{ username }} &#x21bb;</p>
+        			<a class="username2" href="">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
         			<p class="subtext">&#9716 Analyzed on <span class="bold">{{ date_today }}</p>
 				</div>
 			</div>
@@ -43,10 +43,10 @@
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }} ⏏</span></p>
+					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }}⏏</span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }} ⏏</span></p>
+					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }}⏏</span></p>
 					<p class="subtext"><span class="bold">{{ averal_comments }}</span> comments on user's own posts</p>
 				</div>
 			</div>
@@ -78,9 +78,9 @@
 				<button class="section-button">Detailed analysis ⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
-				<p class="subtext">{{ subredits1 }}</p>
-				<p class="subtext">{{ subredits2 }}</p>
-				<p class="subtext">{{ subredits3 }}</p>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits1 }}" target="_blank">{{ subredits1 }}</a>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits2 }}" target="_blank">{{ subredits2 }}</a>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits3 }}" target="_blank">{{ subredits3 }}</a>
 				<p class="subtext">{{ j }}</p>
 				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
 			</div>
@@ -128,9 +128,48 @@
 		<h2 class="section-text">BEHAVIOUR ANALYSIS</h2>
 		<div class="section-line"></div>
 	</div>
-	<div class="flex-container", style="flex-direction: row;">
-		<div class="box">
-			<div id="pie_chart" class="pie-chart"></div>
+	<div class="flex-container width-responsive">
+		<div class="box", style="flex-direction: row; justify-content: start; flex-grow: 0;">
+			<div class="pie-container">
+				<p class="title", style="line-height: 1.8rem; text-align: center;">Bot rank</p>
+				<div id="pie_chart" class="pie-chart"></div>
+			</div>
+			<div style="display:flex; flex-grow: 1; justify-content: center;">
+				<div class="separator-line-vertical"></div>
+			</div>
+			<div class="flex-container", style="flex-direction: column;">
+				<div class="flex-container factors-div">
+					<div class="factor-container">
+						<p class="title", style="line-height: 1.8rem;">Human: <span style="color: #8ad184;">82%</span></p>
+						<div class="factor-list">
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">User is a moderator</p>
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">Many upvotes on posts</p>
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">Many upvotes on comments</p>
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">Each post is unique</p>
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">Account is 4 years old</p>
+							<p class="factor"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">Account has 22 trophies</p>
+						</div>
+					</div>
+					<div style="display:flex; justify-content: center;">
+						<div class="separator-line-vertical"></div>
+					</div>
+					<div class="factor-container">
+						<p class="title", style="line-height: 1.8rem;">Bot: <span style="color: #ffa8a8;">18%</span></p>
+						<div class="factor-list">
+							<p class="factor"><img src="{% static 'img/cross.png' %}", width="15", style="margin-right: 10px">No profile picture</p>
+							<p class="factor"><img src="{% static 'img/cross.png' %}", width="15", style="margin-right: 10px">User is active in too many subreddits</p>
+							<p class="factor"><img src="{% static 'img/cross.png' %}", width="15", style="margin-right: 10px">Generic username</p>
+						</div>
+					</div>
+				</div>
+				<p class="statistic-title">We examine behaviour patterns to evaluate the possibility of a user being a bot. There is always room for error, and no program can tell for sure if an account is run by a bot. We only provide you with useful analysis, making your verdict easier to make.</p>
+				<!-- <p class="statistic-title"><b>Account is a moderator</b><br>If an account is a moderator, this means that this user is moderating a subreddit.</p> -->
+			</div>
+			
+		</div>
+		<div class="box", style="flex-grow: 1;">
+			<p class="title", style="line-height: 1.8rem; text-align: center;">Semanthic analysis</p>
+			<p>Here is going to be a list of the user's frequently used words, themes and propaganda/hate words.</p>
 		</div>
 	</div>
 </body>
