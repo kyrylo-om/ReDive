@@ -25,7 +25,7 @@
 				</div>
 				<div class="profile-info">
 					<p class="username">{{ name }}</p>
-        			<p class="username2">u/{{ username }} &#x21bb;</p>
+        			<a class="username2" href="">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
         			<p class="subtext">&#9716 Analyzed on <span class="bold">{{ date_today }}</p>
 				</div>
 			</div>
@@ -43,10 +43,10 @@
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }} ⏏</span></p>
+					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }}⏏</span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }} ⏏</span></p>
+					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }}⏏</span></p>
 					<p class="subtext"><span class="bold">{{ averal_comments }}</span> comments on user's own posts</p>
 				</div>
 			</div>
@@ -78,9 +78,9 @@
 				<button class="section-button">Detailed analysis ⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
-				<p class="subtext">{{ subredits1 }}</p>
-				<p class="subtext">{{ subredits2 }}</p>
-				<p class="subtext">{{ subredits3 }}</p>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits1 }}" target="_blank">{{ subredits1 }}</a>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits2 }}" target="_blank">{{ subredits2 }}</a>
+				<a class="subtext link" href="https://www.reddit.com/{{ subredits3 }}" target="_blank">{{ subredits3 }}</a>
 				<p class="subtext">{{ j }}</p>
 				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
 			</div>
