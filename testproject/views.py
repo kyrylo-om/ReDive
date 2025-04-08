@@ -21,6 +21,7 @@ def analysispage(request):
     up_v_down=0
     up=0
     n=0
+    up_comment=0
     j=""
     subredits1=''
     subredits2=''
@@ -47,6 +48,9 @@ def analysispage(request):
         up+=i["score"]
         comment_amount+=i['num_comments']
         n+=1
+    for i in data.get('recent_comments', []):
+        subredits.append(i['subreddit'])
+        up_comment+=i["score"]
     if len(subredits)>=3:
         subredits1="r/"+subredits[0]
         subredits2="r/"+subredits[1]
@@ -91,5 +95,6 @@ def analysispage(request):
         "averal_comments":comment_amount,
         "j":j,
         "posting_frequency": posting_frequency,
+        "up_comment":round(up_comment/n,2),
         "query": query 
     })
