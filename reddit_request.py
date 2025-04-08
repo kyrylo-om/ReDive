@@ -53,7 +53,7 @@ class DataGetter:
         return self.description_red(proxy_link)
 
     @staticmethod
-    def description_red(proxy_link: praw.models.Redditor, limit_post = 5, limit_comment = 5):
+    def description_red(proxy_link: praw.models.Redditor, limit_post = 1000, limit_comment = 1000):
         """Return the description of a Reddit user"""
         try:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
