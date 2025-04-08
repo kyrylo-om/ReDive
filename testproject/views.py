@@ -59,8 +59,10 @@ def analysispage(request):
     elif len(subredits)>=2:
         subredits1="r/"+subredits[0]
         subredits2="r/"+subredits[1]
-    else:
+    elif len(subredits)>=1:
         subredits1="r/"+subredits[0]
+    else:
+        subredits1="No subreddits"
     posts = data.get('recent_posts', [])
     posts_amount = len(posts)
     posting_frequency = 0
@@ -74,6 +76,8 @@ def analysispage(request):
             posting_frequency = round(posts_amount / months, 2)
         except Exception as e:
             print("Error calculating posting frequency:", e)
+    if n == 0:
+        n = 1
     return render(request, 'analysis.html', {
         "pic":pic,
         "date_today":date_today,
