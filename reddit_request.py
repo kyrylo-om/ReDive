@@ -155,6 +155,12 @@ class DataGetter:
         api_url = f"https://www.reddit.com/user/{username}/about.json"
         try:
             response = requests.get(api_url, headers=headers, timeout=5)
+            rate_limit_used = response.headers.get('X-Ratelimit-Used')
+            rate_limit_remaining = response.headers.get('X-Ratelimit-Remaining')
+            rate_limit_reset = response.headers.get('X-Ratelimit-Reset')
+            print("Used: ", rate_limit_used)
+            print("Remaining: ", rate_limit_remaining)
+            print(f"Reset on: {int(rate_limit_reset)/60:.2f} minutes")
             response.raise_for_status()
         except requests.exceptions.RequestException:
             return None
