@@ -78,10 +78,14 @@
 				<button class="section-button">Detailed analysis ⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
-				<a class="subtext link" href="https://www.reddit.com/{{ subredits1 }}" target="_blank">{{ subredits1 }}</a>
-				<a class="subtext link" href="https://www.reddit.com/{{ subredits2 }}" target="_blank">{{ subredits2 }}</a>
-				<a class="subtext link" href="https://www.reddit.com/{{ subredits3 }}" target="_blank">{{ subredits3 }}</a>
-				<p class="subtext">{{ j }}</p>
+				{% for sr in subreddit_names %}
+						<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
+				{% endfor %}
+				{% if subreddit_activity|length > 3 %}
+					<p class="subtext">and {{ k }} more</p>
+				{% else %}
+					<p class="subtext">No subreddits</p>
+				{% endif %}
 				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
 			</div>
 		</div>
@@ -95,8 +99,8 @@
 			<p class="title", style="line-height: 1.8rem;">Activity history</p>
 			<div id="plot" class="plot"></div>
 		</div>
-		<div class="box", style="flex-grow: 0;">
-			<p class="title", style="line-height: 1.8rem; margin-bottom: 0.5rem;">Activity by subreddits</p>
+		<div class="box" style="flex-grow: 0;"> 
+			<p class="title" style="line-height: 1.8rem; margin-bottom: 0.5rem;">Activity by subreddits</p>
 			<div class="table-container">
 				<table class="table">
 					<thead>
@@ -108,20 +112,20 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr><td>r/politics</td><td>12</td><td>102</td><td class="orange">11021</td></tr>
-						<tr><td>r/law</td><td>7</td><td>51</td><td class="orange">3004</td></tr>
-						<tr><td>r/blowjobgirl</td><td>0</td><td>563</td><td class="orange">-103</td></tr>
-						<tr><td>r/worldpolitics</td><td>4</td><td>30</td><td class="orange">947</td></tr>
-						<tr><td>r/europe</td><td>3</td><td>12</td><td class="orange">548</td></tr>
-						<tr><td>r/askreddit</td><td>1</td><td>51</td><td class="orange">306</td></tr>
-						<tr><td>r/beamazed</td><td>0</td><td>12</td><td class="orange">120</td></tr>
-						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
-						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
-						<tr><td>r/gaming</td><td>0</td><td>2</td><td class="orange">58</td></tr>
+						{% for sr in subreddit_activity %}
+						<tr>
+							<td>{{ sr.name }}</td>
+							<td>{{ sr.posts }}</td>
+							<td>{{ sr.comments }}</td>
+							<td class="orange">{{ sr.upvotes }}</td>
+						</tr>
+						{% empty %}
+						<tr><td colspan="4">No activity found.</td></tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>
-			<p class="subreddit-count">Showed activity in 35 subreddits total</p>
+			<p class="subreddit-count">Showed activity in {{ j }} subreddits total</p>
 		</div>
 	</div>
 	<div class="section-title">

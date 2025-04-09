@@ -2,7 +2,7 @@ from django.shortcuts import render
 from reddit_request import DataGetter
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+from collections import defaultdict
 def homepage(request):
     return render(request, "home.html")
 
@@ -22,10 +22,7 @@ def analysispage(request):
     up=0
     n=0
     up_comment=0
-    j=""
-    subredits1=''
-    subredits2=''
-    subredits3=""
+    j=0
     comment_amount=0
     pic= DataGetter.get_reddit_avatar(query)
     date_today = datetime.today().strftime("%B %d %Y")
@@ -39,30 +36,29 @@ def analysispage(request):
         name = username
     posts_amount=len(data.get('recent_posts', []))
     post_karma=data.get('link_karma')
-    comment = len(data.get('recent_comments', []))
+    comment_amount= len(data.get('recent_comments', []))
     comment_karma=data.get('comment_karma')
-    subredits= []
     for i in data.get('recent_posts', []):
-        subredits.append(i['subreddit'])
         up_v_down +=i['upvotes_ratio']
         up+=i["score"]
         comment_amount+=i['num_comments']
         n+=1
     for i in data.get('recent_comments', []):
-        subredits.append(i['subreddit'])
         up_comment+=i["score"]
-    if len(subredits)>=3:
-        subredits1="r/"+subredits[0]
-        subredits2="r/"+subredits[1]
-        subredits3="r/"+subredits[2]
-        j=f"and {len(subredits)-3} more"
-    elif len(subredits)>=2:
-        subredits1="r/"+subredits[0]
-        subredits2="r/"+subredits[1]
-    elif len(subredits)>=1:
-        subredits1="r/"+subredits[0]
-    else:
-        subredits1="No subreddits"
+    subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
+
+    for post in data.get('recent_posts', []):
+        sr = post['subreddit']
+        subreddits_stats[sr]["posts"] += 1
+        subreddits_stats[sr]["upvotes"] += post["score"]
+
+    for comment in data.get('recent_comments', []):
+        sr = comment['subreddit']
+        subreddits_stats[sr]["comments"] += 1
+        subreddits_stats[sr]["upvotes"] += comment["score"]
+
+    subreddit_activity = sorted([{"name": f"r/{k}", **v} for k, v in subreddits_stats.items()],key=lambda x: x["upvotes"],reverse=True)
+    j = len(subreddit_activity)
     posts = data.get('recent_posts', [])
     posts_amount = len(posts)
     posting_frequency = 0
@@ -88,17 +84,17 @@ def analysispage(request):
         "name": name,
         "post":posts_amount,
         "post_karma":post_karma,
-        "comment":comment,
+        "comment":comment_amount,
         "comment_karma":comment_karma,
-        "subredits1":subredits1,
-        "subredits2":subredits2,
-        "subredits3":subredits3,
         "up": round(up/n,2),
         "up_v_down":round(up_v_down/n,2),
         "comment_amount":round(comment_amount/n,2),
         "averal_comments":comment_amount,
         "j":j,
+        "k":j-3,
         "posting_frequency": posting_frequency,
         "up_comment":round(up_comment/n,2),
+        "subreddit_activity": subreddit_activity,
+        "subreddit_names": [sub['name'] for sub in subreddit_activity][:3],
         "query": query 
     })
