@@ -25,8 +25,8 @@
 				</div>
 				<div class="profile-info">
 					<p class="username">{{ name }}</p>
-        			<a class="username2" href="">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext">&#9716 Analyzed on <span class="bold">{{ date_today }}</p>
+        			<a class="username2" href="https://www.reddit.com/user/{{ username }}" target="_blank">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Analyzed on <span class="bold">{{ date_today }}</p>
 				</div>
 			</div>
 			<div class="flex-container", style="flex-direction: row;">
@@ -43,10 +43,10 @@
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }}⏏</span></p>
+					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }}⏏</span></p>
+					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
 					<p class="subtext"><span class="bold">{{ averal_comments }}</span> comments on user's own posts</p>
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 						<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
 				{% if subreddit_activity|length > 3 %}
-					<p class="subtext">and {{ k }} more</p>
+					<p class="subtext">- and {{ k }} more -</p>
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}
