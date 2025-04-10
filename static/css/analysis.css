@@ -242,10 +242,18 @@ body {
 }
 
 .table-container {
-	position: relative;
 	max-height: 18rem;
 	overflow-y: auto;
 }
+
+.subreddit-sort-criteria {
+	cursor: pointer;
+}
+
+.subreddit-sort-criteria:hover {
+	text-decoration: underline;
+}
+
 .table-container::-webkit-scrollbar {
     width: 6px;
     height: 12px;

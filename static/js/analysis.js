@@ -1,6 +1,11 @@
+// Charts
 const plot = echarts.init(document.getElementById('plot'));
 const pie_chart = echarts.init(document.getElementById('pie_chart'));
 
+// Django variables
+const subreddits = JSON.parse(document.getElementById('django-data').textContent);
+
+// Functions
 function limit_text_width (text, max_width) {
     let words = text.split(" ");
     let result = words[0];
@@ -15,6 +20,49 @@ function limit_text_width (text, max_width) {
     }
 
     return result
+}
+
+function fill_subreddits_table(sort_criteria) {
+    const table = document.getElementById('table-body')
+    function clear_criterias() {
+        document.getElementById('table-head').children[0].textContent = "Name"
+        document.getElementById('table-head').children[1].textContent = "Posts"
+        document.getElementById('table-head').children[2].textContent = "Comments"
+        document.getElementById('table-head').children[3].textContent = "Upvotes"
+    }
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+      }
+    if (sort_criteria == "name") {
+        subreddits.sort((a, b) => a.name.localeCompare(b.name));
+        clear_criterias();
+        document.getElementById('table-head').children[0].textContent = "Name ↓"
+    }
+    else if (sort_criteria == "posts") {
+        subreddits.sort((a, b) => b.posts - a.posts);
+        clear_criterias();
+        document.getElementById('table-head').children[1].textContent = "Posts ↓"
+    }
+    else if (sort_criteria == "comments") {
+        subreddits.sort((a, b) => b.comments - a.comments);
+        clear_criterias();
+        document.getElementById('table-head').children[2].textContent = "Comments ↓"
+    }
+    else if (sort_criteria == "upvotes") {
+        subreddits.sort((a, b) => b.upvotes - a.upvotes);
+        clear_criterias();
+        document.getElementById('table-head').children[3].textContent = "Upvotes ↓"
+    }
+    for (let i = 0; i < subreddits.length; i += 1) {
+        var sub = document.createElement('tr')
+        sub.innerHTML = `
+            <td>${subreddits[i].name}</td>
+            <td>${subreddits[i].posts}</td>
+            <td>${subreddits[i].comments}</td>
+            <td>${subreddits[i].upvotes}</td>
+        `;
+        table.appendChild(sub)
+    }
 }
 
 const plot_options = {
@@ -250,4 +298,9 @@ document.querySelectorAll('.factor').forEach(factor => {
           name: itemName
         });
       });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    fill_subreddits_table("upvotes")
+    plot.resize();
 });

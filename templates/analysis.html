@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{{ subreddit_activity|json_script:"django-data" }}
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
@@ -104,25 +105,14 @@
 			<div class="table-container">
 				<table class="table">
 					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Posts</th>
-							<th>Comments</th>
-							<th>Upvotes</th>
+						<tr id="table-head">
+							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
+							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
+							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
+							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
 						</tr>
 					</thead>
-					<tbody>
-						{% for sr in subreddit_activity %}
-						<tr>
-							<td>{{ sr.name }}</td>
-							<td>{{ sr.posts }}</td>
-							<td>{{ sr.comments }}</td>
-							<td class="orange">{{ sr.upvotes }}</td>
-						</tr>
-						{% empty %}
-						<tr><td colspan="4">No activity found.</td></tr>
-						{% endfor %}
-					</tbody>
+					<tbody id="table-body"></tbody>
 				</table>
 			</div>
 			<p class="subreddit-count">Showed activity in {{ j }} subreddits total</p>
