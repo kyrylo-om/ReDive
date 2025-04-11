@@ -1,4 +1,5 @@
 const lightTheme = {
+    '--footer-bg': 'rgba(255, 255, 255, 0.3)',
     '--header-bg': '#AE9EC4',
     '--container-bg': 'rgba(255, 255, 255, 0.3)',
     '--text-color': '#2d3436',
@@ -15,6 +16,7 @@ const lightTheme = {
   };
   
   const darkTheme = {
+    '--footer-bg': 'rgba(0, 0, 0, 0.5)',
     '--header-bg': '#2b2735',
     '--container-bg': 'rgba(0, 0, 0, 0.5)',
     '--text-color': 'white',
