@@ -1,11 +1,16 @@
 """Module about requesting info from Reddit"""
 import re
 from datetime import datetime, timezone
+import os
 import praw
 import prawcore
 import requests
+from dotenv import load_dotenv
 
-
+load_dotenv()
+REDDIT_CLIENT_ID = os.getenv('REDDIT-CLIENT-ID')
+REDDIT_CLIENT_SECRET = os.getenv('REDDIT-CLIENT-SECRET')
+REDDIT_USER_AGENT = os.getenv('REDDIT-USER-AGENT')
 class RedditAPIError(Exception):
     """Base class for Reddit API errors"""
 
@@ -32,14 +37,8 @@ def handle_reddit_errors(func):
 class DataGetter:
     """Get data about someone or something"""
 
-    _reddit_client_id = "xyDp0DW13ZB9wDj7eU57nw"
-    _reddit_client_secret = "hkG-118uedArdKf8T4gWi64so_YCFw"
-    _reddit_user_agent = "windows:RedditAnalyzer:v1.0 (by /u/lukakerf)"
-    _reddit = praw.Reddit(
-        client_id=_reddit_client_id,
-        client_secret=_reddit_client_secret,
-        user_agent=_reddit_user_agent,
-    )
+
+    _reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID, client_secret=REDDIT_CLIENT_SECRET, user_agent=REDDIT_USER_AGENT)
 
     def __init__(self):
         pass
@@ -83,6 +82,7 @@ class DataGetter:
             "recent_posts": [
                 {
                     "title": post.title,
+                    "body": post.selftext,
                     "subreddit": post.subreddit.display_name,
                     "permalink": post.permalink,
                     "url": post.url,
@@ -97,7 +97,7 @@ class DataGetter:
             ],
             "recent_comments": [
                 {
-                    "body": comment.body[:100],
+                    "body": comment.body,
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
                     "url": comment.permalink,
