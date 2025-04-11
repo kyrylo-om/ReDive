@@ -19,8 +19,8 @@
         <p>JUST IN A FEW CLICKS</p>
         
         <div class="searchbar">
-            <input type="text" placeholder="U/USERNAME">
-            <button class="search-btn "onclick="window.location.href='{% url 'analysispage' %}'"></button>
+            <input type="text" name="query" placeholder="U/USERNAME">
+            <button class="search-btn" onclick="window.location.href='{% url 'analysispage' %}"></button>
         </div>
         <a href="{% static 'templates/database.html' %}" class="database-btn">DATABASE</a>
     </div>
