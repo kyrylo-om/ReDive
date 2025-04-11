@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDive</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="{% static 'js/theme.js' %}" defer></script>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
     <header class="header">
@@ -18,14 +17,11 @@
         <h2>DIVE INTO ACCOUNT ANALYSIS</h2>
         <p>JUST IN A FEW CLICKS</p>
         
-        <form action="{% url 'analysispage' %}" method="GET">
-            <div class="searchbar">
-                <input type="text" name="query" placeholder="U/USERNAME" required>
-                <button type="submit" class="search-btn"></button>
-            </div>
-        </form>
-
-        <a href="database/" class="database-btn">DATABASE</a>
+        <div class="searchbar">
+            <input type="text" placeholder="U/USERNAME">
+            <button class="search-btn "onclick="location.href='analysis.html'"></button>
+        </div>
+        <a href="database.html" class="database-btn">DATABASE</a>
     </div>
 
     <footer class="footer">
@@ -34,5 +30,7 @@
             <a href="mailto:redive_support@gmail.com">redive_support@gmail.com</a>
         </p>
     </footer>
+
+    <script src="theme.js"></script>
 </body>
 </html>
