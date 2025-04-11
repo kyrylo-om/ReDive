@@ -90,7 +90,7 @@ body {
 }
 
 .footer .support {
-    background-color: var(--support-bg);
+    background-color: var(--container-bg);
     color: var(--text-color);
 
     padding: 0.3rem 0.6rem;
