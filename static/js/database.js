@@ -1,24 +1,48 @@
-const accountsData = [
-    { username: "user123", posts: "512", comments: "246", bot_percentage: "8" },
-    { username: "superpider", posts: "47", comments: "5", bot_percentage: "55" },
-    { username: "ke1roo", posts: "11", comments: "52", bot_percentage: "81" },
-    { username: "ke1roo", posts: "11", comments: "52", bot_percentage: "81" },
-    { username: "ke1roo", posts: "11", comments: "52", bot_percentage: "81" },
-    { username: "ke1roo", posts: "11", comments: "52", bot_percentage: "81" },
-    { username: "ke1roo", posts: "11", comments: "52", bot_percentage: "81" }
-];
+let accountsData = []; // Массив для збереження акаунтів
+let currentPage = 1;    // Поточна сторінка
+let itemsPerPage = 10;  // Кількість акаунтів на сторінці
+let currentSort = null; // Поточне сортування
 
+// Функція для отримання даних з бекенду
+function fetchAccountsData(sort = null, page = 1) {
+    let url = `/api/accounts/?page=${page}&limit=${itemsPerPage}`;
+    
+    // Додаємо параметри сортування, якщо вони є
+    if (sort) {
+        url += `&sort=${sort.key}&direction=${sort.direction}`;
+    }
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch data");
+            return response.json();
+        })
+        .then(data => {
+            // Якщо це перший запит, очищаємо старі дані
+            if (page === 1) {
+                accountsData = data;
+            } else {
+                accountsData = [...accountsData, ...data];  // Додаємо нові акаунти
+            }
+            renderAccounts(accountsData);
+        })
+        .catch(error => {
+            console.error("Error fetching accounts data:", error);
+        });
+}
+
+// Функція для рендерингу акаунтів
 function renderAccounts(accounts) {
     const container = document.getElementById("accounts-container");
-    
-    // Перевірка, чи контейнер існує
+
     if (!container) {
-        console.error("Контейнер 'accounts-container' не знайдено!");
+        console.error("Container 'accounts-container' not found!");
         return;
     }
 
-    container.innerHTML = "";
+    container.innerHTML = ""; // Очищаємо контейнер
 
+    // Рендеримо акаунти
     accounts.forEach(account => {
         const accountDiv = document.createElement("div");
         accountDiv.classList.add("account");
@@ -37,58 +61,71 @@ function renderAccounts(accounts) {
         `;
         container.appendChild(accountDiv);
     });
+
+    // Якщо є більше акаунтів для завантаження, показуємо кнопку
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    if (accounts.length >= itemsPerPage) {
+        loadMoreBtn.style.display = "block"; // Показуємо кнопку
+    } else {
+        loadMoreBtn.style.display = "none"; // Ховаємо кнопку, якщо немає більше акаунтів
+    }
 }
 
-// Запускаємо рендеринг після завантаження сторінки
-document.addEventListener("DOMContentLoaded", () => {
-    renderAccounts(accountsData);
+// Обробка завантаження додаткових акаунтів
+document.getElementById("load-more-btn").addEventListener("click", () => {
+    currentPage += 1;  // Збільшуємо номер сторінки
+    fetchAccountsData(currentSort, currentPage);  // Завантажуємо наступну порцію акаунтів
 });
 
-// Filter popup functionality
-document.addEventListener('DOMContentLoaded', () => {
+// Ініціалізація при завантаженні сторінки
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAccountsData(); // Початкове завантаження акаунтів
+
     const filtersBtn = document.getElementById('filters-btn');
     const filterPopup = document.getElementById('filter-popup');
     const applyBtn = document.getElementById('apply-filters');
     const resetBtn = document.getElementById('reset-filters');
     
-    // Toggle popup visibility
+    // Перемикання видимості попапу
     filtersBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent immediate close when clicking button
+        e.stopPropagation();
         filterPopup.classList.toggle('active');
     });
     
-    // Close popup when clicking outside
+    // Закриття попапу при кліку поза ним
     filterPopup.addEventListener('click', (e) => {
         if (e.target === filterPopup) {
             filterPopup.classList.remove('active');
         }
     });
     
-    // Apply filters
+    // Застосування сортування
     applyBtn.addEventListener('click', () => {
-        const selectedFilters = [];
-        document.querySelectorAll('input[name="filter"]:checked').forEach(checkbox => {
-            selectedFilters.push(checkbox.value);
-        });
-        
-        // Here you would implement your actual filtering logic
-        console.log('Applied filters:', selectedFilters);
+        const selectedSortRadio = document.querySelector('input[name="sort"]:checked');
+    
+        if (selectedSortRadio && selectedSortRadio.value !== 'none') {
+            const [key, direction] = selectedSortRadio.value.split('-');
+            currentSort = { key, direction };  // Оновлюємо сортування
+            currentPage = 1;  // Скидаємо сторінку на першу
+            fetchAccountsData(currentSort, currentPage);  // Перезавантажуємо акаунти
+        } else {
+            currentSort = null;  // Якщо сортування не вибрано
+            currentPage = 1;
+            fetchAccountsData();  // Завантажуємо акаунти без сортування
+        }
+    
         filterPopup.classList.remove('active');
-        
-        // Example: filterAccounts(selectedFilters);
     });
     
-    // Reset filters
+    // Скидання сортування
     resetBtn.addEventListener('click', () => {
-        document.querySelectorAll('input[name="filter"]').forEach(checkbox => {
-            checkbox.checked = false;
-        });
-        // Here you would reset your filtered view
-        console.log('Filters reset');
-        // Example: resetAccountFilters();
+        document.querySelector('input[name="sort"][value="none"]').checked = true;
+        currentSort = null;  // Скидаємо сортування
+        currentPage = 1;  // Скидаємо сторінку на першу
+        fetchAccountsData();  // Завантажуємо акаунти без сортування
     });
     
-    // Close with Escape key
+    // Закриття попапу при натисканні клавіші Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && filterPopup.classList.contains('active')) {
             filterPopup.classList.remove('active');
