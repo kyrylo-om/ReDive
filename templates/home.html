@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDive</title>
-    <link rel="stylesheet" href="common.css">
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
     <header class="header">
@@ -21,7 +21,7 @@
             <input type="text" placeholder="U/USERNAME">
             <button class="search-btn "onclick="location.href='analysis.html'"></button>
         </div>
-        <a href="database.html" class="database-btn">DATABASE</a>
+        <a href="{% static 'templates/database.html' %}" class="database-btn">DATABASE</a>
     </div>
 
     <footer class="footer">
@@ -31,6 +31,6 @@
         </p>
     </footer>
 
-    <script src="theme.js"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
 </body>
 </html>
