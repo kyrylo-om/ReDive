@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDive</title>
-    <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <script src="{% static 'js/theme.js' %}" defer></script>
 </head>
 <body>
     <header class="header">
-        <button id="theme-toggle" class="theme-toggle">🌓</button>
+        <button 
+            id="theme-toggle" 
+            class="theme-toggle" 
+            data-sun-url="{% static 'img/sun.png' %}" 
+            data-moon-url="{% static 'img/moon.png' %}">
+            🌓
+        </button>
         <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
     </header>
 
