@@ -5,40 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDive</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="stylesheet" href="{% static 'css/database.css' %}">
     <script src="{% static 'js/database.js' %}" defer></script>
 </head>
 <body>
     <header class="header">
+        <button id="theme-toggle" class="theme-toggle">🌓</button>
         <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
     </header>
 
     <div class="main-container">
         <h2>Database</h2>
-        
+
         <div class="search-container">
             <button id="filters-btn" class="filters-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                    <path
+                        d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
                 </svg>
                 Filters
             </button>
-            
+
             <!-- Обгортка для пошукової панелі -->
             <div class="searchbar-wrapper">
                 <div class="searchbar">
                     <input type="text" id="search-input" placeholder="U/USERNAME">
-                    <button id="search-btn" class="search-btn" onclick="location.href='analysis.html'"></button>
+                    <button id="search-btn" class="search-btn" onclick="location.href='index.html'"></button>
                 </div>
             </div>
         </div>
 
     </div>
 
-
-    <div id="accounts-container" onclick="location.href='analysis.html'">
+    <div id="accounts-container" onclick="location.href='index.html'">
         <!-- тут акаунти динамічно з js додаються -->
     </div>
+
+    <button id="load-more" class="load-more-btn">Show 10 more</button>
 
     <footer class="footer">
         <p>&copy; 2025 ReDive</p>
@@ -48,38 +52,46 @@
         </div>
     </footer>
 
+    <script src="database.js"></script>
+
     <div class="filter-popup" id="filter-popup">
         <div class="filter-content">
-            <h3>Filter Options</h3>
-            <div class="filter-group">
-                <label>
-                    <input type="checkbox" name="filter" value="high-posts">
-                    option 1
-                </label>
+            <h3>Sort Options</h3>
+
+            <!-- Sorting Section -->
+            <div class="sort-section">
+                <h4>Sort By:</h4>
+                <div class="sort-options">
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="posts-asc">
+                        Posts (Low to High)
+                    </label>
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="posts-desc">
+                        Posts (High to Low)
+                    </label>
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="comments-asc">
+                        Comments (Low to High)
+                    </label>
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="comments-desc">
+                        Comments (High to Low)
+                    </label>
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="none" checked>
+                        None (Default)
+                    </label>
+                </div>
             </div>
-            <div class="filter-group">
-                <label>
-                    <input type="checkbox" name="filter" value="low-posts">
-                    option 2
-                </label>
-            </div>
-            <div class="filter-group">
-                <label>
-                    <input type="checkbox" name="filter" value="high-bot">
-                    option 3
-                </label>
-            </div>
-            <div class="filter-group">
-                <label>
-                    <input type="checkbox" name="filter" value="verified">
-                    option 4
-                </label>
-            </div>
+
             <div class="filter-actions">
                 <button id="apply-filters">Apply</button>
                 <button id="reset-filters">Reset</button>
             </div>
         </div>
     </div>
+
+    <script src="{% static 'js/theme.js' %}"></script>
 </body>
 </html>
