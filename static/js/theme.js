@@ -48,8 +48,8 @@ const lightTheme = {
       localStorage.setItem('theme', themeName);
       applyTheme(themeName === 'dark' ? darkTheme : lightTheme);
       themeToggle.innerHTML = themeName === 'dark'
-      ? '<img class="theme-icon" src="sun.png" alt="Light mode">'
-      : '<img class="theme-icon" src="moon.png" alt="Dark mode">';
+      ? '<img class="theme-icon" src="{% static 'img/sun.png' %}" alt="Light mode">'
+      : '<img class="theme-icon" src="{% static 'img/moon.png' %}" alt="Dark mode">';
     }
 
   
