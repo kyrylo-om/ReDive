@@ -8,10 +8,17 @@
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="stylesheet" href="{% static 'css/database.css' %}">
     <script src="{% static 'js/database.js' %}" defer></script>
+    <script src="{% static 'js/theme.js' %}" defer></script>
 </head>
 <body>
     <header class="header">
-        <button id="theme-toggle" class="theme-toggle">🌓</button>
+        <button 
+            id="theme-toggle" 
+            class="theme-toggle" 
+            data-sun-url="{% static 'img/sun.png' %}" 
+            data-moon-url="{% static 'img/moon.png' %}">
+            🌓
+        </button>
         <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
     </header>
 
@@ -24,23 +31,27 @@
                     <path
                         d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
                 </svg>
-                Filters
+                Sort options
             </button>
 
             <!-- Обгортка для пошукової панелі -->
             <div class="searchbar-wrapper">
-                <div class="searchbar">
-                    <input type="text" id="search-input" placeholder="U/USERNAME">
-                    <button id="search-btn" class="search-btn" onclick="location.href='analysis.html'"></button>
-                </div>
+                <form action="{% url 'analysispage' %}" method="GET">
+                    <div class="searchbar">
+                        <input type="text" name="query" placeholder="U/USERNAME" required>
+                        <button type="submit" class="search-btn"></button>
+                    </div>
+                </form>
             </div>
         </div>
 
     </div>
 
-    <div id="accounts-container" onclick="location.href='analysis.html'">
-        <!-- тут акаунти динамічно з js додаються -->
+    {% for account in accounts %}
+    <div class="account-card" onclick="location.href='{% url 'analysis' account.id %}'">
+        <p>{{ account.username }}</p>
     </div>
+    {% endfor %}
 
     <button id="load-more" class="load-more-btn">Show 10 more</button>
 
@@ -51,8 +62,6 @@
             <a href="mailto:redive_support@gmail.com">Contact us</a>
         </div>
     </footer>
-
-    <script src="database.js"></script>
 
     <div class="filter-popup" id="filter-popup">
         <div class="filter-content">
@@ -91,7 +100,5 @@
             </div>
         </div>
     </div>
-
-    <script src="{% static 'js/theme.js' %}"></script>
 </body>
 </html>
