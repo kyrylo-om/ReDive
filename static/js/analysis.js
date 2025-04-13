@@ -86,25 +86,33 @@ const plot_options = {
         },
         formatter: function (params) {
             return `
-                <strong>Post title</strong><br/>
-                Subreddit: r/politics<br/>
-                Upvotes: 1009<br/>
-                Comments: 93<br/>
-                Posted on 11.10.23<br/>
+                <strong>${params.data.title}</strong><br/>
+                Subreddit: r/${params.data.subreddit}<br/>
+                Upvotes: ${params.value[1]}<br/>
+                Comments: ${params.data.num_comments}<br/>
+                Posted on ${params.value[0]}<br/>
                 <span style="font-size:0.7rem">Click to see on Reddit</span>
             `;
         }
     },
     xAxis: {
         type: 'category',
-        data: Array.from({ length: 30 }, (_, i) => `October ${i + 1}`),
+        inverse: true,
         axisLine: {
             lineStyle: {
                 color: 'rgb(196, 196, 196)'
             }
         },
         axisLabel: {
-            color: 'rgb(196, 196, 196)'
+            color: 'rgb(196, 196, 196)',
+            formatter: (value) => {
+                const date = new Date(value)
+                return new Intl.DateTimeFormat("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                  }).format(date);
+            }
         }
     },
     yAxis: {
@@ -115,38 +123,57 @@ const plot_options = {
             }
         },
         axisLabel: {
-            color: 'rgb(196, 196, 196)'
+            color: 'rgb(196, 196, 196)',
+            formatter: (value) => {
+                if (value >= 1000000) return (value / 1000000) + 'M';
+                if (value >= 1000) return (value / 1000) + 'k';
+                return value;
+            }
         }
     },
     series: [{
-        data: Array.from({ length: 50 }, () => Math.floor(Math.random() * 100)),
+        data: posts.map(item => ({
+            value: [item.created_date, item.score],
+            title: item.title,
+            subreddit: item.subreddit,
+            body: item.body,
+            permalink: item.permalink,
+            num_comments: item.num_comments
+          })),
         type: 'scatter',
         symbolSize: 10,
         itemStyle: {
             color: 'rgb(255, 102, 0)'
         }
     }],
-    dataZoom: [{
-        type: 'slider',
-        zoomLock: false,
-        xAxisIndex: [0],
-        start: 0,
-        end: 100,
-        handleStyle: {
-            color: 'rgb(255, 255, 255)',
-            borderColor: '#8ad184',
-            borderWidth: 1
+    dataZoom: [
+        {
+            type: 'inside'
         },
-        handleLabel: {
-            show: false
-        },
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
-        fillerColor: 'rgba(255, 94, 0, 0.13)',
-        borderColor: 'rgb(255, 196, 172)'
+        {
+            type: 'slider',
+            labelFormatter: function (value) {
+                return ''
+            },
+            zoomLock: false,
+            xAxisIndex: [0],
+            start: 0,
+            end: 100,
+            handleStyle: {
+                color: 'rgb(255, 255, 255)',
+                borderColor: 'rgb(197, 197, 197)',
+                borderWidth: 1
+            },
+            handleLabel: {
+                show: true
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            fillerColor: 'rgba(255, 94, 0, 0.13)',
+            borderColor: 'rgb(255, 196, 172)'
     }],
     grid: {
-        left: 30,
-        right: 15,
+        left: 40,
+        right: 35,
         top: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderColor: 'rgba(161, 0, 0, 0.8)'
@@ -157,61 +184,7 @@ const pie_options = {
     tooltip: {
         trigger: 'item',
         confine: true,
-        // rich: {
-        //     a: {
-        //         lineHeight: 20,
-        //         width: 100
-        //     }
-        // },
-        // formatter: function (params) {
-        //     return `
-        //         <strong>${params.name}</strong><br/>
-        //         Value: ${params.value}<br/>
-        //         Upvotes: 1009<br/>
-        //         Comments: 93<br/>
-        //         Posted on 11.10.23<br/>
-        //         <span style="font-size:0.7rem">Click to see on Reddit</span>
-        //     `;
-        // }
     },
-    // legend: [
-    //     {
-    //         type: "scroll",
-    //         pageButtonItemGap: 20,
-    //         pageIconColor: '#ccc',
-    //         pageIconInactiveColor: '#878787',
-    //         pageTextStyle: {
-    //             color: 'rgb(196, 196, 196)'
-    //           },
-    //         data: ['No profile picture', 'User is active in too many subreddits', 'Generic username'],
-    //         left: 'left',
-    //         orient: 'vertical',
-    //         textStyle: {
-    //             color: '#ffffff'
-    //         }, 
-    //         formatter: function (text) {
-    //             return limit_text_width(text, 10)
-    //         }
-    //     },
-    //     {
-    //         type: "scroll",
-    //         pageButtonItemGap: 20,
-    //         pageIconColor: '#ccc',
-    //         pageIconInactiveColor: '#878787',
-    //         pageTextStyle: {
-    //             color: 'rgb(196, 196, 196)'
-    //           },
-    //         data: ['User is a moderator', 'Many upvotes on posts', 'Many upvotes on comments', 'Each post is unique', 'Account is 4 years old', 'Account has 22 trophies'],
-    //         left: 'right',
-    //         orient: 'vertical',
-    //         textStyle: {
-    //             color: '#ffffff'
-    //         },
-    //         formatter: function (text) {
-    //             return limit_text_width(text, 10)
-    //         }
-    //     }
-    // ],
     series: [
         {
             selectedMode: 'single',
@@ -273,27 +246,6 @@ plot.on('click', function (params) {
     window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0");
 });
 
-
-
-// function adjustPiePosition() {
-//     const chartWidth = document.getElementById('pie_chart').clientWidth;
-//     const chartHeight = document.getElementById('pie_chart').clientHeight;
-//     const pieRadius = 0.9 * chartHeight; // Calculate radius based on width
-
-//     // Update the center position
-//     pie_chart.setOption({
-//         series: [{
-//             center: [pieRadius, '50%'] // Set center based on calculated offset
-//         }]
-//     });
-// }
-
-// // Call the function to adjust position initially
-// adjustPiePosition();
-
-// // Adjust position on window resize
-// window.addEventListener('resize', adjustPiePosition);
-
 document.querySelectorAll('.factor').forEach(factor => {
     const itemName = factor.textContent.trim();
     
@@ -315,4 +267,4 @@ document.querySelectorAll('.factor').forEach(factor => {
 document.addEventListener('DOMContentLoaded', function() {
     fill_subreddits_table("upvotes")
     plot.resize();
-});
+})
