@@ -13,6 +13,7 @@ def save_analysis_entry(data: dict):
 
         history = History.objects.create(
             person=person,
+            pic=data['pic'],
             karma=data['karma'],
             link_karma=data['link_karma'],
             comment_karma=data['comment_karma'],
@@ -92,6 +93,7 @@ def get_analysis_entry(name: str) -> dict:
     data = {
         'name': person.name,
         'karma': history.karma,
+        'pic': history.pic,
         'link_karma': history.link_karma,
         'comment_karma': history.comment_karma,
         'created_date': person.created_date,
@@ -141,6 +143,7 @@ def serialize_the_persons_data(page, limit, sort_key, sort_dir):
 
         accounts.append({
             "username": person.name,
+            'pic': history.pic,
             "posts": post_count,
             "comments": comment_count,
             "bot_percentage": history.bot_likelihood_percent if history else "N/A"

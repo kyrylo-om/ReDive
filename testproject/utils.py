@@ -11,7 +11,6 @@ def prepare_data_analysis_page(query, data, today):
     up_comment=0
     j=0
     comment_amount=0
-    pic= DataGetter.get_reddit_avatar(query)
     date_today = today
     date_of_creation =data.get('created_date', [])
     account_age = datetime.today().year - date_of_creation.year
@@ -63,7 +62,7 @@ def prepare_data_analysis_page(query, data, today):
         n = 1
 
     return {
-        "pic":pic,
+        "pic":data['pic'],
         "date_today":date_today,
         'date_of_creation': date_of_creation,
         "account_age":account_age,

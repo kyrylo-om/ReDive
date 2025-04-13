@@ -20,6 +20,7 @@ class History(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="histories")
     analyzed_at = models.DateTimeField(default=timezone.now)
     karma = models.IntegerField()
+    pic = models.URLField(max_length=2048)
     link_karma = models.IntegerField()
     comment_karma = models.IntegerField()
     is_mod = models.BooleanField()

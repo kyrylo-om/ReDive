@@ -50,37 +50,24 @@ class DataGetter:
             raise ValueError("Username must be a non-empty string")
         proxy_link = DataGetter._reddit.redditor(username)
         _ = proxy_link.id
-        return self.description_red(proxy_link)
+        return self.description_red(proxy_link, username)
 
     @staticmethod
-    def description_red(proxy_link: praw.models.Redditor, limit_post = 1000, limit_comment = 1000):
+    def description_red(proxy_link: praw.models.Redditor, username:str, limit_post = 1000, limit_comment = 1000):
         """Return the description of a Reddit user"""
         try:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
             comments = list(proxy_link.comments.new(limit=limit_comment))
-            bot_score = DataGetter.compute_bot_score(proxy_link, submissions, comments)
-            trophies = [
-                        {
-                            "name": trophy.name,
-                            "icon_70": trophy.icon_70,
-                            "icon_40": trophy.icon_40,
-                        }
-                        for trophy in proxy_link.trophies()
-                    ]
             subreddit = proxy_link.subreddit
-            subreddit_data = {
-                "banner_img": subreddit["banner_img"],
-                "name": subreddit["name"],
-                "over_18": subreddit["over_18"],
-                "public_description": subreddit["public_description"],
-                "subscribers":subreddit["subscribers"],
-                "title":subreddit["title"]
-            }
+            bot_score = DataGetter.compute_bot_score(proxy_link, submissions, comments)
+
+
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
 
         return {
             "name": proxy_link.name,
+            'pic': DataGetter.get_reddit_avatar(username),
             "id": proxy_link.id,
             "karma": proxy_link.link_karma + proxy_link.comment_karma,
             "link_karma": proxy_link.link_karma,
@@ -90,10 +77,24 @@ class DataGetter:
             "is_employee": proxy_link.is_employee,
             "is_gold": proxy_link.is_gold,
             "verified": proxy_link.verified,
-            "trophies": trophies,
+            "trophies": [
+                        {
+                            "name": trophy.name,
+                            "icon_70": trophy.icon_70,
+                            "icon_40": trophy.icon_40,
+                        }
+                        for trophy in proxy_link.trophies()
+                    ],
             "has_verified_email": proxy_link.has_verified_email,
             "bot_likelihood_percent": bot_score,
-            "subreddit": subreddit_data,
+            "subreddit": {
+                "banner_img": subreddit["banner_img"],
+                "name": subreddit["name"],
+                "over_18": subreddit["over_18"],
+                "public_description": subreddit["public_description"],
+                "subscribers":subreddit["subscribers"],
+                "title":subreddit["title"]
+            },
             "recent_posts": [
                 {
                     "title": post.title,
