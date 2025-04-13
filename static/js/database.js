@@ -18,24 +18,24 @@ function fetchAccountsData(sort = null, page = 1) {
             return response.json();
         })
         .then(data => {
-            // Якщо це перший запит, очищаємо старі дані
+            const newAccounts = data.accounts; // беремо масив з data.accounts
+            const totalCount = data.totalCount; // отримуємо загальну кількість
+        
             if (page === 1) {
-                accountsData = data;
+                accountsData = newAccounts;
             } else {
-                accountsData = [...accountsData, ...data];  // Додаємо нові акаунти
+                accountsData = [...accountsData, ...newAccounts];
             }
-            renderAccounts(accountsData);
-        })
+        
+            renderAccounts(accountsData, totalCount); // Передаємо totalCount в рендер
+        })        
         .catch(error => {
             console.error("Error fetching accounts data:", error);
         });
 }
 
-const container = document.getElementById("accounts-container");
-const baseAnalysisURL = container.dataset.analysisUrl;
-
 // Функція для рендерингу акаунтів
-function renderAccounts(accounts) {
+function renderAccounts(accounts, totalCount) {
     const container = document.getElementById("accounts-container");
 
     if (!container) {
@@ -43,9 +43,8 @@ function renderAccounts(accounts) {
         return;
     }
 
-    container.innerHTML = ""; // Очищаємо контейнер
+    container.innerHTML = "";
 
-    // Рендеримо акаунти
     accounts.forEach(account => {
         const accountDiv = document.createElement("div");
         accountDiv.classList.add("account");
@@ -70,12 +69,11 @@ function renderAccounts(accounts) {
         container.appendChild(accountDiv);
     });
 
-    // Якщо є більше акаунтів для завантаження, показуємо кнопку
     const loadMoreBtn = document.getElementById("load-more-btn");
-    if (accounts.length >= itemsPerPage) {
-        loadMoreBtn.style.display = "block"; // Показуємо кнопку
+    if (accounts.length < totalCount) {
+        loadMoreBtn.style.display = "block";
     } else {
-        loadMoreBtn.style.display = "none"; // Ховаємо кнопку, якщо немає більше акаунтів
+        loadMoreBtn.style.display = "none";
     }
 }
 
