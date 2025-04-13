@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/database.css' %}">
     <script src="{% static 'js/database.js' %}" defer></script>
     <script src="{% static 'js/theme.js' %}" defer></script>
+    <script src="{% static 'js/search-check.js' %}" defer></script>
     <style>
         :root {
             --search-icon: url('{% static 'img/search-icon.png' %}');
@@ -43,7 +44,7 @@
 
             <!-- Обгортка для пошукової панелі -->
             <div class="searchbar-wrapper">
-                <form action="{% url 'analysispage' %}" method="GET">
+                <form id="user-search-form">
                     <div class="searchbar">
                         <input type="text" name="query" placeholder="U/USERNAME" required>
                         <button type="submit" class="search-btn"></button>
@@ -54,7 +55,7 @@
 
     </div>
 
-    <div id="accounts-container"></div>
+    <div id="accounts-container" data-analysis-url="{% url 'analysispage' %}"></div>
 
     <button id="load-more-btn" class="load-more-btn">Show 10 more</button>
 
