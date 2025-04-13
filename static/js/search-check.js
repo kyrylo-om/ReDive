@@ -24,9 +24,5 @@ document.addEventListener("DOMContentLoaded", () => {
                     errorMsg.textContent = `User "${username}" does not exist.`;
                 }
             })
-            .catch(err => {
-                console.error("Error:", err);
-                errorMsg.textContent = "Server error. :)";
-            });
     });
 });
