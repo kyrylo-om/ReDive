@@ -24,4 +24,5 @@ urlpatterns = [
     path('user/', views.analysispage, name='analysispage'),
     path('database/', views.datapage, name='datapage'),
     path('api/accounts/', views.get_accounts_data, name='get_accounts_data'),
+    path('api/check-user/', views.check_username, name='check_username'),
 ]
