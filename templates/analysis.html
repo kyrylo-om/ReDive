@@ -27,7 +27,7 @@
 				<div class="profile-info">
 					<p class="username">{{ name }}</p>
         			<a class="username2" href="https://www.reddit.com/user/{{ username }}" target="_blank">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ date_today }}</span>. <a href="" style="color: inherit">Analyze again</a></p>
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ date_today }}</span>. <a href="" style="color: inherit">Analyze again &#8635</a></p>
 				</div>
 			</div>
 			<div class="flex-container", style="flex-direction: row;">
@@ -76,7 +76,7 @@
 			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
 				<p class="title">Bot rank</p>
 				<p class="statistic", style="color: lightgreen;">18%</p>
-				<button class="section-button">Detailed analysis ⬇</button>
+				<button class="section-button" onclick="scroll_to_analysis()">Detailed analysis&nbsp;⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Subreddits</p>
 				{% for sr in subreddit_names %}
@@ -87,12 +87,12 @@
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}
-				<button class="section-button", style="margin-bottom: 0;">Activity monitor ⬇</button>
+				<button class="section-button", style="margin-bottom: 0;" onclick="scroll_to_monitor()">Activity monitor&nbsp;⬇</button>
 			</div>
 		</div>
 	</div>
 	<div class="section-title">
-		<h2 class="section-text">ACTIVITY MONITOR</h2>
+		<h2 class="section-text" id="activity-monitor">ACTIVITY MONITOR</h2>
 		<div class="section-line"></div>
 	</div>
 	<div class="flex-container width-responsive">
@@ -119,7 +119,7 @@
 		</div>
 	</div>
 	<div class="section-title">
-		<h2 class="section-text">BEHAVIOUR ANALYSIS</h2>
+		<h2 class="section-text" id="behaviour-analysis">BEHAVIOUR ANALYSIS</h2>
 		<div class="section-line"></div>
 	</div>
 	<div class="flex-container width-responsive">

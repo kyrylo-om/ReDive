@@ -36,22 +36,22 @@ function fill_subreddits_table(sort_criteria) {
     if (sort_criteria == "name") {
         subreddits.sort((a, b) => a.name.localeCompare(b.name));
         clear_criterias();
-        document.getElementById('table-head').children[0].textContent = "Name ↓"
+        document.getElementById('table-head').children[0].textContent = "Name&nbsp;↓"
     }
     else if (sort_criteria == "posts") {
         subreddits.sort((a, b) => b.posts - a.posts);
         clear_criterias();
-        document.getElementById('table-head').children[1].textContent = "Posts ↓"
+        document.getElementById('table-head').children[1].textContent = "Posts&nbsp;↓"
     }
     else if (sort_criteria == "comments") {
         subreddits.sort((a, b) => b.comments - a.comments);
         clear_criterias();
-        document.getElementById('table-head').children[2].textContent = "Comments ↓"
+        document.getElementById('table-head').children[2].textContent = "Comments&nbsp;↓"
     }
     else if (sort_criteria == "upvotes") {
         subreddits.sort((a, b) => b.upvotes - a.upvotes);
         clear_criterias();
-        document.getElementById('table-head').children[3].textContent = "Upvotes ↓"
+        document.getElementById('table-head').children[3].textContent = "Upvotes&nbsp;↓"
     }
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
@@ -63,6 +63,14 @@ function fill_subreddits_table(sort_criteria) {
         `;
         table.appendChild(sub)
     }
+}
+
+function scroll_to_analysis() {
+    document.getElementById('behaviour-analysis').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scroll_to_monitor() {
+    document.getElementById('activity-monitor').scrollIntoView({ behavior: 'smooth' });
 }
 
 const plot_options = {
