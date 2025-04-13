@@ -5,12 +5,15 @@ from reddit_request import DataGetter
 
 
 def prepare_data_analysis_page(query, data, today):
+    d = DataGetter()
     up_v_down=0
     up=0
     n=0
+    c=0
     up_comment=0
     j=0
     comment_amount=0
+    post_text=""
     date_today = today
     date_of_creation =data.get('created_date', [])
     account_age = datetime.today().year - date_of_creation.year
@@ -28,9 +31,21 @@ def prepare_data_analysis_page(query, data, today):
         up_v_down +=i['upvotes_ratio']
         up+=i["score"]
         comment_amount+=i['num_comments']
+        if n<50:
+            post_text+=i["title"]+" "
+            try:
+                post_text+=i["body"]+" "
+            except KeyError:
+                pass
         n+=1
     for i in data.get('recent_comments', []):
         up_comment+=i["score"]
+        if c<50:
+            try:
+                post_text += i["body"] + " "
+            except KeyError:
+                pass
+        c+=1
     subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
 
     for post in data.get('recent_posts', []):
@@ -58,9 +73,10 @@ def prepare_data_analysis_page(query, data, today):
             posting_frequency = round(posts_amount / months, 2)
         except Exception as e:
             print("Error calculating posting frequency:", e)
+    # will be needed when we will use semantics:
+    # semantics_list, semantics_analysis = d.semantics_analysis(post_text)
     if n == 0:
         n = 1
-
     return {
         "pic":data['pic'],
         "date_today":date_today,
