@@ -41,10 +41,10 @@
 }
 
 .search-container {
-    height: 3rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-items: center;
     align-items: center;
-    gap: 10px;
     width: 90%;
     max-width: 800px;
     margin: 2rem auto;
