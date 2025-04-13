@@ -10,6 +10,11 @@ a {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Kanit', sans-serif;
+    transition: 
+        background-color 0.5s ease,
+        color 0.3s ease,
+        box-shadow 0.5s ease,
+        border-color 0.5s ease;
 }
 
 body {
@@ -113,42 +118,8 @@ body {
     text-decoration: underline;
 }
 
-html {
-    transition: background-color 0.5s ease, color 0.3s ease;
-}
-
-body {
-    transition: 
-        background 0.5s ease,
-        color 0.3s ease;
-}
-
 .header,
 .footer {
-    transition: 
-        background-color 0.5s ease,
-        color 0.3s ease,
-        box-shadow 0.5s ease,
-        border-color 0.5s ease;
-}
-
-html {
-    transition: background-color 0.5s ease, color 0.3s ease;
-}
-
-body {
-    transition: 
-        background 0.5s ease,
-        color 0.3s ease;
-}
-
-.header,
-.main-container,
-.footer,
-.searchbar input,
-.search-btn,
-.database-btn,
-.footer .support {
     transition: 
         background-color 0.5s ease,
         color 0.3s ease,
@@ -157,8 +128,7 @@ body {
 }
 
 /* For backdrop-filter elements */
-.main-container,
-.footer {
+.main-container {
     transition: 
         background-color 0.5s ease,
         backdrop-filter 0.5s ease,
