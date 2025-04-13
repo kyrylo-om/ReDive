@@ -73,8 +73,8 @@ body {
     -webkit-backdrop-filter: blur(15px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.125);
 
-    color: var(--text-color);
-    background-color: var(--container-bg);
+    color: var(--text-color) !important;
+    background-color: var(--container-bg) !important;
 
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     display: flex;
