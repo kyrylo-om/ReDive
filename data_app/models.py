@@ -29,7 +29,7 @@ class History(models.Model):
     verified = models.BooleanField()
     has_verified_email = models.BooleanField()
     bot_likelihood_percent = models.IntegerField()
-    subreddit = models.CharField(max_length=100, null=True, blank=True)
+    subreddit = models.JSONField(default=dict)
     def __str__(self):
         analyzed_at = self.analyzed_at.strftime('%Y-%m-%d %H:%M')
         return f"{self.person.name} @ {analyzed_at}"
