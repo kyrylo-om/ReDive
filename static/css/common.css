@@ -46,6 +46,10 @@ body {
     color: var(--text-color);
 }
 
+.header a {
+    display: inline-block;
+}
+
 /* Theme toggle button */
 .theme-toggle {
     position: absolute;
