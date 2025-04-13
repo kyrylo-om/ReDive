@@ -46,6 +46,11 @@ function renderAccounts(accounts) {
     accounts.forEach(account => {
         const accountDiv = document.createElement("div");
         accountDiv.classList.add("account");
+
+        accountDiv.addEventListener("click", () => {
+            window.location.href = `{% url 'analysispage' %}?name=${encodeURIComponent(account.username)}`;
+        });
+
         accountDiv.innerHTML = `
             <div class="avatar">
                 <img src="https://i.pravatar.cc/50?u=${account.username}" alt="${account.username}">
