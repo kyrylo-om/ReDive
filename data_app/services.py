@@ -111,41 +111,42 @@ def get_analysis_entry(name: str) -> dict:
 def serialize_the_persons_data(page, limit, sort_key, sort_dir):
     persons = Person.objects.all().select_related("last_analysis")
 
-    if sort_key in ["comments", "bot_likelihood_percent", "posts"]:
-        if sort_key == "bot_likelihood_percent":
-            persons = sorted(
-                persons,
-                key=lambda p: p.last_analysis.bot_likelihood_percent if p.last_analysis else -1,
-                reverse=(sort_dir == "desc")
-            )
-        elif sort_key == "karma":
-            persons = sorted(
-                persons,
-                key=lambda p: (p.last_analysis.karma if p.last_analysis else 0),
-                reverse=(sort_dir == "desc")
-            )
-        else:
-            persons = persons.order_by(f"{'' if sort_dir == 'asc' else '-'}{sort_key}")
-    else:
-        persons = persons.order_by('-last_analysis__analyzed_at')
-
+    # if sort_key in ["comments", "bot_likelihood_percent", "posts"]:
+    #     if sort_key == "bot_likelihood_percent":
+    #         persons = sorted(
+    #             persons,
+    #             key=lambda p: p.last_analysis.bot_likelihood_percent if p.last_analysis else -1,
+    #             reverse=(sort_dir == "desc")
+    #         )
+    #     elif sort_key == "karma":
+    #         persons = sorted(
+    #             persons,
+    #             key=lambda p: (p.last_analysis.karma if p.last_analysis else 0),
+    #             reverse=(sort_dir == "desc")
+    #         )
+    #     else:
+    #         persons = persons.order_by(f"{'' if sort_dir == 'asc' else '-'}{sort_key}")
+    # else:
+    persons = persons.order_by('-last_analysis__analyzed_at')
+    total_count = persons.all().count()
 
     paginator = Paginator(persons, limit)
     page_obj = paginator.get_page(page)
 
-    data = []
+    accounts = []
     for person in page_obj:
         history = person.last_analysis
         post_count = history.posts.count() if history else 0
         comment_count = history.comments.count() if history else 0
 
-        data.append({
+        accounts.append({
             "username": person.name,
             "posts": post_count,
             "comments": comment_count,
             "bot_percentage": history.bot_likelihood_percent if history else "N/A"
         })
-    
+
+    data = {'accounts':accounts, 'totalCount':total_count}
     return data
 def check_if_user_exists(username: str) -> bool:
     """Check if a user exists in the database"""
