@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <script src="{% static 'js/theme.js' %}" defer></script>
+    <script src="{% static 'js/search-check.js' %}" defer></script>
     <style>
         :root {
             --search-icon: url('{% static 'img/search-icon.png' %}');
@@ -33,11 +34,10 @@
         <h2>DIVE INTO ACCOUNT ANALYSIS</h2>
         <p>JUST IN A FEW CLICKS</p>
         
-        <form action="{% url 'analysispage' %}" method="GET">
+        <form id="user-search-form">
             <div class="searchbar">
                 <input type="text" name="query" placeholder="U/USERNAME" required>
-                <button type="submit" class="search-btn">
-                </button>
+                <button type="submit" class="search-btn"></button>
             </div>
         </form>
 
