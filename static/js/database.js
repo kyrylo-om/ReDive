@@ -31,6 +31,9 @@ function fetchAccountsData(sort = null, page = 1) {
         });
 }
 
+const container = document.getElementById("accounts-container");
+const baseAnalysisURL = container.dataset.analysisUrl;
+
 // Функція для рендерингу акаунтів
 function renderAccounts(accounts) {
     const container = document.getElementById("accounts-container");
@@ -48,7 +51,7 @@ function renderAccounts(accounts) {
         accountDiv.classList.add("account");
 
         accountDiv.addEventListener("click", () => {
-            window.location.href = `{% url 'analysispage' %}?name=${encodeURIComponent(account.username)}`;
+            window.location.href = `${baseAnalysisURL}?name=${encodeURIComponent(account.username)}`;
         });
 
         accountDiv.innerHTML = `
