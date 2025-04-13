@@ -83,7 +83,7 @@ class DataGetter:
             "karma": proxy_link.link_karma + proxy_link.comment_karma,
             "link_karma": proxy_link.link_karma,
             "comment_karma": proxy_link.comment_karma,
-            "created_date": datetime.fromtimestamp(proxy_link.created_utc, tz=timezone.utc),
+            "created_date": datetime.fromtimestamp(proxy_link.created_utc).date(),
             "is_mod": proxy_link.is_mod,
             "is_employee": proxy_link.is_employee,
             "is_gold": proxy_link.is_gold,
@@ -115,7 +115,7 @@ class DataGetter:
                     "url": post.url,
                     "score": post.score,
                     "upvotes_ratio": post.upvote_ratio,
-                    "created_date": datetime.fromtimestamp(post.created_utc).date(),
+                    "created_date": datetime.fromtimestamp(post.created_utc, tz=timezone.utc),
                     "num_comments": post.num_comments,
                     "over_18": post.over_18,
                 }
@@ -128,7 +128,7 @@ class DataGetter:
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
                     "url": comment.permalink,
-                    "created_date": datetime.fromtimestamp(comment.created_utc).date(),
+                    "created_date": datetime.fromtimestamp(comment.created_utc, tz=timezone.utc),
                 }
                 for comment in comments
                 if hasattr(comment, "body")

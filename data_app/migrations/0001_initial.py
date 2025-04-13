@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 ("score", models.IntegerField()),
                 ("subreddit", models.CharField(max_length=100)),
                 ("url", models.URLField()),
-                ("created_date", models.DateField()),
+                ("created_date", models.DateTimeField()),
                 (
                     "history",
                     models.ForeignKey(
@@ -83,7 +83,7 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(max_length=75, unique=True)),
                 ("entry_date", models.DateTimeField(auto_now_add=True)),
-                ("created_date", models.DateTimeField(blank=True, null=True)),
+                ("created_date", models.DateField(blank=True, null=True)),
                 (
                     "last_analysis",
                     models.ForeignKey(
@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
                 ("url", models.URLField()),
                 ("score", models.IntegerField()),
                 ("upvotes_ratio", models.FloatField()),
-                ("created_date", models.DateField()),
+                ("created_date", models.DateTimeField()),
                 ("num_comments", models.IntegerField()),
                 ("over_18", models.BooleanField()),
                 (
