@@ -55,7 +55,7 @@ function renderAccounts(accounts, totalCount) {
 
         accountDiv.innerHTML = `
             <div class="avatar">
-                <img src="${account.avatar}" alt="${account.username}">
+                <img src="${account.pic}" alt="${account.username}">
             </div>
             <div class="account-content">
                 <div class="username">${account.username}</div>
