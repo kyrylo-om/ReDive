@@ -59,6 +59,14 @@ class DataGetter:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
             comments = list(proxy_link.comments.new(limit=limit_comment))
             bot_score = DataGetter.compute_bot_score(proxy_link, submissions, comments)
+            trophies = [
+                        {
+                            "name": trophy.name,
+                            "icon_70": trophy.icon_70,
+                            "icon_40": trophy.icon_40,
+                        }
+                        for trophy in proxy_link.trophies()
+                    ]
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
 
@@ -73,7 +81,7 @@ class DataGetter:
             "is_employee": proxy_link.is_employee,
             "is_gold": proxy_link.is_gold,
             "verified": proxy_link.verified,
-            "trophies": list(proxy_link.trophies()),
+            "trophies": trophies,
             "has_verified_email": proxy_link.has_verified_email,
             "bot_likelihood_percent": bot_score,
             "subreddit": (
