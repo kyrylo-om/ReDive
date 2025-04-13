@@ -74,7 +74,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.125);
 
     color: var(--text-color);
-    background-color: var(--footer-bg);
+    background-color: var(--container-bg);
 
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     display: flex;
