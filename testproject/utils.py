@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from reddit_request import DataGetter
 
 
-def prepare_data_analysis_page(query, data):
+def prepare_data_analysis_page(query, data, today):
     up_v_down=0
     up=0
     n=0
@@ -12,7 +12,7 @@ def prepare_data_analysis_page(query, data):
     j=0
     comment_amount=0
     pic= DataGetter.get_reddit_avatar(query)
-    date_today = datetime.today().strftime("%B %d %Y")
+    date_today = today
     date_of_creation =data.get('created_date', [])
     account_age = datetime.today().year - date_of_creation.year
     trophies = len(data.get('trophies', []))
@@ -84,5 +84,7 @@ def prepare_data_analysis_page(query, data):
         "up_comment":round(up_comment/n,2),
         "subreddit_activity": subreddit_activity,
         "subreddit_names": [sub['name'] for sub in subreddit_activity][:3],
-        "query": query
+        "query": query,
+        "posts": data['recent_posts'],
+        'comments': data['recent_comments']
     }
