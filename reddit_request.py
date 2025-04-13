@@ -67,6 +67,15 @@ class DataGetter:
                         }
                         for trophy in proxy_link.trophies()
                     ]
+            subreddit = proxy_link.subreddit
+            subreddit_data = {
+                "banner_img": subreddit["banner_img"],
+                "name": subreddit["name"],
+                "over_18": subreddit["over_18"],
+                "public_description": subreddit["public_description"],
+                "subscribers":subreddit["subscribers"],
+                "title":subreddit["title"]
+            }
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
 
@@ -84,9 +93,7 @@ class DataGetter:
             "trophies": trophies,
             "has_verified_email": proxy_link.has_verified_email,
             "bot_likelihood_percent": bot_score,
-            "subreddit": (
-                proxy_link.subreddit if proxy_link.subreddit else None
-            ),
+            "subreddit": subreddit_data,
             "recent_posts": [
                 {
                     "title": post.title,
