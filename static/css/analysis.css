@@ -174,12 +174,19 @@
 	font-weight: 500;
 }
 
-.statistic-line {
+.statistic-outline {
 	height: 1rem;
 	background-color: rgba(0, 0, 0, 0);
 	border: white solid 0.05rem;
 	border-radius: 2rem;
 	margin: 0.5rem 0;
+}
+
+.statistic-bar {
+	height: 1rem;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 2rem;
+	width: 80%;
 }
 
 .title {
@@ -199,6 +206,11 @@
     border: 0.1rem solid white;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s ease;
+}
+
+.section-button:hover {
+	transform: scale(1.05);
 }
 
 .plot {
