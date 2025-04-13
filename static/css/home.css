@@ -80,22 +80,19 @@
 }
 
 .search-btn {
+    background-image: var(--search-icon);
     background-color: var(--search-bg);
     width: 3rem;
     height: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
     border: none;
     border-radius: 0 5rem 5rem 0;
     cursor: pointer;
     transition: all 0.3s;
-    padding: 0;
 }
 
-.search-btn img {
-    width: 1.5rem;
-    height: 1.5rem;
-    object-fit: contain;
-    pointer-events: none;
+.search-btn:hover {
+    background-color: white;
 }
