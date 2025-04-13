@@ -5,13 +5,22 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="{% static 'css/common.css' %}">
 	<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
 	<script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 	<script src="{% static 'js/analysis.js' %}" defer></script>
+	<script src="{% static 'js/theme.js' %}" defer></script>
 	<title>ReDive analysis</title>
 </head>
 <body>
 	<header class="header">
+		<button 
+            id="theme-toggle" 
+            class="theme-toggle" 
+            data-sun-url="{% static 'img/sun.png' %}" 
+            data-moon-url="{% static 'img/moon.png' %}">
+            🌓
+        </button>
 		<a href="{% url 'homepage' %}">
             <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
         </a>
