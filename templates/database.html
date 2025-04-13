@@ -24,7 +24,9 @@
             data-moon-url="{% static 'img/moon.png' %}">
             🌓
         </button>
-        <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
+        <a href="{% url 'homepage' %}">
+            <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
+        </a>
     </header>
 
     <div class="main-container">
@@ -72,6 +74,14 @@
             <div class="sort-section">
                 <h4>Sort By:</h4>
                 <div class="sort-options">
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="bot_likelihood_percent-asc">
+                        Bot rank (Low to High)
+                    </label>
+                    <label class="sort-option">
+                        <input type="radio" name="sort" value="bot_likelihood_percent-desc">
+                        Bot rank (High to Low)
+                    </label>
                     <label class="sort-option">
                         <input type="radio" name="sort" value="posts-asc">
                         Posts (Low to High)
