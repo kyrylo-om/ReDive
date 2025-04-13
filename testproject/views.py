@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render
 from django.http import JsonResponse
-from reddit_request import DataGetter
+from reddit_request import DataGetter, NotFound
 from data_app.services import save_analysis_entry, get_analysis_entry, check_if_user_exists, get_date_of_last_analysis, is_last_analysis_recent, serialize_the_persons_data
 from testproject.utils import prepare_data_analysis_page
 
@@ -19,6 +19,18 @@ def get_accounts_data(request):
 
     data = serialize_the_persons_data(page, limit, sort_key, sort_dir)
 
+    return JsonResponse(data, safe=False)
+
+def check_username(request):
+    try:
+        query1 = request.GET.get('username', '')
+        if len(query1) > 1 and query1[1] == "/":
+            query=query1[2:]
+        else:
+            query=query1
+        data = {'exists':DataGetter.check_for_errors(query)}
+    except NotFound as e:
+        data = {'exists':False}
     return JsonResponse(data, safe=False)
 
 def analysispage(request):

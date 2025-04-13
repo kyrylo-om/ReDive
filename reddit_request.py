@@ -28,12 +28,8 @@ def handle_reddit_errors(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except prawcore.exceptions.NotFound as e:
-            raise NotFound("Resource not found") from e
-        except prawcore.exceptions.Forbidden as e:
-            raise RedditAPIError("Access forbidden") from e
         except Exception as e:
-            raise RedditAPIError(f"Unexpected error: {e}") from e
+            raise NotFound("Resource not found") from e
 
     return wrapper
 
@@ -52,7 +48,13 @@ class DataGetter:
 
     def __init__(self):
         pass
-
+    @handle_reddit_errors
+    def check_for_errors(username: str):
+        if not username or not isinstance(username, str):
+            raise ValueError("Username must be a non-empty string")
+        proxy_link = DataGetter._reddit.redditor(username)
+        _ = proxy_link.id
+        return True
     @handle_reddit_errors
     def get_user_analysis(self, username: str):
         """Get the analysis of a Reddit user"""
@@ -76,12 +78,12 @@ class DataGetter:
 
         return {
             "name": proxy_link.name,
-            'pic': DataGetter.get_reddit_avatar(username),
+            'pic': proxy_link.icon_img,
             "id": proxy_link.id,
             "karma": proxy_link.link_karma + proxy_link.comment_karma,
             "link_karma": proxy_link.link_karma,
             "comment_karma": proxy_link.comment_karma,
-            "created_date": datetime.fromtimestamp(proxy_link.created_utc).date(),
+            "created_date": datetime.fromtimestamp(proxy_link.created_utc, tz=timezone.utc),
             "is_mod": proxy_link.is_mod,
             "is_employee": proxy_link.is_employee,
             "is_gold": proxy_link.is_gold,
@@ -206,31 +208,31 @@ class DataGetter:
             ],
         }
 
-    @staticmethod
-    def get_reddit_avatar(username):
-        """Get the avatar of a Reddit user"""
-        if not username or not isinstance(username, str):
-            raise ValueError("Username must be a non-empty string")
-        headers = {"User-Agent": "windows:RedditAnalyzer:v1.0 (by /u/lukakerf)"}
-        api_url = f"https://www.reddit.com/user/{username}/about.json"
-        try:
-            response = requests.get(api_url, headers=headers, timeout=5)
-            rate_limit_used = response.headers.get('X-Ratelimit-Used')
-            rate_limit_remaining = response.headers.get('X-Ratelimit-Remaining')
-            rate_limit_reset = response.headers.get('X-Ratelimit-Reset')
-            print("Used: ", rate_limit_used)
-            print("Remaining: ", rate_limit_remaining)
-            print(f"Reset on: {int(rate_limit_reset)/60:.2f} minutes")
-            response.raise_for_status()
-        except requests.exceptions.RequestException:
-            return None
-        if response.status_code == 200:
-            data = response.json()
-            avatar_url = data.get("data", {}).get("icon_img", "").split("?")[0]
-            if avatar_url:
-                return avatar_url
+    # @staticmethod
+    # def get_reddit_avatar(username):
+    #     """Get the avatar of a Reddit user"""
+    #     if not username or not isinstance(username, str):
+    #         raise ValueError("Username must be a non-empty string")
+    #     headers = {"User-Agent": "windows:RedditAnalyzer:v1.0 (by /u/lukakerf)"}
+    #     api_url = f"https://www.reddit.com/user/{username}/about.json"
+    #     try:
+    #         response = requests.get(api_url, headers=headers, timeout=5)
+    #         rate_limit_used = response.headers.get('X-Ratelimit-Used')
+    #         rate_limit_remaining = response.headers.get('X-Ratelimit-Remaining')
+    #         rate_limit_reset = response.headers.get('X-Ratelimit-Reset')
+    #         print("Used: ", rate_limit_used)
+    #         print("Remaining: ", rate_limit_remaining)
+    #         print(f"Reset on: {int(rate_limit_reset)/60:.2f} minutes")
+    #         response.raise_for_status()
+    #     except requests.exceptions.RequestException:
+    #         return None
+    #     if response.status_code == 200:
+    #         data = response.json()
+    #         avatar_url = data.get("data", {}).get("icon_img", "").split("?")[0]
+    #         if avatar_url:
+    #             return avatar_url
 
-        return None
+    #     return None
 
     @handle_reddit_errors
     def semantics_analysis(self,row: str):
