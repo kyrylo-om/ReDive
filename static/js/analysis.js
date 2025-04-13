@@ -65,6 +65,14 @@ function fill_subreddits_table(sort_criteria) {
     }
 }
 
+function scroll_to_analysis() {
+    document.getElementById('behaviour-analysis').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scroll_to_monitor() {
+    document.getElementById('activity-monitor').scrollIntoView({ behavior: 'smooth' });
+}
+
 const plot_options = {
     tooltip: {
         trigger: 'item',
