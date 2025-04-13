@@ -5,7 +5,7 @@ let currentSort = null; // Поточне сортування
 
 // Функція для отримання даних з бекенду
 function fetchAccountsData(sort = null, page = 1) {
-    let url = `/api/accounts/?page=${page}&limit=${itemsPerPage}`;
+    let url = `database/?page=${page}&limit=${itemsPerPage}`;
     
     // Додаємо параметри сортування, якщо вони є
     if (sort) {
