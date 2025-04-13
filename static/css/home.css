@@ -59,10 +59,11 @@
 }
 
 .searchbar {
-    width: 100%;
-    max-width: 31.25rem;
+    max-width: 100%;
+    width: 400px;
     margin: 1.8rem auto;
     display: flex;
+    height: 3rem;
 }
 
 .searchbar input {

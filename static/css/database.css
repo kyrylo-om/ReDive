@@ -208,10 +208,11 @@ h4 {
 
 .searchbar {
     display: flex;
-    flex-grow: 1;
     height: 100%;
     align-items: stretch;
-    width: 100%;
+    max-width: 100%;
+    width: 400px;
+    height: 3rem;
 }
 
 .searchbar input {
@@ -334,4 +335,17 @@ h4 {
 
 .load-more-btn:hover {
     background-color: #45a049;
+}
+
+.error-message {
+    height: 1.2rem; /* або скільки тобі треба */
+    font-size: 0.9rem;
+    color: red;
+    text-align: center;
+    margin-top: 4px;
+    visibility: hidden; /* приховано, але місце є */
+}
+
+.error-message.visible {
+    visibility: visible;
 }
