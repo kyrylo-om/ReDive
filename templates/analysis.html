@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
-{{ subreddit_activity|json_script:"django-data" }}
+
+{{ data|json_script:"django_data" }}
+
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
@@ -33,68 +35,78 @@
 		<div class="flex-container", style="flex-direction: column;">
 			<div class="box profile">
 				<div class="profile-picture">
-					<img src={{ pic }} alt="Profile Picture" />
+					<img src={{ data.pic }} alt="Profile Picture" />
 				</div>
 				<div class="profile-info">
-					<p class="username">{{ name }}</p>
-        			<a class="username2" href="https://www.reddit.com/user/{{ username }}" target="_blank">u/{{ username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ date_today }}</span>. <a href="" style="color: inherit">Analyze again &#8635</a></p>
+					<p class="username">{{ data.name }}</p>
+        			<a class="username2" href="https://www.reddit.com/user/{{ data.username }}" target="_blank">u/{{ data.username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ data.date_today }}</span>. <a href="" style="color: inherit">Analyze again &#8635</a></p>
 				</div>
-			</div>
+			</div>	
 			<div class="flex-container", style="flex-direction: row;">
-				<div class="box">
+				<div class="box", style="flex-grow: 0">
 					<div class="trophies-div">
 						<p class="statistic-title">Trophies</p>
 						<button class="trophies-button">View</button>
 					</div>
-					<p class="statistic", style="color: gold;">{{ trophies }}</p>
+					<p class="statistic", style="color: gold;">{{ data.trophies }}</p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Registration date</p>
-					<p class="date-statistic">{{ date_of_creation }}</p>
-					<p class="subtext">Account is <span class="bold">{{ account_age }}</span> years old</p>
+					<p class="date-statistic">{{ data.date_of_creation }}</p>
+					<p class="subtext">Account is <span class="bold">{{ data.account_age }}</span> years old</p>
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">{{ post }}〡<span class="orange">{{ post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
+					<p class="statistic">{{ data.post_count }}〡<span class="orange">{{ data.post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">{{ comment }}〡<span class="orange">{{ comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
-					<p class="subtext"><span class="bold">{{ averal_comments }}</span> comments on user's own posts</p>
+					<p class="statistic">{{ data.comment_count }}〡<span class="orange">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
+					<p class="subtext"><span class="bold">2</span> comments on user's own posts</p>
 				</div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: row;">
 			<div class="box">
-				<p class="statistic-title">Posting frequency: <span class="orange bold">{{posting_frequency}}</span> per day</p>
-				<div class="statistic-line"></div>
+				<p class="statistic-title">Posting frequency: <span class="orange bold">{{data.posting_frequency}}</span> per day</p>
+				<div class="statistic-outline">
+					<div class="statistic-bar"></div>
+				</div>
 				<div class="separator-line"></div>
 				
-				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">{{ up }}</span></p>
-				<div class="statistic-line"></div>
+				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">{{ data.up }}</span></p>
+				<div class="statistic-outline">
+					<div class="statistic-bar"></div>
+				</div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage comments per post: <span class="orange bold">{{ comment_amount }}</span></p>
-				<div class="statistic-line"></div>
+				<p class="statistic-title">Avarage comments per post: <span class="orange bold">{{ data.comment_amount }}</span></p>
+				<div class="statistic-outline">
+					<div class="statistic-bar"></div>
+				</div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">{{ up_comment }}</span></p>
-				<div class="statistic-line"></div>
+				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">{{ data.up_comment }}</span></p>
+				<div class="statistic-outline">
+					<div class="statistic-bar"></div>
+				</div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ up_v_down }}</span></p>
-				<div class="statistic-line"></div>
+				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ data.up_v_down }}</span></p>
+				<div class="statistic-outline">
+					<div class="statistic-bar"></div>
+				</div>
 			</div>
 			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
 				<p class="title">Bot rank</p>
 				<p class="statistic", style="color: lightgreen;">18%</p>
 				<button class="section-button" onclick="scroll_to_analysis()">Detailed analysis&nbsp;⬇</button>
 				<div class="separator-line"></div>
-				<p class="title">Subreddits</p>
-				{% for sr in subreddit_names %}
-						<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
+				<p class="title">Active in:</p>
+				{% for sr in data.subreddit_names %}
+					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
-				{% if subreddit_activity|length > 3 %}
-					<p class="subtext">- and {{ k }} more -</p>
+				{% if data.subreddit_activity|length > 3 %}
+					<p class="subtext">- and {{ data.k }} more -</p>
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}

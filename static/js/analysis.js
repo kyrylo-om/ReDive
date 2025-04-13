@@ -2,8 +2,12 @@
 const plot = echarts.init(document.getElementById('plot'));
 const pie_chart = echarts.init(document.getElementById('pie_chart'));
 
-// Django variables
-const subreddits = JSON.parse(document.getElementById('django-data').textContent);
+// Django data
+const django_data = JSON.parse(document.getElementById('django_data').textContent);
+
+const subreddits = django_data['subreddit_activity'];
+const posts = django_data['posts'];
+const comments = django_data['comments'];
 
 // Functions
 function limit_text_width (text, max_width) {
@@ -36,22 +40,22 @@ function fill_subreddits_table(sort_criteria) {
     if (sort_criteria == "name") {
         subreddits.sort((a, b) => a.name.localeCompare(b.name));
         clear_criterias();
-        document.getElementById('table-head').children[0].textContent = "Name&nbsp;↓"
+        document.getElementById('table-head').children[0].innerHTML = "Name&nbsp;↓"
     }
     else if (sort_criteria == "posts") {
         subreddits.sort((a, b) => b.posts - a.posts);
         clear_criterias();
-        document.getElementById('table-head').children[1].textContent = "Posts&nbsp;↓"
+        document.getElementById('table-head').children[1].innerHTML = "Posts&nbsp;↓"
     }
     else if (sort_criteria == "comments") {
         subreddits.sort((a, b) => b.comments - a.comments);
         clear_criterias();
-        document.getElementById('table-head').children[2].textContent = "Comments&nbsp;↓"
+        document.getElementById('table-head').children[2].innerHTML = "Comments&nbsp;↓"
     }
     else if (sort_criteria == "upvotes") {
         subreddits.sort((a, b) => b.upvotes - a.upvotes);
         clear_criterias();
-        document.getElementById('table-head').children[3].textContent = "Upvotes&nbsp;↓"
+        document.getElementById('table-head').children[3].innerHTML = "Upvotes&nbsp;↓"
     }
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
