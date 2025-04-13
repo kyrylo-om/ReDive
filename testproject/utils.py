@@ -17,8 +17,8 @@ def prepare_data_analysis_page(query, data, today):
     account_age = datetime.today().year - date_of_creation.year
     trophies = len(data.get('trophies', []))
     username = data.get('name')
-    if data.get('subreddit').title:
-        name = data.get('subreddit').title
+    if data.get('subreddit')['title']:
+        name = data.get('subreddit')['title']
     else:
         name = username
     posts_amount=len(data.get('recent_posts', []))
