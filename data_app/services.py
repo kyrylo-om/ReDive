@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.utils import timezone
 from django.db import transaction
+from django.core.paginator import Paginator
 from .models import Person, History, Post, Comment
 
 
@@ -107,7 +108,45 @@ def get_analysis_entry(name: str) -> dict:
     }
 
     return data
+def serialize_the_persons_data(page, limit, sort_key, sort_dir):
+    persons = Person.objects.all().select_related("last_analysis")
 
+    if sort_key in ["comments", "bot_likelihood_percent", "posts"]:
+        if sort_key == "bot_likelihood_percent":
+            persons = sorted(
+                persons,
+                key=lambda p: p.last_analysis.bot_likelihood_percent if p.last_analysis else -1,
+                reverse=(sort_dir == "desc")
+            )
+        elif sort_key == "karma":
+            persons = sorted(
+                persons,
+                key=lambda p: (p.last_analysis.karma if p.last_analysis else 0),
+                reverse=(sort_dir == "desc")
+            )
+        else:
+            persons = persons.order_by(f"{'' if sort_dir == 'asc' else '-'}{sort_key}")
+    else:
+        persons = persons.order_by('-last_analysis__analyzed_at')
+
+
+    paginator = Paginator(persons, limit)
+    page_obj = paginator.get_page(page)
+
+    data = []
+    for person in page_obj:
+        history = person.last_analysis
+        post_count = history.posts.count() if history else 0
+        comment_count = history.comments.count() if history else 0
+
+        data.append({
+            "username": person.name,
+            "posts": post_count,
+            "comments": comment_count,
+            "bot_percentage": history.bot_likelihood_percent if history else "N/A"
+        })
+    
+    return data
 def check_if_user_exists(username: str) -> bool:
     """Check if a user exists in the database"""
     return Person.objects.filter(name=username).exists()
