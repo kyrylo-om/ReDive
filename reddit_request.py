@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import os
 import praw
 import prawcore
-import requests
+import random
 from dotenv import load_dotenv
 import nltk
 from nltk.corpus import stopwords
@@ -71,13 +71,15 @@ class DataGetter:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
             comments = list(proxy_link.comments.new(limit=limit_comment))
             subreddit = proxy_link.subreddit
-
+            pic = proxy_link.icon_img
+            if not pic:
+                pic = 'https://www.redditstatic.com/avatars/defaults/v2/avatar_default_3.png'
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
 
         return {
             "name": proxy_link.name,
-            'pic': proxy_link.icon_img,
+            'pic': pic,
             "id": proxy_link.id,
             "karma": proxy_link.link_karma + proxy_link.comment_karma,
             "link_karma": proxy_link.link_karma,
@@ -96,7 +98,7 @@ class DataGetter:
                         for trophy in proxy_link.trophies()
                     ],
             "has_verified_email": proxy_link.has_verified_email,
-            "bot_likelihood_percent": 22,
+            "bot_likelihood_percent": random.randint(0,100),
             "subreddit": {
                 "banner_img": subreddit["banner_img"],
                 "name": subreddit["name"],

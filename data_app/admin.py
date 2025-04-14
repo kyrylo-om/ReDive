@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Person, History, Post, Comment
 
 class HistoryAdmin(admin.ModelAdmin):
-    list_display = ('person', 'analyzed_at', 'karma', 'bot_likelihood_percent')
+    list_display = ('person', 'analyzed_at', 'karma', 'bot_likelihood_percent', 'pic')
     list_filter = ('analyzed_at',)
 
 class PostAdmin(admin.ModelAdmin):
