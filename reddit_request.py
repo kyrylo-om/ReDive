@@ -72,8 +72,8 @@ class DataGetter:
             comments = list(proxy_link.comments.new(limit=limit_comment))
             subreddit = proxy_link.subreddit
             pic = proxy_link.icon_img
-            if not pic:
-                pic = 'https://www.redditstatic.com/avatars/defaults/v2/avatar_default_3.png'
+            if not 'styles.redditmedia.com' in pic:
+                pic = 'https://www.redditstatic.com/avatars/avatar_default_01_A5A4A4.png'
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
 
