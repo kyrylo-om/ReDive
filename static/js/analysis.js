@@ -77,6 +77,30 @@ function scroll_to_monitor() {
     document.getElementById('activity-monitor').scrollIntoView({ behavior: 'smooth' });
 }
 
+function fill_statistics() {
+    const max_post_frequency = 4;
+    const max_upvotes_post = 1000;
+    const max_comments = 300;
+    const max_upvotes_comment = 500;
+    const max_ratio = 1;
+
+    document.getElementById("posting-frequency").style.width = Math.min((django_data['posting_frequency'] / max_post_frequency) * 100, 100) + "%";
+    if(django_data['up'] > 0) {
+        document.getElementById("avarage-upvotes-post").style.width = Math.min((django_data['up'] / max_upvotes_post) * 100, 100) + "%";
+    }
+    else {
+        document.getElementById("avarage-upvotes-post").style.width = '0%'
+    }
+    document.getElementById("avarage-comments").style.width = Math.min((django_data['comment_amount'] / max_comments) * 100, 100) + "%";
+    if(django_data['up_comment'] > 0) {
+        document.getElementById("avarage-upvotes-comment").style.width = Math.min((django_data['up_comment'] / max_upvotes_comment) * 100, 100) + "%";
+    }
+    else {
+        document.getElementById("avarage-upvotes-comment").style.width = '0%'
+    }
+    document.getElementById("upvotes-ratio").style.width = Math.min((django_data['up_v_down'] / max_ratio) * 100, 100) + "%";
+}
+
 const plot_options = {
     tooltip: {
         trigger: 'item',
@@ -267,4 +291,6 @@ document.querySelectorAll('.factor').forEach(factor => {
 document.addEventListener('DOMContentLoaded', function() {
     fill_subreddits_table("upvotes")
     plot.resize();
+
+    fill_statistics();
 })
