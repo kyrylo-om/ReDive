@@ -138,4 +138,34 @@ document.addEventListener("DOMContentLoaded", () => {
             filterPopup.classList.remove('active');
         }
     });
+
+    const searchBtn = document.querySelector('.search-btn');
+    const searchInput = document.querySelector('.searchbar input[name="query"]');
+
+    searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const query = searchInput.value.trim();
+
+        if (!query) return;
+
+        const url = `/api/accounts/search/?query=${encodeURIComponent(query)}&limit=${itemsPerPage}&page=1`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Search request failed");
+                return response.json();
+            })
+            .then(data => {
+                const foundAccounts = data.accounts || [];
+                const totalCount = data.totalCount || 0;
+
+                accountsData = foundAccounts;
+                currentPage = 1;
+                renderAccounts(accountsData, totalCount);
+            })
+            .catch(error => {
+                console.error("Search error:", error);
+            });
+    });
 });
