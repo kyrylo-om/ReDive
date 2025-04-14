@@ -167,7 +167,7 @@ class DataGetter:
         if proxy_link.is_mod or proxy_link.is_employee:
             score -= 10
 
-        return max(0, min(score, max_score))
+        return 15
     @handle_reddit_errors
     def get_subreddit_info(self, subreddit_name: str):
         """Отримати інформацію про сабреддіт"""

@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db import transaction
 from django.core.paginator import Paginator
+from django.db.models import Count
 from .models import Person, History, Post, Comment
 
 
@@ -110,28 +111,10 @@ def get_analysis_entry(name: str) -> dict:
     }
 
     return data
-def serialize_the_persons_data(page, limit, sort_key, sort_dir):
-    persons = Person.objects.all().select_related("last_analysis")
 
-    # if sort_key in ["comments", "bot_likelihood_percent", "posts"]:
-    #     if sort_key == "bot_likelihood_percent":
-    #         persons = sorted(
-    #             persons,
-    #             key=lambda p: p.last_analysis.bot_likelihood_percent if p.last_analysis else -1,
-    #             reverse=(sort_dir == "desc")
-    #         )
-    #     elif sort_key == "karma":
-    #         persons = sorted(
-    #             persons,
-    #             key=lambda p: (p.last_analysis.karma if p.last_analysis else 0),
-    #             reverse=(sort_dir == "desc")
-    #         )
-    #     else:
-    #         persons = persons.order_by(f"{'' if sort_dir == 'asc' else '-'}{sort_key}")
-    # else:
-    persons = persons.order_by('-last_analysis__analyzed_at')
+def paginate_persons(persons, page, limit):
+
     total_count = persons.all().count()
-
     paginator = Paginator(persons, limit)
     page_obj = paginator.get_page(page)
 
@@ -150,7 +133,29 @@ def serialize_the_persons_data(page, limit, sort_key, sort_dir):
         })
 
     data = {'accounts':accounts, 'totalCount':total_count}
+
     return data
+def serialize_the_persons_data(page, limit, sort_key, sort_dir):
+    persons = Person.objects.all().select_related("last_analysis")
+
+    if sort_key in ["comments", "bot_likelihood_percent", "posts"]:
+        if sort_key == "bot_likelihood_percent":
+            order_prefix = "-" if sort_dir == "desc" else ""
+            persons = persons.order_by(f"{order_prefix}last_analysis__bot_likelihood_percent")
+        elif sort_key == "comments":
+            order_prefix = "-" if sort_dir == "desc" else ""
+            persons = persons.annotate(
+                comment_count=Count("last_analysis__comments")
+            ).order_by(f"{order_prefix}comment_count")
+        else:
+            order_prefix = "-" if sort_dir == "desc" else ""
+            persons = persons.annotate(
+                post_count=Count("last_analysis__posts")
+            ).order_by(f"{order_prefix}post_count")
+    else:
+        persons = persons.order_by('-last_analysis__analyzed_at')
+
+    return paginate_persons(persons, page, limit)
 def check_if_user_exists(username: str) -> bool:
     """Check if a user exists in the database"""
     return Person.objects.filter(name=username).exists()
@@ -163,3 +168,9 @@ def is_last_analysis_recent(username:str):
     person = Person.objects.filter(name=username).select_related('last_analysis').first()
     if person and person.last_analysis:
         return person.last_analysis.analyzed_at >= timezone.now() - timedelta(days=7)
+
+def get_persons_with_query(query:str, page, limit):
+    persons = Person.objects.filter(username__icontains=query)
+    return paginate_persons(persons, page, limit)
+
+
