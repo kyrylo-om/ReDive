@@ -37,6 +37,7 @@ function fetchAccountsData(sort = null, page = 1) {
 // Функція для рендерингу акаунтів
 function renderAccounts(accounts, totalCount) {
     const container = document.getElementById("accounts-container");
+    const analysisUrl = container.getAttribute("data-analysis-url"); // Отримуємо URL з data-атрибута
 
     if (!container) {
         console.error("Container 'accounts-container' not found!");
@@ -50,7 +51,7 @@ function renderAccounts(accounts, totalCount) {
         accountDiv.classList.add("account");
 
         accountDiv.addEventListener("click", () => {
-            window.location.href = `${baseAnalysisURL}?name=${encodeURIComponent(account.username)}`;
+            window.location.href = `${analysisUrl}?query=${encodeURIComponent(account.username)}`;
         });
 
         accountDiv.innerHTML = `
