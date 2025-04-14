@@ -207,6 +207,9 @@ class DataGetter:
 
     @handle_reddit_errors
     def semantics_analysis(self,row: str):
+        """
+        Gets analisys for word user uses
+        """
         spliter = row.split()
         results=dict()
         stop_words = set(stopwords.words("english"))

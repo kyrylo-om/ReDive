@@ -63,16 +63,19 @@ def prepare_data_analysis_page(query, data, today):
     posts = data.get('recent_posts', [])
     posts_amount = len(posts)
     posting_frequency = 0
-    if posts:
-        try:
-            post_dates = [p['created_date'] for p in posts if p.get('created_date')]
-            oldest_post_date = min(post_dates)
-            today = datetime.today()
-            delta = relativedelta(today, oldest_post_date)
-            months = delta.years * 12 + delta.months + 1  
-            posting_frequency = round(posts_amount / months, 2)
-        except Exception as e:
-            print("Error calculating posting frequency:", e)
+    try:
+        post_times = [
+            p["created_date"]
+            for p in posts
+            if isinstance(p.get("created_date"), datetime)
+        ]
+        if len(post_times) >= 2:
+            post_times.sort()
+            total_days = (post_times[-1] - post_times[0]).total_seconds() / (3600 * 24)
+            if total_days >= 1:
+                posting_frequency = round(len(post_times) / total_days * 7, 2)
+    except Exception as e:
+        print("Error calculating weekly posting frequency:", e)
     # will be needed when we will use semantics:
     # semantics_list, semantics_analysis = d.semantics_analysis(post_text)
     if n == 0:
