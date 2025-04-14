@@ -71,7 +71,6 @@ class DataGetter:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
             comments = list(proxy_link.comments.new(limit=limit_comment))
             subreddit = proxy_link.subreddit
-            bot_score = DataGetter.compute_bot_score(proxy_link, submissions, comments)
 
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
@@ -97,7 +96,7 @@ class DataGetter:
                         for trophy in proxy_link.trophies()
                     ],
             "has_verified_email": proxy_link.has_verified_email,
-            "bot_likelihood_percent": bot_score,
+            "bot_likelihood_percent": 22,
             "subreddit": {
                 "banner_img": subreddit["banner_img"],
                 "name": subreddit["name"],
@@ -135,39 +134,35 @@ class DataGetter:
             ],
         }
 
-    @staticmethod
-    def compute_bot_score(proxy_link, submissions, comments):
-        '''Compute the bot score of a Reddit user'''
-        score = 0
-        max_score = 100  # We normalize to this
+    # @staticmethod
+    # def compute_bot_score(proxy_link, submissions, comments):
+    #     '''Compute the bot score of a Reddit user'''
+    #     score = 0
+    #     max_score = 100
 
-        # Username bot-like
-        if re.search(r'\b(bot|auto)\b|\d{5,}', proxy_link.name.lower()):
-            score += 15
+    #     if re.search(r'\b(bot|auto)\b|\d{5,}', proxy_link.name.lower()):
+    #         score += 15
 
-        # New account + activity
-        account_created = datetime.fromtimestamp(proxy_link.created_utc, tz=timezone.utc)
-        account_age_days = (datetime.now(timezone.utc) - account_created).days
-        if account_age_days < 7:
-            score += 20
+    #     account_created = datetime.fromtimestamp(proxy_link.created_utc, tz=timezone.utc)
+    #     account_age_days = (datetime.now(timezone.utc) - account_created).days
+    #     if account_age_days < 7:
+    #         score += 20
 
-        # High post frequency
-        if len(submissions) + len(comments) > 100 and account_age_days < 30:
-            score += 20
+    #     if len(submissions) + len(comments) > 100 and account_age_days < 30:
+    #         score += 20
 
-        # Low karma but high activity
-        total_karma = proxy_link.link_karma + proxy_link.comment_karma
-        if total_karma < 50 and (len(submissions) + len(comments)) > 50:
-            score += 15
+    #     total_karma = proxy_link.link_karma + proxy_link.comment_karma
+    #     if total_karma < 50 and (len(submissions) + len(comments)) > 50:
+    #         score += 15
 
-        comment_bodies = [c.body[:50] for c in comments if hasattr(c, "body")]
-        if len(set(comment_bodies)) < len(comment_bodies) * 0.5:
-            score += 15
+    #     comment_bodies = [c.body[:50] for c in comments if hasattr(c, "body")]
+    #     if len(set(comment_bodies)) < len(comment_bodies) * 0.5:
+    #         score += 15
 
-        if proxy_link.is_mod or proxy_link.is_employee:
-            score -= 10
+    #     if proxy_link.is_mod or proxy_link.is_employee:
+    #         score -= 10
 
-        return 15
+    #     return 15
     @handle_reddit_errors
     def get_subreddit_info(self, subreddit_name: str):
         """Отримати інформацію про сабреддіт"""
@@ -207,32 +202,6 @@ class DataGetter:
                 for post in subreddit.top(limit=5)
             ],
         }
-
-    # @staticmethod
-    # def get_reddit_avatar(username):
-    #     """Get the avatar of a Reddit user"""
-    #     if not username or not isinstance(username, str):
-    #         raise ValueError("Username must be a non-empty string")
-    #     headers = {"User-Agent": "windows:RedditAnalyzer:v1.0 (by /u/lukakerf)"}
-    #     api_url = f"https://www.reddit.com/user/{username}/about.json"
-    #     try:
-    #         response = requests.get(api_url, headers=headers, timeout=5)
-    #         rate_limit_used = response.headers.get('X-Ratelimit-Used')
-    #         rate_limit_remaining = response.headers.get('X-Ratelimit-Remaining')
-    #         rate_limit_reset = response.headers.get('X-Ratelimit-Reset')
-    #         print("Used: ", rate_limit_used)
-    #         print("Remaining: ", rate_limit_remaining)
-    #         print(f"Reset on: {int(rate_limit_reset)/60:.2f} minutes")
-    #         response.raise_for_status()
-    #     except requests.exceptions.RequestException:
-    #         return None
-    #     if response.status_code == 200:
-    #         data = response.json()
-    #         avatar_url = data.get("data", {}).get("icon_img", "").split("?")[0]
-    #         if avatar_url:
-    #             return avatar_url
-
-    #     return None
 
     @handle_reddit_errors
     def semantics_analysis(self,row: str):

@@ -170,7 +170,7 @@ def is_last_analysis_recent(username:str):
         return person.last_analysis.analyzed_at >= timezone.now() - timedelta(days=7)
 
 def get_persons_with_query(query:str, page, limit):
-    persons = Person.objects.filter(username__icontains=query)
+    persons = Person.objects.filter(name__icontains=query)
     return paginate_persons(persons, page, limit)
 
 
