@@ -82,7 +82,9 @@
 				<div class="profile-info">
 					<p class="username">{{ data.name }}</p>
         			<a class="username2" href="https://www.reddit.com/user/{{ data.username }}" target="_blank">u/{{ data.username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ data.date_today }}</span>. <a href="" style="color: inherit">Analyze again &#8635</a></p>
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ data.date_today }}</span>. 
+						<!-- <a href="" style="color: inherit">Analyze again &#8635</a> -->
+					</p>
 				</div>
 			</div>	
 			<div class="flex-container", style="flex-direction: row;">
@@ -111,31 +113,31 @@
 			<div class="box">
 				<p class="statistic-title">Posting frequency: <span class="orange bold">{{data.posting_frequency}}</span> per day</p>
 				<div class="statistic-outline">
-					<div class="statistic-bar"></div>
+					<div class="statistic-bar" id="posting-frequency"></div>
 				</div>
 				<div class="separator-line"></div>
 				
 				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">{{ data.up }}</span></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar"></div>
+					<div class="statistic-bar" id="avarage-upvotes-post"></div>
 				</div>
 				<div class="separator-line"></div>
 
 				<p class="statistic-title">Avarage comments per post: <span class="orange bold">{{ data.comment_amount }}</span></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar"></div>
+					<div class="statistic-bar" id="avarage-comments"></div>
 				</div>
 				<div class="separator-line"></div>
 
 				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">{{ data.up_comment }}</span></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar"></div>
+					<div class="statistic-bar" id="avarage-upvotes-comment"></div>
 				</div>
 				<div class="separator-line"></div>
 
 				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ data.up_v_down }}</span></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar"></div>
+					<div class="statistic-bar" id="upvotes-ratio"></div>
 				</div>
 			</div>
 			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
