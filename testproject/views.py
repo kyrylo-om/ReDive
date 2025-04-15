@@ -54,3 +54,6 @@ def analysispage(request):
     info = prepare_data_analysis_page(query, data, datetime.today().strftime("%B %d %Y"))
     save_analysis_entry(data)
     return render(request, 'analysis.html', info)
+
+def infopage(request):
+    render(request, 'info.html')
