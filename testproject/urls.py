@@ -26,5 +26,5 @@ urlpatterns = [
     path('api/accounts/', views.get_accounts_data, name='get_accounts_data'),
     path('api/check-user/', views.check_username, name='check_username'),
     path('api/accounts/search/', views.search_data_base_for_account, name='search_database'),
-    path('infopage/', views.infopage, name='infopage')
+    path('infopage/', views.infopage, name='infopage'),
 ]

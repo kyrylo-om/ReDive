@@ -56,4 +56,4 @@ def analysispage(request):
     return render(request, 'analysis.html', info)
 
 def infopage(request):
-    render(request, 'info.html')
+    return render(request, 'info.html')
