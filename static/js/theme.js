@@ -65,4 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
       setTheme(e.matches ? 'dark' : 'light');
     }
   });
+
+  const lenis = new Lenis({
+    duration: 1, // швидкість скролу (1 = норм, більше = плавніше)
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
+    smooth: true,
+    smoothTouch: true
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
 });

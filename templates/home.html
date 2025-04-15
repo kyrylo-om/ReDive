@@ -51,6 +51,7 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <script src="{% static 'js/theme.js' %}" defer></script>
     <script src="{% static 'js/search-check.js' %}" defer></script>
+    <script src="{% static 'js/home.js' %}" defer></script>
     <style>
         :root {
             --search-icon: url('{% static 'img/search-icon.png' %}');
@@ -72,6 +73,13 @@
         <a href="{% url 'homepage' %}">
             <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
         </a>
+        <button 
+            id="info-button"
+            class="info-btn" 
+            title="Info page"
+            data-url="{% url 'infopage' %}"
+            data-info-url="{% static 'img/info.png' %}"> 
+        </button>
     </header>
 
     <div class="main-container">

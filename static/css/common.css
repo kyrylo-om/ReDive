@@ -55,6 +55,31 @@ body {
     display: inline-block;
 }
 
+.info-btn {
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    transform: translateY(-50%);
+    
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
 /* Theme toggle button */
 .theme-toggle {
     position: absolute;
@@ -172,4 +197,3 @@ body {
       transform: translateY(20px);
     }
   }
-  

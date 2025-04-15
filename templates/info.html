@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.14/bundled/lenis.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReDive</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/info.css' %}">
+    <script src="{% static 'js/theme.js' %}" defer></script>
+    <style>
+        :root {
+            --search-icon: url('{% static 'img/search-icon.png' %}');
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <button 
+            id="theme-toggle" 
+            class="theme-toggle" 
+            data-sun-url="{% static 'img/sun.png' %}" 
+            data-moon-url="{% static 'img/moon.png' %}">
+            🌓
+        </button>
+        <a href="{% url 'homepage' %}">
+            <h1><span class="re">Re</span><span class="dive">Dive</span></h1>
+        </a>
+    </header>
+
+    <div class="top-container">
+        <img src="{% static 'img/logo.png' %}" alt="Logo">
+        <h1><span class="redive">ReDive</span><span class="copyright">©</span></h1>
+        <p><span class="welike">We like it </span><span class="deep">deep</span><span class="dot">.</span></p>
+    </div>
+
+    <div class="how-to-use">
+        <h2>How to use</h2>
+        <div class="steps">
+            <div class="step">
+                <h3>Homepage</h3>
+                <img src="{% static 'img/home-tutorial.png' %}" alt="Step 1">
+                <h4>1. Info button</h4>
+                <p>
+                    Sends you to the info page
+                </p>
+                <h4>2. Head</h4>
+                <p>
+                    Sends you to the homepage
+                </p>
+                <h4>3. Theme-toggle</h4>
+                <p>
+                    Switches between dark (default) and light themes
+                </p>
+                <h4>4. Searchbar</h4>
+                <p>
+                    Here the username that you would like to analyse should be typed in.
+                    You can begin to analyze by pressing the search-button on the right or by pressing Enter.
+                    Right afterards you will be sent to an analysis page.
+                    <span class="note">Note: </span> if the username you typed is wrong or the username does not exist you will see an error message.
+                </p>
+                <h4>5. Database button</h4>
+                <p>
+                    Forwards you to the database page.
+                    There you can see every account ever analyzed.
+                </p>
+                <h4>6. Contacts</h4>
+                <p>
+                    Our support contacts.
+                    You can write an email to us just by clicking the link.
+                </p>
+            </div>
+            <div class="step">
+                <h3>Database page</h3>
+                <img src="{% static 'img/database-tutorial.png' %}" alt="Step 2">
+                <h4>7. Sort options</h4>
+                <p>
+                    By clicking you can see different sort options that you can apply by pressing an "apply" button.
+                </p>
+                <h4>8. Searchbar</h4>
+                <p>
+                    Helps you to navigate the database.
+                    After pressing the search button only the users who has input text in the username will be shown.
+                </p>
+                <h4>9. Account card</h4>
+                <p>
+                    Shows main info about a user: avatar, posts, comments and bot rank.
+                    If clicked, the deatiled analysis of the user will be shown.
+                </p>
+            </div>
+            <div class="step">
+                <img src="step3.png" alt="Step 3">
+                <p>Review the generated profile insights.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="about-us">
+        <h2>About us</h2>
+        <p>
+            passionate team
+        </p>
+    </div>
+
+    <div class="our-team">
+        <h2>Our team</h2>
+        <div class="team-members">
+            <div class="member">
+                <img src="member1.jpg" alt="Member 1">
+                <p>Ostap</p>
+            </div>
+            <div class="member">
+                <img src="member2.jpg" alt="Member 2">
+                <p>Luka</p>
+            </div>
+            <div class="member">
+                <img src="member3.jpg" alt="Member 3">
+                <p>Kyrylo</p>
+            </div>
+            <div class="member">
+                <img src="member4.jpg" alt="Member 4">
+                <p>Anton</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>©2025 ReDive</p>
+        <p class="support">Contacts:  
+            <a href="mailto:redive_support@gmail.com">redive_support@gmail.com</a>
+        </p>
+    </footer>
+</body>
+</html>
