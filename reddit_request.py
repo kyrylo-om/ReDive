@@ -6,10 +6,7 @@ import praw
 import prawcore
 import random
 from dotenv import load_dotenv
-import nltk
-from nltk.corpus import stopwords
-from nltk.corpus import wordnet as wn
-from textblob import TextBlob
+from bot_rank import estimate_bot_likelihood
 
 load_dotenv()
 REDDIT_CLIENT_ID = os.getenv('REDDIT-CLIENT-ID')
@@ -36,14 +33,7 @@ def handle_reddit_errors(func):
 
 class DataGetter:
     """Get data about someone or something"""
-    try:
-        nltk.data.find("corpora/stopwords")
-    except LookupError:
-        nltk.download("stopwords")
-    try:
-        nltk.data.find("corpora/wordnet")
-    except LookupError:
-        nltk.download("wordnet")
+
     _reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID, client_secret=REDDIT_CLIENT_SECRET, user_agent=REDDIT_USER_AGENT)
 
     def __init__(self):
@@ -76,8 +66,7 @@ class DataGetter:
                 pic = 'https://www.redditstatic.com/avatars/avatar_default_01_A5A4A4.png'
         except prawcore.exceptions.Forbidden:
             submissions, comments, bot_score = [], [], 0
-
-        return {
+        user_data = {
             "name": proxy_link.name,
             'pic': pic,
             "id": proxy_link.id,
@@ -98,14 +87,13 @@ class DataGetter:
                         for trophy in proxy_link.trophies()
                     ],
             "has_verified_email": proxy_link.has_verified_email,
-            "bot_likelihood_percent": random.randint(0,100),
+            "bot_likelihood_percent": 0,
             "subreddit": {
-                "banner_img": subreddit["banner_img"],
-                "name": subreddit["name"],
-                "over_18": subreddit["over_18"],
-                "public_description": subreddit["public_description"],
-                "subscribers":subreddit["subscribers"],
-                "title":subreddit["title"]
+                "name": subreddit.name,
+                "over_18": subreddit.over_18,
+                "public_description": subreddit.public_description,
+                "subscribers":subreddit.subscribers,
+                "title":subreddit.title
             },
             "recent_posts": [
                 {
@@ -135,36 +123,10 @@ class DataGetter:
                 if hasattr(comment, "body")
             ],
         }
+        user_data['bot_likelihood_percent'] = estimate_bot_likelihood(user_data)['bot_likelihood_percent']
 
-    # @staticmethod
-    # def compute_bot_score(proxy_link, submissions, comments):
-    #     '''Compute the bot score of a Reddit user'''
-    #     score = 0
-    #     max_score = 100
+        return user_data
 
-    #     if re.search(r'\b(bot|auto)\b|\d{5,}', proxy_link.name.lower()):
-    #         score += 15
-
-    #     account_created = datetime.fromtimestamp(proxy_link.created_utc, tz=timezone.utc)
-    #     account_age_days = (datetime.now(timezone.utc) - account_created).days
-    #     if account_age_days < 7:
-    #         score += 20
-
-    #     if len(submissions) + len(comments) > 100 and account_age_days < 30:
-    #         score += 20
-
-    #     total_karma = proxy_link.link_karma + proxy_link.comment_karma
-    #     if total_karma < 50 and (len(submissions) + len(comments)) > 50:
-    #         score += 15
-
-    #     comment_bodies = [c.body[:50] for c in comments if hasattr(c, "body")]
-    #     if len(set(comment_bodies)) < len(comment_bodies) * 0.5:
-    #         score += 15
-
-    #     if proxy_link.is_mod or proxy_link.is_employee:
-    #         score -= 10
-
-    #     return 15
     @handle_reddit_errors
     def get_subreddit_info(self, subreddit_name: str):
         """Отримати інформацію про сабреддіт"""
@@ -205,38 +167,6 @@ class DataGetter:
             ],
         }
 
-    @handle_reddit_errors
-    def semantics_analysis(self,row: str):
-        """
-        Gets analisys for word user uses
-        """
-        spliter = row.split()
-        results=dict()
-        stop_words = set(stopwords.words("english"))
-        for i in spliter:
-            i = i.lower()
-            if not i.isalpha():
-                continue
-            if i in stop_words:
-                continue
-            results[i] = results.get(i, 0) + 1
-        analysis = {
-            "top_words": [],
-            "themes": {},
-            "sentiment": {"polarity": 0, "subjectivity": 0}
-            }
-        analysis["top_words"] = sorted(results.items(), key=lambda x: x[1], reverse=True)
-
-        for word, freq in analysis["top_words"]:
-            synsets = wn.synsets(word)
-            if synsets:
-                topic = synsets[0].lexname()
-                if topic not in analysis["themes"]:
-                    analysis["themes"][topic] = 0
-                analysis["themes"][topic] += freq
-
-        sentence = ' '.join([word for word in results])
-        blob = TextBlob(sentence)
-        analysis["sentiment"]["polarity"] = round(blob.sentiment.polarity,2)
-        analysis["sentiment"]["subjectivity"] = round(blob.sentiment.subjectivity,2)
-        return results,analysis
+engine = DataGetter()
+data = engine.get_user_analysis('Im_A_Fuckin_Liar')
+print(estimate_bot_likelihood(data))
