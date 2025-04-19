@@ -32,6 +32,9 @@ const submission_container = document.getElementById('submission_container');
 const submission_title = document.getElementById("submission_title");
 const submission_body = document.getElementById("submission_body");
 const submission_info = document.getElementById("submission_info");
+const submission_subredit = submission_info.children[0];
+const submission_meta = submission_info.children[1];
+const submission_tags = submission_info.children[2];
 const submission_image = document.getElementById("submission_image")
 const submission_video = document.getElementById("submission_video");
 const submission_link = document.getElementById("submission_link");
@@ -558,20 +561,23 @@ function view_submission(submission) {
     else {
         submission_body.innerHTML = submission.body;
     }
-    submission_info.textContent = 'r/' + submission.subreddit + ' • ' + convert_date(submission.created_date) + ' • ' + submission.score + ' upvotes'
+    submission_subredit.textContent = 'r/' + submission.subreddit;
+    submission_subredit.href = "https://www.reddit.com/r/" + submission.subreddit;
+    submission_meta.textContent = ' • ' + convert_date(submission.created_date) + ' • ' + submission.score + ' upvotes';
+
     if (submission.hasOwnProperty("title")) {
-        submission_info.textContent += ' • ' + submission.num_comments + ' comments'
+        submission_meta.textContent += ' • ' + submission.num_comments + ' comments'
 
         if (submission.spoiler || submission.over_18 || submission.oc) {
-            submission_info.textContent += ' |'
+            submission_tags.textContent = ' |'
             if (submission.spoiler) {
-                submission_info.textContent += ' SPOILER'
+                submission_tags.textContent += ' SPOILER'
             }
             if (submission.over_18) {
-                submission_info.textContent += ' NSFW'
+                submission_tags.textContent += ' NSFW'
             }
             if (submission.oc) {
-                submission_info.textContent += ' OC'
+                submission_tags.textContent += ' OC'
             }
         }
     }
