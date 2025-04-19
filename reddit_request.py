@@ -168,7 +168,3 @@ class DataGetter:
                 for post in subreddit.top(limit=5)
             ],
         }
-
-engine = DataGetter()
-data = engine.get_user_analysis('Im_A_Fuckin_Liar')
-print(estimate_bot_likelihood(data))
