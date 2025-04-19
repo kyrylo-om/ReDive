@@ -51,6 +51,8 @@ class Post(models.Model):
     upvotes_ratio = models.FloatField()
     created_date = models.DateTimeField()
     num_comments = models.IntegerField()
+    spoiler = models.BooleanField()
+    oc = models.BooleanField()
     over_18 = models.BooleanField()
 
     def __str__(self):
@@ -61,9 +63,9 @@ class Comment(models.Model):
     body = models.TextField()
     score = models.IntegerField()
     subreddit = models.CharField(max_length=100)
-    url = models.URLField()
+    permalink = models.URLField()
     created_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.url}"
+        return f"{self.permalink}"
 

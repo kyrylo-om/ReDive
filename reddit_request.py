@@ -55,7 +55,7 @@ class DataGetter:
         return self.description_red(proxy_link, username)
 
     @staticmethod
-    def description_red(proxy_link: praw.models.Redditor, username:str, limit_post = 1000, limit_comment = 1000):
+    def description_red(proxy_link: praw.models.Redditor, username:str, limit_post = 3000, limit_comment = 3000):
         """Return the description of a Reddit user"""
         try:
             submissions = list(proxy_link.submissions.new(limit=limit_post))
@@ -100,12 +100,14 @@ class DataGetter:
                     "title": post.title,
                     "body": post.selftext,
                     "subreddit": post.subreddit.display_name,
-                    "permalink": post.permalink,
+                    "permalink": f"https://www.reddit.com{post.permalink}",
                     "url": post.url,
                     "score": post.score,
                     "upvotes_ratio": post.upvote_ratio,
                     "created_date": datetime.fromtimestamp(post.created_utc, tz=timezone.utc),
                     "num_comments": post.num_comments,
+                    "spoiler": post.spoiler,
+                    "oc": post.is_original_content,
                     "over_18": post.over_18,
                 }
                 for post in submissions
@@ -116,7 +118,7 @@ class DataGetter:
                     "body": comment.body,
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
-                    "url": comment.permalink,
+                    "permalink": f"https://www.reddit.com{comment.permalink}",
                     "created_date": datetime.fromtimestamp(comment.created_utc, tz=timezone.utc),
                 }
                 for comment in comments

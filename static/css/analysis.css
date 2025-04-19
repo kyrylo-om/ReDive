@@ -130,6 +130,10 @@
 	color: rgb(201, 201, 201);
 }
 
+.gray {
+	color: rgb(201, 201, 201);
+}
+
 .statistic-title {
 	margin: 0;
 	line-height: 1.2rem;
@@ -171,6 +175,10 @@
 
 .orange {
 	color: rgb(255, 136, 0);
+}
+
+.number {
+	font-family: Arial;
 }
 
 .bold {
@@ -215,46 +223,190 @@
 	transform: scale(1.05);
 }
 
-.plot {
-	height: 100%;
-	min-height: 20rem;
-	/* width: 100% */
+.search-bar {
+	background-color: rgba(0, 0, 0, 0.2);
+	color: var(--text-color);
+	margin-bottom: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-size: 1rem;
+	border: 0.1rem white solid;
+	width: 100%;
+	border-radius: 2rem 0 0 2rem;
+	border-right: none;
 }
 
-.table-container {
-	max-height: 18rem;
-	overflow-y: auto;
-}
-
-.subreddit-sort-criteria {
+.search-bar-button {
+	background-color: rgba(0, 0, 0, 0.2);
+	color: var(--text-color);
+	margin-bottom: 0.5rem;
+	font-size: 1rem;
+	border: 0.1rem white solid;
+	width: 100%;
+	border-radius: 0 2rem 2rem 0;
+	width: 3rem;
+	border-left: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	cursor: pointer;
 }
 
-.subreddit-sort-criteria:hover {
+.search-bar-button:hover {
+	background-color: rgba(147, 147, 147, 0.2);
+}
+
+.search-bar-button-deactivated {
+	background-color: rgba(0, 0, 0, 0.2);
+	color: var(--text-color);
+	margin-bottom: 0.5rem;
+	font-size: 1rem;
+	border: 0.1rem white solid;
+	width: 100%;
+	border-radius: 0 2rem 2rem 0;
+	width: 3rem;
+	border-left: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.filters {
+	margin-bottom: 0.5rem;
+	display: flex;
+}
+
+.filter-container {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 0;
+}
+
+.checkbox {
+	user-select: none;
+}
+
+.select-bar {
+	background-color: transparent;
+	color: var(--text-color);
+	border: 2px solid #888;
+	border-radius: 0.5rem;
+	padding: 0rem 0.5rem;
+	cursor: pointer;
+	margin: 0 0.5rem;
+}
+
+.select-sort-button {
+	background: transparent;
+	color: var(--text-color);
+    border: 2px solid #888;
+	border-left: none;
+	border-radius: 0 0.5rem 0.5rem 0;
+	padding: 0rem 0.5rem;
+    cursor: pointer;
+}
+
+.main-select-option {
+	color: orangered;
+	font-weight: 600;
+}
+
+.select-option {
+	background-color: var(--container-bg);
+}
+
+#viewer {
+	height: 20rem;
+	flex-grow: 0;
+}
+
+.submission {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	flex-grow: 1;
+}
+
+.submission-title {
+	font-size: 1.8rem;
+	line-height: 1.8rem;
+	margin: 0;
+	overflow-y: auto;
+	min-height: 1.8rem;
+	/* text-decoration: underline; */
+	cursor: pointer;
+}
+
+.submission-title:hover {
 	text-decoration: underline;
 }
 
-.table-container::-webkit-scrollbar {
+.submission-body {
+	margin-top: 0.5rem;
+	flex-grow: 1;
+	overflow-y: auto;
+	font-weight: 300;
+	flex-shrink: 1;
+}
+
+.submission-info {
+	font-size: 0.8rem;
+}
+
+.submission-media {
+	height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	border-radius: 2rem;
+	margin-left: 2rem;
+}
+
+.plot {
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 0.5rem;
+}
+
+.subreddits-table-container {
+	max-height: 15rem;
+	overflow-y: auto;
+}
+
+.subreddits-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.sort-criteria {
+	cursor: pointer;
+}
+
+.sort-criteria:hover {
+	text-decoration: underline;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
     width: 6px;
     height: 12px;
 }
 
-.table-container::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.table-container::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
     background: #838383;
     border-radius: 6px;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #696969;
-}
-
-.table {
-	width: 100%;
-	border-collapse: collapse;
 }
 
 th, td {
@@ -277,6 +429,108 @@ tr:nth-child(even) {
 	font-size: 1rem;
 	font-weight: 300;
 	color: rgb(218, 218, 218);
+}
+
+.switch-container {
+	position: relative;
+	display: flex;
+	margin: 0.5rem;
+	justify-content: center;
+	align-items: center;
+}
+
+.switch-options {
+	display: flex;
+	border: 1px solid #ccc;
+	border-radius: 2rem;
+	width:100%;
+	background-color: var(--container-bg);
+	color: var(--text-color);
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.switch-option {
+	padding: 0.8rem 1rem;
+	cursor: pointer;
+	text-align: center;
+	width: 33.3%;
+	border-radius: 2rem;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.switch-option:hover {
+	background-color: #ffffff17;
+}
+
+#slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 33.3%;
+	height: 100%;
+	background-color: transparent;
+	border-radius: 2rem;
+	border: 2px white solid;
+	transition: transform 0.3s ease;
+}
+
+.browser-container {
+	display: flex;
+	flex-direction: column;
+	width: 35rem;
+	flex-shrink: 0;
+}
+
+@media (max-width: 60rem) {
+	.browser-container {
+		width: 100%;
+	}
+}
+
+#browser {
+	height: 30rem;
+	overflow-y: auto;
+}
+
+.browser-post {
+	background: rgba(255, 255, 255, 0.068);
+	border: 1.2px rgb(255, 136, 0) solid;
+	border-radius: 1rem;
+	padding: 1rem;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	margin-bottom: 1rem;
+	width: 100%;
+	cursor: pointer;
+	transition: border-color 0.3s ease;
+}
+
+.browser-post:hover {
+	background: rgba(255, 255, 255, 0.15);
+	border: 1.2px rgb(255, 255, 255) solid;
+}
+
+.browser-comment {
+	background: rgba(255, 255, 255, 0.068);
+	/* border: 1px rgb(0, 225, 255) solid; */
+	border-radius: 1rem;
+	padding: 1rem;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	margin-bottom: 1rem;
+	width: 100%;
+	cursor: pointer;
+	transition: border-color 0.3s ease;
+}
+
+.browser-comment:hover {
+	background: rgba(255, 255, 255, 0.15);
 }
 
 .pie-container {

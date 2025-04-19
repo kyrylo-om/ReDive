@@ -35,12 +35,14 @@ def save_analysis_entry(data: dict):
                 title=post_data['title'],
                 body=post_data['body'],
                 subreddit=post_data['subreddit'],
-                permalink=f"https://reddit.com{post_data['permalink']}",
+                permalink=post_data['permalink'],
                 url=post_data['url'],
                 score=post_data['score'],
                 upvotes_ratio=post_data['upvotes_ratio'],
                 created_date=post_data['created_date'],
                 num_comments=post_data['num_comments'],
+                spoiler=post_data['spoiler'],
+                oc=post_data['oc'],
                 over_18=post_data['over_18'],
             )
 
@@ -51,7 +53,7 @@ def save_analysis_entry(data: dict):
                 body=comment_data['body'],
                 score=comment_data['score'],
                 subreddit=comment_data['subreddit'],
-                url=f"https://reddit.com{comment_data['url']}",
+                permalink=comment_data['permalink'],
                 created_date=comment_data['created_date'],
             )
 
@@ -68,13 +70,16 @@ def get_analysis_entry(name: str) -> dict:
     recent_posts = [
         {
             'title': post.title,
+            'body': post.body,
             'subreddit': post.subreddit,
-            'permalink': post.permalink.replace("https://reddit.com", ""),
+            'permalink': post.permalink,
             'url': post.url,
             'score': post.score,
             'upvotes_ratio': post.upvotes_ratio,
             'created_date': post.created_date,
             'num_comments': post.num_comments,
+            'spoiler': post.spoiler,
+            'oc': post.oc,
             'over_18': post.over_18,
         }
         for post in history.posts.all()
@@ -85,7 +90,7 @@ def get_analysis_entry(name: str) -> dict:
             'body': comment.body,
             'score': comment.score,
             'subreddit': comment.subreddit,
-            'url': comment.url.replace("https://reddit.com", ""),
+            'permalink': comment.permalink,
             'created_date': comment.created_date,
         }
         for comment in history.comments.all()

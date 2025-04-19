@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ("body", models.TextField()),
                 ("score", models.IntegerField()),
                 ("subreddit", models.CharField(max_length=100)),
-                ("url", models.URLField()),
+                ("permalink", models.URLField()),
                 ("created_date", models.DateTimeField(default=django.utils.timezone.now)),
                 (
                     "history",
@@ -126,6 +126,8 @@ class Migration(migrations.Migration):
                 ("upvotes_ratio", models.FloatField()),
                 ("created_date", models.DateTimeField(default=django.utils.timezone.now)),
                 ("num_comments", models.IntegerField()),
+                ("spoiler", models.BooleanField()),
+                ("oc", models.BooleanField()),
                 ("over_18", models.BooleanField()),
                 (
                     "history",

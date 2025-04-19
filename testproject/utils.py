@@ -30,7 +30,6 @@ def prepare_data_analysis_page(query, data, today):
     for i in data.get('recent_posts', []):
         up_v_down +=i['upvotes_ratio']
         up+=i["score"]
-        comment_amount+=i['num_comments']
         if n<50:
             post_text+=i["title"]+" "
             try:
@@ -48,6 +47,7 @@ def prepare_data_analysis_page(query, data, today):
         c+=1
     subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
 
+    # ??? why do you iterate over the same lists twice
     for post in data.get('recent_posts', []):
         sr = post['subreddit']
         subreddits_stats[sr]["posts"] += 1
@@ -102,7 +102,7 @@ def prepare_data_analysis_page(query, data, today):
             "posting_frequency": posting_frequency,
             "up_comment":round(up_comment/n,2),
             "subreddit_activity": subreddit_activity,
-            "subreddit_names": [sub['name'] for sub in subreddit_activity][:3],
+            "subreddit_names": [sub['name'] for sub in subreddit_activity],
             "query": query,
             "posts": data['recent_posts'],
             'comments': data['recent_comments']

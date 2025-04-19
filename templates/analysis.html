@@ -77,7 +77,7 @@
 		<div class="flex-container", style="flex-direction: column;">
 			<div class="box profile">
 				<div class="profile-picture">
-					<img src={{ data.pic }} alt="Profile Picture" />
+					<img src={{ data.pic }} alt="{% static 'img/clock.png' %}" />
 				</div>
 				<div class="profile-info">
 					<p class="username">{{ data.name }}</p>
@@ -97,20 +97,31 @@
 					<div class="separator-line"></div>
 					<p class="statistic-title">Registration date</p>
 					<p class="date-statistic">{{ data.date_of_creation|date:"M j, Y" }}</p>
-					<p class="subtext">Account is <span class="bold">{{ data.account_age }}</span> years old</p>
+					<p class="subtext">Account is
+						{% if data.account_age == 0 %}
+							less than a year
+						{% elif data.account_age == 1 %}
+							<span class="bold">1</span> year
+						{% else %}
+							<span class="bold">{{ data.account_age }}</span> years
+						{% endif %}
+						 old
+					</p>
 				</div>
 				<div class="box">
 					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
-					<p class="statistic">{{ data.post_count }}〡<span class="orange">{{ data.post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
+					<p class="statistic">{{ data.post_count }}〡<span class="orange number">{{ data.post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
-					<p class="statistic">{{ data.comment_count }}〡<span class="orange">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
+					<p class="statistic">{{ data.comment_count }}〡<span class="orange number">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
 					<p class="subtext"><span class="bold">2</span> comments on user's own posts</p>
 				</div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: row;">
 			<div class="box">
+				<p class="statistic-title">Showing statistics for: posts + comments</p>
+
 				<p class="statistic-title">Posting frequency: <span class="orange bold">{{data.posting_frequency}}</span> per week</p>
 				<div class="statistic-outline">
 					<div class="statistic-bar" id="posting-frequency"></div>
@@ -146,11 +157,11 @@
 				<button class="section-button" onclick="scroll_to_analysis()">Detailed analysis&nbsp;⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Active in:</p>
-				{% for sr in data.subreddit_names %}
+				{% for sr in data.subreddit_names|slice:":3" %}
 					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
 				{% if data.subreddit_activity|length > 3 %}
-					<p class="subtext">- and {{ data.k }} more -</p>
+					<p class="subtext"><br>- {{ data.k }} subreddits total -</p>
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}
@@ -158,31 +169,130 @@
 			</div>
 		</div>
 	</div>
+	<!-- <div class="section-title">
+		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
+		<div class="section-line"></div>
+	</div>
+	<div class="box", style="flex-grow: 0;">
+		<div class="flex-container">
+			<div>
+				<p class="title">Search options</p>
+				<div id="price-slider" class="slider-container"></div>
+			</div>
+			<div style="display:flex; flex-grow: 1; justify-content: center;">
+				<div class="separator-line-vertical"></div>
+			</div>
+			<div class="flex-container", style="flex-direction: column; flex-grow: 0;">
+				<div class="subreddits-table-container custom-scrollbar">
+					<table class="subreddits-table">
+						<thead>
+							<tr id="subreddits-head">
+								<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Subreddit</th>
+								<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
+								<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
+							</tr>
+						</thead>
+						<tbody id="subreddits-body"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div> -->
 	<div class="section-title">
-		<h2 class="section-text" id="activity-monitor">ACTIVITY MONITOR</h2>
+		<h2 class="section-text" id="activity-monitor">SUBMISSIONS</h2>
 		<div class="section-line"></div>
 	</div>
 	<div class="flex-container width-responsive">
-		<div class="box">
-			<p class="title", style="line-height: 1.8rem;">Activity history</p>
-			<div id="plot" class="plot"></div>
-		</div>
-		<div class="box" style="flex-grow: 0;"> 
-			<p class="title" style="line-height: 1.8rem; margin-bottom: 0.5rem;">Activity by subreddits</p>
-			<div class="table-container">
-				<table class="table">
-					<thead>
-						<tr id="table-head">
-							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
-							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
-							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
-							<th class="subreddit-sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
-						</tr>
-					</thead>
-					<tbody id="table-body"></tbody>
-				</table>
+		<div class="browser-container">
+			<div class="switch-container">
+				<div class="switch-options">
+					<div class="switch-option" onclick="switch_to_posts(this)", style="color: orange;">Posts</div>
+					<div class="switch-option" onclick="switch_to_comments(this)">Comments</div>
+					<div class="switch-option" onclick="switch_to_everything(this)">Everything</div>
+				</div>
+				<div id="slider"></div>
 			</div>
-			<p class="subreddit-count">Showed activity in {{ j }} subreddits total</p>
+			<div class="box">
+				<form>
+					<div class="flex-container", style="flex-direction: row;">
+						<input type="text" class="search-bar" id="submissions-search" placeholder="Search titles...">
+						<div class="search-bar-button" onclick="toggle_body_search()" title="Include post body text">
+							<img src="{% static 'img/post-body.png' %}" width="15" id="search-bar-button">
+						</div>
+					</div>
+					<div class="flex-container filters", style="justify-content: space-between;">
+						<div class="filter-container">
+							<p>Sort by </p>
+							<select class="select-bar" id="sort_select", style="margin-right: 0; border-radius: 0.5rem 0 0 0.5rem;">
+								<option class="select-option">Date</option>
+								<option class="select-option">Upvotes</option>
+								<option class="select-option" id="comments_sort_option">Comments</option>
+							</select>
+							<button type="button" class="select-sort-button" onclick="change_sort_direction(this)">▼</button>
+						</div>
+						<label class="checkbox">
+							<input type="checkbox" class="posts-only" id="image_checkbox">
+							Media
+						</label>
+						<label class="checkbox">
+							<input type="checkbox" class="posts-only" id="spoiler_checkbox">
+							Spoiler
+						</label>
+						<label class="checkbox">
+							<input type="checkbox" class="posts-only" id="nsfw_checkbox">
+							NSFW
+						</label>
+						<label class="checkbox">
+							<input type="checkbox" class="posts-only" id="oc_checkbox">
+							OC
+						</label>
+					</div>
+					<div class="flex-container filters">
+						<div class="filter-container">
+							<p>Filter by subreddit </p>
+							<select class="select-bar" id="subreddit_select">
+								<option class="main-select-option">All</option>
+								{% for sub in data.subreddit_names %}
+								<option class="select-option">{{ sub }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<p style="color: lightgray;">• <span id="results_count">{{data.post_count}} results</span></p>
+					</div>
+				</form>
+				<div id="browser"></div>
+			</div>
+		</div>
+		<div class="flex-container", style="flex-direction: column;">
+			<div class="box", id="viewer">
+				<p class="title gray" id="viewer_hint", style="text-align: center;">Select a post to view it here</p>
+				<div class="submission" id="submission_container" style="display: none;">
+					<div class="content">
+						<p class="submission-title custom-scrollbar" id="submission_title" onclick="open_submission_link()">Title<img src="{% static 'img/external-link.png' %}", width="20", class="icon"></p>
+						<p class="submission-body custom-scrollbar" id="submission_body">Body text</p>
+						<div class="separator-line"></div>
+						<p class="submission-info gray" id="submission_info">r/politics_abracadabra_lol • Apr 17, 2025 • 1000 upvotes • 1092 comments<span class="gray"> | SPOILER • NSFW • OC</span></p>
+					</div>
+					<video controls muted playsinline class="submission-media" id="submission_video">
+						<source src="https://v.redd.it/odt2vbftnieb1/DASH_480.mp4" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<img src="" class="submission-media" id="submission_image">
+					<div class="submission-media" style="display: flex; flex-direction: column; cursor: pointer; align-items: center; margin-left: 2rem" id="submission_link">
+						<p style="text-align: center;">
+							This post<br>
+							has an<br>
+							attached<br>
+							link
+						</p>
+						<img src="{% static 'img/external-link.png' %}", width="40", class="icon">
+					</div>
+				</div>
+			</div>
+			<div class="box", style="flex-grow: 1;">
+				<!-- <p class="title" style="line-height: 1.8rem; margin-bottom: 0.5rem;">Submission history</p> -->
+				<div id="plot" class="plot"></div>
+			</div>
 		</div>
 	</div>
 	<div class="section-title">
