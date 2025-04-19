@@ -531,6 +531,8 @@ function view_submission(submission) {
     submission_link.style.display = "none";
     submission_container.style.display = "flex";
 
+    submission_tags.textContent = "";
+
     if (submission.hasOwnProperty("title")) {
         submission_title.firstChild.textContent = submission.title;
 
@@ -551,15 +553,16 @@ function view_submission(submission) {
                 submission_link.title = submission.url;
             }
         }
+        if (submission.body == "") {
+            submission_body.textContent = "This post has no body text.";
+        }
+        else {
+            submission_body.textContent = submission.body;
+        }
     }
     else {
         submission_title.firstChild.textContent = "View comment";
-    }
-    if (submission.body == "") {
-        submission_body.textContent = "This post has no body text.";
-    }
-    else {
-        submission_body.innerHTML = submission.body;
+        submission_body.innerHTML = submission.html;
     }
     submission_subredit.textContent = 'r/' + submission.subreddit;
     submission_subredit.href = "https://www.reddit.com/r/" + submission.subreddit;
@@ -569,7 +572,7 @@ function view_submission(submission) {
         submission_meta.textContent += ' • ' + submission.num_comments + ' comments'
 
         if (submission.spoiler || submission.over_18 || submission.oc) {
-            submission_tags.textContent = ' |'
+            submission_tags.textContent += ' |'
             if (submission.spoiler) {
                 submission_tags.textContent += ' SPOILER'
             }
