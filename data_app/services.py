@@ -34,6 +34,7 @@ def save_analysis_entry(data: dict):
                 history=history,
                 title=post_data['title'],
                 body=post_data['body'],
+                html=post_data['html'],
                 subreddit=post_data['subreddit'],
                 permalink=post_data['permalink'],
                 url=post_data['url'],
@@ -72,6 +73,7 @@ def get_analysis_entry(name: str) -> dict:
         {
             'title': post.title,
             'body': post.body,
+            'html': post.html,
             'subreddit': post.subreddit,
             'permalink': post.permalink,
             'url': post.url,

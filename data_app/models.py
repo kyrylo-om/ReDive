@@ -44,6 +44,7 @@ class Post(models.Model):
     history = models.ForeignKey(History, on_delete=models.CASCADE, related_name="posts")
     title = models.CharField(max_length=300)
     body = models.TextField()
+    html = models.TextField()
     subreddit = models.CharField(max_length=100)
     permalink = models.URLField()
     url = models.URLField()

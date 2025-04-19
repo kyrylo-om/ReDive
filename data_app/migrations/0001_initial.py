@@ -120,6 +120,7 @@ class Migration(migrations.Migration):
                 ),
                 ("title", models.CharField(max_length=300)),
                 ("body", models.TextField()),
+                ("html", models.TextField()),
                 ("subreddit", models.CharField(max_length=100)),
                 ("permalink", models.URLField()),
                 ("url", models.URLField()),
