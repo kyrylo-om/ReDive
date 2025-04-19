@@ -51,6 +51,7 @@ def save_analysis_entry(data: dict):
             Comment.objects.create(
                 history=history,
                 body=comment_data['body'],
+                html=comment_data['html'],
                 score=comment_data['score'],
                 subreddit=comment_data['subreddit'],
                 permalink=comment_data['permalink'],
@@ -88,6 +89,7 @@ def get_analysis_entry(name: str) -> dict:
     recent_comments = [
         {
             'body': comment.body,
+            'html': comment.html,
             'score': comment.score,
             'subreddit': comment.subreddit,
             'permalink': comment.permalink,

@@ -61,6 +61,7 @@ class Post(models.Model):
 class Comment(models.Model):
     history = models.ForeignKey(History, on_delete=models.CASCADE, related_name="comments")
     body = models.TextField()
+    html = models.TextField()
     score = models.IntegerField()
     subreddit = models.CharField(max_length=100)
     permalink = models.URLField()

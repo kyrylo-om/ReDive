@@ -116,6 +116,7 @@ class DataGetter:
             "recent_comments": [
                 {
                     "body": comment.body,
+                    "html": comment.body_html,
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
                     "permalink": f"https://www.reddit.com{comment.permalink}",

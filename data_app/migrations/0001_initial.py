@@ -55,6 +55,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("body", models.TextField()),
+                ("html", models.TextField()),
                 ("score", models.IntegerField()),
                 ("subreddit", models.CharField(max_length=100)),
                 ("permalink", models.URLField()),
