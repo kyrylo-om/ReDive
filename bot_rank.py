@@ -89,12 +89,10 @@ def estimate_bot_likelihood(data):
     if user_data.get("is_mod"):
         human_points["moderator_status"] = 150
 
-    # Posts with high upvotes
     post_bonus = sum(3 for post in user_data.get("recent_posts", []) if post.get("score", 0) > 100)
     if post_bonus:
         human_points["popular_posts"] = post_bonus
 
-    # Comments with high upvotes
     comment_bonus = sum(2 for comment in user_data.get("recent_comments", []) if comment.get("score", 0) > 50)
     if comment_bonus:
         human_points["popular_comments"] = comment_bonus
@@ -105,17 +103,14 @@ def estimate_bot_likelihood(data):
     if not user_data.get("repetitive_comments", False):
         human_points["unique_comments"] = 200
 
-    # Account age in years
     years_old = user_data.get("account_age_days", 0) // 365
     if years_old:
         human_points["account_age"] = years_old * 50
 
-    # Trophies
     num_trophies = len(user_data.get("trophies", []))
     if num_trophies:
         human_points["trophies"] = num_trophies * 40
 
-    # Has profile picture
     if user_data.get("pic") and "default" not in user_data["pic"]:
         human_points["has_profile_picture"] = 100
 
