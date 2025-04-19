@@ -519,10 +519,10 @@ function view_submission(submission) {
 
         const point = ((value - min) / (max - min)) * 100
 
-        const dataZoom = plot.getOption().dataZoom[1];
-        const zoom_length = dataZoom.end - dataZoom.start
+        // const dataZoom = plot.getOption().dataZoom[1];
+        // const zoom_length = dataZoom.end - dataZoom.start
 
-        set_datazoom(point - zoom_length/5, point + zoom_length/5)
+        set_datazoom(point - 15, point + 15)
     }
 
     viewer_hint.style.display = "none";
