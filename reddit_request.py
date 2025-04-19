@@ -98,7 +98,7 @@ class DataGetter:
             "recent_posts": [
                 {
                     "title": post.title,
-                    "body": post.selftext,
+                    "body": re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', post.selftext),
                     "html": post.selftext_html if post.selftext_html else "",
                     "subreddit": post.subreddit.display_name,
                     "permalink": f"https://www.reddit.com{post.permalink}",
