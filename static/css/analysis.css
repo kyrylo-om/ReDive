@@ -330,11 +330,22 @@
 	flex-direction: column;
 	height: 100%;
 	flex-grow: 1;
+	width: 100%;
 }
 
 .content {
 	overflow-y: auto;
+	overflow-x: hidden;
 	flex-grow: 1;
+}
+
+.content a {
+	text-decoration:underline;
+	color: rgb(153, 177, 255) !important;
+}
+
+.content a:hover {
+	color: rgb(255, 255, 255) !important;
 }
 
 .submission-title {

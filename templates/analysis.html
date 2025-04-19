@@ -260,7 +260,7 @@
 						<p style="color: lightgray;">• <span id="results_count">{{data.post_count}} results</span></p>
 					</div>
 				</form>
-				<div id="browser"></div>
+				<div id="browser" class="custom-scrollbar"></div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: column;">
@@ -268,9 +268,9 @@
 				<p class="title gray" id="viewer_hint", style="text-align: center;">Select a post to view it here</p>
 				<div class="submission" id="submission_container" style="display: none;">
 					<div class="content-container">
-						<div class="content">
-							<p class="submission-title custom-scrollbar" id="submission_title" onclick="open_submission_link()">Title<img src="{% static 'img/external-link.png' %}", width="20", class="icon"></p>
-							<p class="submission-body custom-scrollbar" id="submission_body">Body text</p>
+						<div class="content custom-scrollbar">
+							<p class="submission-title" id="submission_title" onclick="open_submission_link()">Title<img src="{% static 'img/external-link.png' %}", width="20", class="icon"></p>
+							<p class="submission-body" id="submission_body">Body text</p>
 						</div>
 						<div class="separator-line"></div>
 						<p class="submission-info gray" id="submission_info">

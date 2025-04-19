@@ -99,7 +99,7 @@ class DataGetter:
                 {
                     "title": post.title,
                     "body": post.selftext,
-                    "html": post.selftext_html,
+                    "html": post.selftext_html if post.selftext_html else "",
                     "subreddit": post.subreddit.display_name,
                     "permalink": f"https://www.reddit.com{post.permalink}",
                     "url": post.url,

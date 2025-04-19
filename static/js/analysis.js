@@ -557,7 +557,7 @@ function view_submission(submission) {
             submission_body.textContent = "This post has no body text.";
         }
         else {
-            submission_body.textContent = submission.body;
+            submission_body.innerHTML = submission.html;
         }
     }
     else {
