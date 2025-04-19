@@ -161,6 +161,12 @@
 	flex-direction: row;
 }
 
+.trophy {
+	display: flex;
+	align-items: center;
+	margin: 1rem 0;
+}
+
 .trophies-button {
 	border-radius: 1rem;
 	margin-left: 0.5rem;
@@ -171,6 +177,44 @@
     border: 0.1rem solid white;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.trophies-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.trophies-popup.active {
+    display: flex;
+    opacity: 1;
+}
+
+.trophies-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+	overflow-y: auto;
+	max-height: 50%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.trophies-popup.active .filter-content {
+    transform: translateY(0);
 }
 
 .orange {

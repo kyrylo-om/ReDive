@@ -17,7 +17,7 @@ def prepare_data_analysis_page(query, data, today):
     date_today = today
     date_of_creation =data.get('created_date', [])
     account_age = datetime.today().year - date_of_creation.year
-    trophies = len(data.get('trophies', []))
+    trophies = data.get('trophies', [])
     username = data.get('name')
     if data.get('subreddit')['title']:
         name = data.get('subreddit')['title']

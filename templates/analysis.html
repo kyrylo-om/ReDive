@@ -91,9 +91,9 @@
 				<div class="box", style="flex-grow: 0">
 					<div class="trophies-div">
 						<p class="statistic-title">Trophies</p>
-						<button class="trophies-button">View</button>
+						<button class="trophies-button" id="trophies_button">View</button>
 					</div>
-					<p class="statistic", style="color: gold;">{{ data.trophies }}</p>
+					<p class="statistic", style="color: gold;">{{ data.trophies|length }}</p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Registration date</p>
 					<p class="date-statistic">{{ data.date_of_creation|date:"M j, Y" }}</p>
@@ -349,5 +349,18 @@
 			<p>Here is going to be a list of the user's frequently used words, themes and propaganda/hate words.</p>
 		</div>
 	</div>
+
+	<div class="trophies-popup" id="trophies_popup">
+        <div class="trophies-content custom-scrollbar">
+			<p class="title">Trophies</p>
+			<div class="separator-line"></div>
+			{% for trophy in data.trophies %}
+				<div class="trophy">
+					<img src="{{ trophy.icon_40 }}">
+					<p class="title" style="line-height: 1.8rem; margin-left: 1rem; font-size: 1.5rem;">{{ trophy.name }}</p>
+				</div>
+			{% endfor %}
+		</div>
+    </div>
 </body>
 </html>

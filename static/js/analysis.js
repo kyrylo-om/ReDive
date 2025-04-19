@@ -5,12 +5,12 @@ const django_data = JSON.parse(document.getElementById('django_data').textConten
 const subreddits = django_data['subreddit_activity'];
 const posts = django_data['posts'];
 const comments = django_data['comments'];
-console.log(posts)
-console.log(comments)
 const posts_and_comments = posts.concat(comments);
 
 // Elements
 
+const trophies_button = document.getElementById('trophies_button');
+const trophies_popup = document.getElementById('trophies_popup');
 const browser = document.getElementById('browser');
 const analysis_section = document.getElementById('behaviour-analysis');
 const monitor_section = document.getElementById('activity-monitor');
@@ -860,6 +860,18 @@ document.querySelectorAll('.factor').forEach(factor => {
             name: itemName
         });
     });
+});
+
+trophies_button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    trophies_popup.classList.toggle('active');
+});
+
+// Закриття попапу при кліку поза ним
+trophies_popup.addEventListener('click', (e) => {
+    if (e.target === trophies_popup) {
+        trophies_popup.classList.remove('active');
+    }
 });
 
 // On load
