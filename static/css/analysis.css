@@ -325,10 +325,15 @@
 	height: 100%;
 }
 
-.content {
+.content-container {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	flex-grow: 1;
+}
+
+.content {
+	overflow-y: auto;
 	flex-grow: 1;
 }
 
@@ -336,8 +341,7 @@
 	font-size: 1.8rem;
 	line-height: 1.8rem;
 	margin: 0;
-	overflow-y: auto;
-	min-height: 1.8rem;
+	min-height: 2rem;
 	/* text-decoration: underline; */
 	cursor: pointer;
 }
@@ -348,8 +352,6 @@
 
 .submission-body {
 	margin-top: 0.5rem;
-	flex-grow: 1;
-	overflow-y: auto;
 	font-weight: 300;
 	flex-shrink: 1;
 }

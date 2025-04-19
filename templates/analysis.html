@@ -267,9 +267,11 @@
 			<div class="box", id="viewer">
 				<p class="title gray" id="viewer_hint", style="text-align: center;">Select a post to view it here</p>
 				<div class="submission" id="submission_container" style="display: none;">
-					<div class="content">
-						<p class="submission-title custom-scrollbar" id="submission_title" onclick="open_submission_link()">Title<img src="{% static 'img/external-link.png' %}", width="20", class="icon"></p>
-						<p class="submission-body custom-scrollbar" id="submission_body">Body text</p>
+					<div class="content-container">
+						<div class="content">
+							<p class="submission-title custom-scrollbar" id="submission_title" onclick="open_submission_link()">Title<img src="{% static 'img/external-link.png' %}", width="20", class="icon"></p>
+							<p class="submission-body custom-scrollbar" id="submission_body">Body text</p>
+						</div>
 						<div class="separator-line"></div>
 						<p class="submission-info gray" id="submission_info">r/politics_abracadabra_lol • Apr 17, 2025 • 1000 upvotes • 1092 comments<span class="gray"> | SPOILER • NSFW • OC</span></p>
 					</div>
