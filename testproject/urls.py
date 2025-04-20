@@ -27,4 +27,5 @@ urlpatterns = [
     path('api/check-user/', views.check_username, name='check_username'),
     path('api/accounts/search/', views.search_data_base_for_account, name='search_database'),
     path('infopage/', views.infopage, name='infopage'),
+    path('botrank/', views.get_bot_rank, name='botrank'),
 ]

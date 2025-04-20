@@ -182,4 +182,7 @@ def get_persons_with_query(query:str, page, limit):
     persons = Person.objects.filter(name__icontains=query)
     return paginate_persons(persons, page, limit)
 
-
+def set_bot_likelihood(name, bot_likelihood_percent):
+    person = Person.objects.filter(name=name).first()
+    history = person.last_analysis
+    history.bot_likelihood_percent = bot_likelihood_percent

@@ -127,7 +127,6 @@ class DataGetter:
                 if hasattr(comment, "body")
             ],
         }
-        user_data['bot_likelihood_percent'] = estimate_bot_likelihood(user_data)['bot_likelihood_percent']
 
         return user_data
 
