@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Analyzing coffee consumption patterns..."
     ];
 
-    // При поверненні назад - сховати попап
     window.addEventListener("pageshow", () => {
         loadingPopup.classList.remove('active');
     });

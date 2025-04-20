@@ -83,9 +83,9 @@ body {
 /* Theme toggle button */
 .theme-toggle {
     position: absolute;
-    top: 50%; /* центруємо по вертикалі */
+    top: 50%;
     right: 1.5rem;
-    transform: translateY(-50%); /* компенсуємо зміщення */
+    transform: translateY(-50%);
     
     background: transparent;
     border: none;

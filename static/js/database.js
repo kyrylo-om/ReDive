@@ -1,13 +1,11 @@
-let accountsData = []; // Массив для збереження акаунтів
-let currentPage = 1;    // Поточна сторінка
-let itemsPerPage = 10;  // Кількість акаунтів на сторінці
-let currentSort = null; // Поточне сортування
+let accountsData = [];
+let currentPage = 1;
+let itemsPerPage = 10;
+let currentSort = null;
 
-// Функція для отримання даних з бекенду
 function fetchAccountsData(sort = null, page = 1) {
     let url = `/api/accounts/?page=${page}&limit=${itemsPerPage}`;
-    
-    // Додаємо параметри сортування, якщо вони є
+
     if (sort) {
         url += `&sort=${sort.key}&direction=${sort.direction}`;
     }
@@ -18,8 +16,8 @@ function fetchAccountsData(sort = null, page = 1) {
             return response.json();
         })
         .then(data => {
-            const newAccounts = data.accounts; // беремо масив з data.accounts
-            const totalCount = data.totalCount; // отримуємо загальну кількість
+            const newAccounts = data.accounts;
+            const totalCount = data.totalCount;
         
             if (page === 1) {
                 accountsData = newAccounts;
@@ -27,17 +25,16 @@ function fetchAccountsData(sort = null, page = 1) {
                 accountsData = [...accountsData, ...newAccounts];
             }
         
-            renderAccounts(accountsData, totalCount); // Передаємо totalCount в рендер
+            renderAccounts(accountsData, totalCount);
         })        
         .catch(error => {
             console.error("Error fetching accounts data:", error);
         });
 }
 
-// Функція для рендерингу акаунтів
 function renderAccounts(accounts, totalCount) {
     const container = document.getElementById("accounts-container");
-    const analysisUrl = container.getAttribute("data-analysis-url"); // Отримуємо URL з data-атрибута
+    const analysisUrl = container.getAttribute("data-analysis-url");
 
     if (!container) {
         console.error("Container 'accounts-container' not found!");
@@ -78,61 +75,54 @@ function renderAccounts(accounts, totalCount) {
     }
 }
 
-// Обробка завантаження додаткових акаунтів
 document.getElementById("load-more-btn").addEventListener("click", () => {
-    currentPage += 1;  // Збільшуємо номер сторінки
-    fetchAccountsData(currentSort, currentPage);  // Завантажуємо наступну порцію акаунтів
+    currentPage += 1;
+    fetchAccountsData(currentSort, currentPage);
 });
 
-// Ініціалізація при завантаженні сторінки
 document.addEventListener("DOMContentLoaded", () => {
-    fetchAccountsData(); // Початкове завантаження акаунтів
+    fetchAccountsData();
 
     const filtersBtn = document.getElementById('filters-btn');
     const filterPopup = document.getElementById('filter-popup');
     const applyBtn = document.getElementById('apply-filters');
     const resetBtn = document.getElementById('reset-filters');
-    
-    // Перемикання видимості попапу
+
     filtersBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         filterPopup.classList.toggle('active');
     });
-    
-    // Закриття попапу при кліку поза ним
+
     filterPopup.addEventListener('click', (e) => {
         if (e.target === filterPopup) {
             filterPopup.classList.remove('active');
         }
     });
-    
-    // Застосування сортування
+
     applyBtn.addEventListener('click', () => {
         const selectedSortRadio = document.querySelector('input[name="sort"]:checked');
     
         if (selectedSortRadio && selectedSortRadio.value !== 'none') {
             const [key, direction] = selectedSortRadio.value.split('-');
-            currentSort = { key, direction };  // Оновлюємо сортування
-            currentPage = 1;  // Скидаємо сторінку на першу
-            fetchAccountsData(currentSort, currentPage);  // Перезавантажуємо акаунти
-        } else {
-            currentSort = null;  // Якщо сортування не вибрано
+            currentSort = { key, direction };
             currentPage = 1;
-            fetchAccountsData();  // Завантажуємо акаунти без сортування
+            fetchAccountsData(currentSort, currentPage);
+        } else {
+            currentSort = null;
+            currentPage = 1;
+            fetchAccountsData();
         }
     
         filterPopup.classList.remove('active');
     });
-    
-    // Скидання сортування
+
     resetBtn.addEventListener('click', () => {
         document.querySelector('input[name="sort"][value="none"]').checked = true;
-        currentSort = null;  // Скидаємо сортування
-        currentPage = 1;  // Скидаємо сторінку на першу
-        fetchAccountsData();  // Завантажуємо акаунти без сортування
+        currentSort = null;
+        currentPage = 1;
+        fetchAccountsData();
     });
     
-    // Закриття попапу при натисканні клавіші Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && filterPopup.classList.contains('active')) {
             filterPopup.classList.remove('active');

@@ -59,7 +59,7 @@
     justify-content: center;
     gap: 6px;
     padding: 0.75rem 1.5rem;
-    height: 100%; /* Займає всю висоту контейнера */
+    height: 100%;
     background: var(--filters-btn); 
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 2rem;
@@ -257,7 +257,6 @@ h4 {
     padding-bottom: 40px;
 }
 
-/* Стилі для картки акаунта */
 .account {
     backdrop-filter: blur(15px) saturate(160%);
     -webkit-backdrop-filter: blur(15px) saturate(160%);

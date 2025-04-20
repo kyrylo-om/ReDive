@@ -40,8 +40,6 @@
 }
 
 .top-container p {
-    /* align-self: flex-end;
-    margin-bottom: 1.7rem; */
     font-size: 1.5rem;
     margin-left: 20rem;
     color: var(--text-color);
