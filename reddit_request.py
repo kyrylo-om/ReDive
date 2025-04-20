@@ -6,7 +6,6 @@ import praw
 import prawcore
 import random
 from dotenv import load_dotenv
-from bot_rank import estimate_bot_likelihood
 
 load_dotenv()
 REDDIT_CLIENT_ID = os.getenv('REDDIT-CLIENT-ID')

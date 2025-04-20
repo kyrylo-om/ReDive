@@ -1,5 +1,5 @@
 import numpy as np
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime, timezone
 from math import log2
 

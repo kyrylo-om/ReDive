@@ -2,8 +2,8 @@ from datetime import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from reddit_request import DataGetter
-
-
+from bot_rank import estimate_bot_likelihood
+from data_app.services import set_bot_likelihood
 def prepare_data_analysis_page(query, data, today):
     d = DataGetter()
     up_v_down=0
@@ -80,6 +80,8 @@ def prepare_data_analysis_page(query, data, today):
     # semantics_list, semantics_analysis = d.semantics_analysis(post_text)
     if n == 0:
         n = 1
+    bot_analysis = estimate_bot_likelihood(data)
+    set_bot_likelihood(username, bot_analysis['bot_likelihood_percent'])
     return {
         "data":{
             "pic":data['pic'],
@@ -105,6 +107,9 @@ def prepare_data_analysis_page(query, data, today):
             "subreddit_names": [sub['name'] for sub in subreddit_activity],
             "query": query,
             "posts": data['recent_posts'],
-            'comments': data['recent_comments']
+            'comments': data['recent_comments'],
+            'bot_likelihood_percentage' : bot_analysis['bot_likelihood_percent'],
+            'human_points' : bot_analysis['human_points'],
+            "bot_points" : bot_analysis['"bot_points"']
         }
     }
