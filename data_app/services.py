@@ -186,19 +186,3 @@ def set_bot_likelihood(name, bot_likelihood_percent):
     person = Person.objects.filter(name=name).first()
     history = person.last_analysis
     history.bot_likelihood_percent = bot_likelihood_percent
-
-def run_semantic_analysis_for_user(username):
-    person = Person.objects.filter(name=username).first()
-    last_history = person.last_analysis
-
-    posts_text = ' '.join(post.text for post in last_history.posts.all())
-    comments_text = ' '.join(comment.text for comment in last_history.comments.all())
-
-    full_text = posts_text + ' ' + comments_text
-
-    word_counts, analysis = semantics_analysis(full_text)
-
-    return {
-        "word_counts": word_counts,
-        "analysis": analysis
-    }

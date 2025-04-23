@@ -1,11 +1,11 @@
 from datetime import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
-from reddit_request import DataGetter
+from sematics import semantics_analysis
 from bot_rank import estimate_bot_likelihood
 from data_app.services import set_bot_likelihood
+
 def prepare_data_analysis_page(query, data, today):
-    d = DataGetter()
     up_v_down=0
     up=0
     n=0
@@ -74,6 +74,14 @@ def prepare_data_analysis_page(query, data, today):
         n = 1
     bot_analysis = estimate_bot_likelihood(data)
     set_bot_likelihood(username, bot_analysis['bot_likelihood_percent'])
+
+    posts_text = ' '.join(post["body"] for post in data.get('recent_posts',''))
+    comments_text = ' '.join(comment["body"] for comment in data.get('recent_comments',''))
+
+    full_text = posts_text + ' ' + comments_text
+
+    word_counts, analysis = semantics_analysis(full_text)
+
     return {
         "data":{
             "pic":data['pic'],
@@ -102,6 +110,8 @@ def prepare_data_analysis_page(query, data, today):
             'comments': data['recent_comments'],
             'bot_likelihood_percentage' : bot_analysis['bot_likelihood_percent'],
             'human_points' : bot_analysis['human_points'],
-            "bot_points" : bot_analysis['"bot_points"'],
+            "bot_points" : bot_analysis['bot_points'],
+            "word_counts": word_counts,
+            "analysis": analysis,
         }
     }

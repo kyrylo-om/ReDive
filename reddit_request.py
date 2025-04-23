@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 import os
 import praw
 import prawcore
-import random
 from dotenv import load_dotenv
 
 load_dotenv()
