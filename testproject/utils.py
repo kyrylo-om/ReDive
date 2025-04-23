@@ -5,113 +5,158 @@ from sematics import semantics_analysis
 from bot_rank import estimate_bot_likelihood
 from data_app.services import set_bot_likelihood
 
+
 def prepare_data_analysis_page(query, data, today):
-    up_v_down=0
-    up=0
-    n=0
-    c=0
-    up_comment=0
-    j=0
-    comment_amount=0
-    post_text=""
+    up_v_down = 0
+    up = 0
+    n = 0
+    c = 0
+    up_comment = 0
+    comment_amount = 0
+    post_text = ""
+    post_times = []
+    comment_times = []
+    post_upvote_ratios = []
+    comment_total_score = 0
+    total_upvotes = 0
+    total_items = 0
     date_today = today
-    date_of_creation =data.get('created_date', [])
+    date_of_creation = data.get("created_date", [])
     account_age = datetime.today().year - date_of_creation.year
-    trophies = data.get('trophies', [])
-    username = data.get('name')
-    if data.get('subreddit')['title']:
-        name = data.get('subreddit')['title']
+    trophies = data.get("trophies", [])
+    username = data.get("name")
+    if data.get("subreddit")["title"]:
+        name = data.get("subreddit")["title"]
     else:
         name = username
-    posts_amount=len(data.get('recent_posts', []))
-    post_karma=data.get('link_karma')
-    comment_amount= len(data.get('recent_comments', []))
-    comment_karma=data.get('comment_karma')
+    posts_amount = len(data.get("recent_posts", []))
+    post_karma = data.get("link_karma")
+    comment_amount = len(data.get("recent_comments", []))
+    comment_karma = data.get("comment_karma")
+
     subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
-    for i in data.get('recent_posts', []):
-        up_v_down +=i['upvotes_ratio']
-        up+=i["score"]
-        if n<50:
-            post_text+=i["title"]+" "
-            try:
-                post_text+=i["body"]+" "
-            except KeyError:
-                pass
-        n+=1
-        sr = i['subreddit']
+    for i in data.get("recent_posts", []):
+        up_v_down += i.get("upvotes_ratio", 0)
+        up += i.get("score", 0)
+        post_upvote_ratios.append(i.get("upvotes_ratio", 0))
+        total_upvotes += i.get("score", 0)
+        total_items += 1
+        if n < 50:
+            post_text += i.get("title", "") + " "
+            post_text += i.get("body", "") + " "
+        n += 1
+        sr = i["subreddit"]
         subreddits_stats[sr]["posts"] += 1
-        subreddits_stats[sr]["upvotes"] += i["score"]
-    for i in data.get('recent_comments', []):
-        up_comment+=i["score"]
-        if c<50:
-            try:
-                post_text += i["body"] + " "
-            except KeyError:
-                pass
-        c+=1
-        sr = i['subreddit']
+        subreddits_stats[sr]["upvotes"] += i.get("score", 0)
+
+        if isinstance(i.get("created_date"), datetime):
+            post_times.append(i["created_date"])
+
+    for i in data.get("recent_comments", []):
+        score = i.get("score", 0)
+        up_comment += score
+        comment_total_score += score
+        total_upvotes += score
+        total_items += 1
+        if c < 50:
+            post_text += i.get("body", "") + " "
+        c += 1
+        sr = i["subreddit"]
         subreddits_stats[sr]["comments"] += 1
-        subreddits_stats[sr]["upvotes"] += i["score"]
-    subreddit_activity = sorted([{"name": f"r/{k}", **v} for k, v in subreddits_stats.items()],key=lambda x: x["upvotes"],reverse=True)
+        subreddits_stats[sr]["upvotes"] += score
+        if isinstance(i.get("created_date"), datetime):
+            comment_times.append(i["created_date"])
+    subreddit_activity = sorted(
+        [{"name": f"r/{k}", **v} for k, v in subreddits_stats.items()],
+        key=lambda x: x["upvotes"],
+        reverse=True,
+    )
     j = len(subreddit_activity)
-    posts = data.get('recent_posts', [])
+    posts = data.get("recent_posts", [])
     posts_amount = len(posts)
+
     posting_frequency = 0
-    try:
-        post_times = [
-            p["created_date"]
-            for p in posts
-            if isinstance(p.get("created_date"), datetime)
-        ]
-        if len(post_times) >= 2:
-            post_times.sort()
-            total_days = (post_times[-1] - post_times[0]).total_seconds() / (3600 * 24)
-            if total_days >= 1:
-                posting_frequency = round(len(post_times) / total_days * 7, 2)
-    except Exception as e:
-        print("Error calculating weekly posting frequency:", e)
+    if len(post_times) >= 2:
+        post_times.sort()
+        total_days = (post_times[-1] - post_times[0]).total_seconds() / (3600 * 24)
+        if total_days >= 1:
+            posting_frequency = round(len(post_times) / total_days * 7, 2)
+
+    comment_frequency = 0
+    if len(comment_times) >= 2:
+        comment_times.sort()
+        total_days_c = (comment_times[-1] - comment_times[0]).total_seconds() / (
+            3600 * 24
+        )
+        if total_days_c >= 1:
+            comment_frequency = round(len(comment_times) / total_days_c * 7, 2)
+    total_times = post_times + comment_times
+    total_frequency = 0
+    if len(total_times) >= 2:
+        total_times.sort()
+        total_days_all = (total_times[-1] - total_times[0]).total_seconds() / (
+            3600 * 24
+        )
+        if total_days_all >= 1:
+            total_frequency = round(len(total_times) / total_days_all * 7, 2)
+    avg_post_upvote_ratio = (
+        round(sum(post_upvote_ratios) / len(post_upvote_ratios), 2)
+        if post_upvote_ratios
+        else 0
+    )
+    avg_comment_ratio = round(comment_total_score / c, 2) if c else 0
+    avg_total_ratio = round(total_upvotes / total_items, 2) if total_items else 0
+
     if n == 0:
         n = 1
+
     bot_analysis = estimate_bot_likelihood(data)
-    set_bot_likelihood(username, bot_analysis['bot_likelihood_percent'])
+    set_bot_likelihood(username, bot_analysis["bot_likelihood_percent"])
 
-    posts_text = ' '.join(post["body"] for post in data.get('recent_posts',''))
-    comments_text = ' '.join(comment["body"] for comment in data.get('recent_comments',''))
+    posts_text = " ".join(post["body"] for post in data.get("recent_posts", ""))
+    comments_text = " ".join(
+        comment["body"] for comment in data.get("recent_comments", "")
+    )
 
-    full_text = posts_text + ' ' + comments_text
+    full_text = posts_text + " " + comments_text
 
     word_counts, analysis = semantics_analysis(full_text)
 
     return {
-        "data":{
-            "pic":data['pic'],
-            "date_today":date_today,
-            'date_of_creation': date_of_creation,
-            "account_age":account_age,
+        "data": {
+            "pic": data["pic"],
+            "date_today": date_today,
+            "date_of_creation": date_of_creation,
+            "account_age": account_age,
             "trophies": trophies,
             "username": username,
             "name": name,
-            "post_count":posts_amount,
-            "post_karma":post_karma,
-            "comment_count":comment_amount,
-            "comment_karma":comment_karma,
-            "up": round(up/n,2),
-            "up_v_down":round(up_v_down/n,2),
-            "comment_amount":round(comment_amount/n,2),
-            "averal_comments":comment_amount,
-            "j":j,
-            "k":j-3,
-            "posting_frequency": posting_frequency,
-            "up_comment":round(up_comment/n,2),
+            "post_count": posts_amount,
+            "post_karma": post_karma,
+            "comment_count": comment_amount,
+            "comment_karma": comment_karma,
+            "up": round(up / n, 2),
+            "up_v_down": round(up_v_down / n, 2),
+            "comment_amount": round(comment_amount / n, 2),
+            "averal_comments": comment_amount,
+            "j": j,
+            "k": j - 3,
+            "up_comment": round(up_comment / n, 2),
             "subreddit_activity": subreddit_activity,
-            "subreddit_names": [sub['name'] for sub in subreddit_activity],
+            "subreddit_names": [sub["name"] for sub in subreddit_activity],
             "query": query,
-            "posts": data['recent_posts'],
-            'comments': data['recent_comments'],
-            'bot_likelihood_percentage' : bot_analysis['bot_likelihood_percent'],
-            'human_points' : bot_analysis['human_points'],
-            "bot_points" : bot_analysis['bot_points'],
+            "posts": data["recent_posts"],
+            "comments": data["recent_comments"],
+            "bot_likelihood_percentage": bot_analysis["bot_likelihood_percent"],
+            "human_points": bot_analysis["human_points"],
+            "bot_points": bot_analysis["bot_points"],
             "word_counts": word_counts,
             "analysis": analysis,
+            "total_frequency": total_frequency,
+            "posting_frequency": posting_frequency,
+            "comment_frequency": comment_frequency,
+            "avg_post_upvote_ratio": avg_post_upvote_ratio,
+            "avg_comment_ratio": avg_comment_ratio,
+            "avg_total_ratio": avg_total_ratio,
         }
     }
