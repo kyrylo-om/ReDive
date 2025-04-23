@@ -51,8 +51,8 @@ def analysispage(request):
     if check_if_user_exists(query) and is_last_analysis_recent(query):
         return render(request, 'analysis.html', prepare_data_analysis_page(query,get_analysis_entry(query), get_date_of_last_analysis(query)))
     data = d.get_user_analysis(query)
-    info = prepare_data_analysis_page(query, data, datetime.today().strftime("%B %d %Y"))
     save_analysis_entry(data)
+    info = prepare_data_analysis_page(query, data, datetime.today().strftime("%B %d %Y"))
     return render(request, 'analysis.html', info)
 
 def infopage(request):
