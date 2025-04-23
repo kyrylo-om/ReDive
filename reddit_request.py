@@ -119,6 +119,7 @@ class DataGetter:
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
                     "permalink": f"https://www.reddit.com{comment.permalink}",
+                    "is_submitter": comment.is_submitter,
                     "created_date": datetime.fromtimestamp(comment.created_utc, tz=timezone.utc),
                 }
                 for comment in comments

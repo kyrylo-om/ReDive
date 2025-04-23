@@ -56,6 +56,7 @@ def save_analysis_entry(data: dict):
                 score=comment_data['score'],
                 subreddit=comment_data['subreddit'],
                 permalink=comment_data['permalink'],
+                is_submitter=comment_data['is_submitter'],
                 created_date=comment_data['created_date'],
             )
 
@@ -95,6 +96,7 @@ def get_analysis_entry(name: str) -> dict:
             'score': comment.score,
             'subreddit': comment.subreddit,
             'permalink': comment.permalink,
+            'is_submitter': comment.is_submitter,
             'created_date': comment.created_date,
         }
         for comment in history.comments.all()
