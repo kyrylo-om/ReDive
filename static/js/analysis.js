@@ -83,9 +83,10 @@ const plot_options = {
                 <strong>${text_newline(limit_text_width(params.data.title, 100), 30)}</strong><br/>
                 Subreddit: r/${params.data.subreddit}<br/>
                 Upvotes: ${params.value[1]}<br/>
-                ${params.data.is_post
-                    ? `Comments: ${params.data.num_comments}<br/>`
-                    : ''
+                ${
+                    params.data.is_post
+                        ? `Comments: ${params.data.num_comments}<br/>`
+                        : ''
                 }
                 Posted on ${convert_date(params.value[0])}<br/>
             `;
@@ -175,14 +176,14 @@ const pie_options = {
             data: human_factors.map(item => ({
                 ...item,
                 itemStyle: {
-                    color: '#8ad184'
+                  color: '#8ad184'
                 }
-            })).concat(bot_factors.map(item => ({
+              })).concat(bot_factors.map(item => ({
                 ...item,
                 itemStyle: {
-                    color: '#ffa8a8'
+                  color: '#ffa8a8'
                 }
-            })))
+              })))
         }
     ],
     graphic: [{
@@ -196,7 +197,7 @@ const pie_options = {
             fontWeight: 'bold',
             fill: '#fff'
         }
-    },
+    }, 
     {
         type: 'text',
         left: 'center',
@@ -226,11 +227,11 @@ const pie_options = {
 
 // Utility functions
 
-function text_newline(text, max_width) {
+function text_newline (text, max_width) {
     let words = text.split(" ");
     let result = words[0];
     let current_length = result.length;
-
+    
     for (let i = 1; i < words.length; i += 1) {
         current_length += words[i].length;
         if (current_length > max_width) {
@@ -245,11 +246,11 @@ function text_newline(text, max_width) {
     return result
 }
 
-function limit_text_width(text, max_length) {
+function limit_text_width (text, max_length) {
     if (text.length > max_length) {
         return text.slice(0, max_length - 3) + '...';
-    }
-    return text;
+      }
+      return text;
 }
 
 function convert_date(value) {
@@ -258,7 +259,7 @@ function convert_date(value) {
         month: "short",
         day: "numeric",
         year: "numeric",
-    }).format(date);
+      }).format(date);
 }
 
 // Core functions
@@ -272,14 +273,14 @@ function fill_statistics(criteria) {
 
     if (criteria == "Posts + comments") {
         document.getElementById("posting-frequency-title").innerHTML = "Activity frequency: <span class='orange bold'>" + django_data.total_frequency + "</span> per day";
-        document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per submission: <span class='orange bold'>" + django_data.overall_upvotes + "</span>";
-        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comments_under_post_amount + "</span>";
-        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.total_up_v_down + "</span>";
+        document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per submission: <span class='orange bold'>" + django_data.up + "</span>";
+        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comment_amount + "</span>";
+        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_total_ratio + "</span>";
     }
     if (criteria == "Posts") {
         document.getElementById("posting-frequency-title").innerHTML = "Posting frequency: <span class='orange bold'>" + django_data.posting_frequency + "</span> per day";
         document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per post: <span class='orange bold'>" + django_data.up + "</span>";
-        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comments_under_post_amount + "</span>";
+        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comment_amount + "</span>";
         document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio for posts: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
     }
     if (criteria == "Comments") {
@@ -290,14 +291,14 @@ function fill_statistics(criteria) {
     }
 
     document.getElementById("posting-frequency").style.width = Math.max(Math.min((django_data['posting_frequency'] / max_post_frequency) * 100, 100), 4) + "%";
-    if (django_data['up'] > 0) {
+    if(django_data['up'] > 0) {
         document.getElementById("average-upvotes-post").style.width = Math.max(Math.min((django_data['up'] / max_upvotes_post) * 100, 100), 4) + "%";
     }
     else {
         document.getElementById("average-upvotes-post").style.width = '0%'
     }
     document.getElementById("average-comments").style.width = Math.max(Math.min((django_data['comment_amount'] / max_comments) * 100, 100), 4) + "%";
-    if (django_data['up_comment'] > 0) {
+    if(django_data['up_comment'] > 0) {
         document.getElementById("average-upvotes-comment").style.width = Math.max(Math.min((django_data['up_comment'] / max_upvotes_comment) * 100, 100), 4) + "%";
     }
     else {
@@ -310,7 +311,7 @@ function fill_subreddits_table(sort_criteria) {
     const table = document.getElementById('subreddits-body')
     function clear_criterias() {
         document.getElementById('subreddits-head').children[0].textContent = "Subreddit"
-        if (search_target == "posts") {
+        if(search_target == "posts") {
             document.getElementById('subreddits-head').children[1].textContent = "Posts"
         }
         else {
@@ -473,7 +474,7 @@ function toggle_body_search() {
         }
         filter_submissions();
         sort_submissions();
-        reset_browser();
+        reset_browser();   
     }
 }
 
@@ -657,7 +658,7 @@ function set_datazoom(start, end) {
         type: 'dataZoom',
         start: start,
         end: end
-    });
+      });
 }
 
 function update_plot() {
@@ -676,11 +677,11 @@ function update_plot() {
                     num_comments: item.num_comments,
                     is_post: has_title
                 }
-            }),
+              }),
             type: 'scatter',
             symbolSize: 10,
             itemStyle: {
-                color: function (params) {
+                color: function(params) {
                     return params.data.is_post ? 'rgb(255, 102, 0)' : 'rgb(185, 227, 255)';
                 }
             }
@@ -716,7 +717,7 @@ function switch_to_posts(option) {
         el.parentElement.classList.remove('gray');
     });
     comments_sort_option.style.display = "block";
-
+    
     sb_button.parentElement.className = "search-bar-button"
     if (search_target == "comments") {
         sb_button.style.filter = ""
@@ -882,7 +883,7 @@ sort_select.addEventListener('change', () => {
 
 browser.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = browser;
-
+  
     if (scrollTop + clientHeight >= scrollHeight - 10 && browser_index + browser_step < search_results.length) {
         fill_browser();
     }
@@ -890,15 +891,15 @@ browser.addEventListener('scroll', () => {
 
 document.querySelectorAll('.factor').forEach(factor => {
     const itemName = factor.textContent.trim();
-
+    
     factor.addEventListener('mouseenter', function () {
         pie_chart.dispatchAction({
             type: 'select',
             name: itemName
         });
     });
-
-    factor.addEventListener('mouseleave', function () {
+    
+      factor.addEventListener('mouseleave', function () {
         pie_chart.dispatchAction({
             type: 'unselect',
             name: itemName
@@ -919,7 +920,7 @@ trophies_popup.addEventListener('click', (e) => {
 
 // On load
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('form').forEach(form => form.reset());
 
     plot.setOption(plot_options);
