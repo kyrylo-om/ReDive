@@ -114,39 +114,39 @@
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
 					<p class="statistic">{{ data.comment_count }}〡<span class="orange number">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
-					<p class="subtext"><span class="bold">2</span> comments on user's own posts</p>
+					<p class="subtext"><span class="bold">{{data.own_comments}}</span> comments on user's own posts</p>
 				</div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: row;">
 			<div class="box">
-				<p class="statistic-title">Showing statistics for: posts + comments</p>
-
-				<p class="statistic-title">Posting frequency: <span class="orange bold">{{data.total_frequency}}</span> per week</p>
+				<p class="statistic-title">Showing statistics for: 
+					<select class="select-bar" id="statistics_select", style="margin-left: 0;">
+						<option class="select-option">Posts + comments</option>
+						<option class="select-option">Posts</option>
+						<option class="select-option">Comments</option>
+					</select>
+				</p>
+				<div class="separator-line"></div>
+				<p class="statistic-title" id="posting-frequency-title"></p>
 				<div class="statistic-outline">
 					<div class="statistic-bar" id="posting-frequency"></div>
 				</div>
 				<div class="separator-line"></div>
 				
-				<p class="statistic-title">Avarage upvotes per post: <span class="orange bold">{{ data.up }}</span></p>
+				<p class="statistic-title" id="average-upvotes-title"></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar" id="avarage-upvotes-post"></div>
+					<div class="statistic-bar" id="average-upvotes"></div>
 				</div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage comments per post: <span class="orange bold">{{ data.comment_amount }}</span></p>
+				<p class="statistic-title" id="average-comments-title"></p>
 				<div class="statistic-outline">
-					<div class="statistic-bar" id="avarage-comments"></div>
+					<div class="statistic-bar" id="average-comments"></div>
 				</div>
 				<div class="separator-line"></div>
 
-				<p class="statistic-title">Avarage upvotes per comment: <span class="orange bold">{{ data.up_comment }}</span></p>
-				<div class="statistic-outline">
-					<div class="statistic-bar" id="avarage-upvotes-comment"></div>
-				</div>
-				<div class="separator-line"></div>
-
-				<p class="statistic-title">Upvotes to downvotes ratio: <span class="orange bold">{{ data.up_v_down }}</span></p>
+				<p class="statistic-title" id="upvotes-ratio-title"></p>
 				<div class="statistic-outline">
 					<div class="statistic-bar" id="upvotes-ratio"></div>
 				</div>
@@ -169,7 +169,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="section-title">
+	<div class="section-title">
 		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
 		<div class="section-line"></div>
 	</div>
@@ -197,7 +197,7 @@
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 	<div class="section-title">
 		<h2 class="section-text" id="activity-monitor">SUBMISSIONS</h2>
 		<div class="section-line"></div>
