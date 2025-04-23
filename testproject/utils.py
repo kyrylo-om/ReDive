@@ -13,6 +13,7 @@ def prepare_data_analysis_page(query, data, today):
     c = 0
     up_comment = 0
     comment_amount = 0
+    own_comments = 0
     post_text = ""
     post_times = []
     comment_times = []
@@ -64,6 +65,8 @@ def prepare_data_analysis_page(query, data, today):
         sr = i["subreddit"]
         subreddits_stats[sr]["comments"] += 1
         subreddits_stats[sr]["upvotes"] += score
+        if i.get("is_submitter"):
+            own_comments += 1
         if isinstance(i.get("created_date"), datetime):
             comment_times.append(i["created_date"])
     subreddit_activity = sorted(
@@ -158,5 +161,6 @@ def prepare_data_analysis_page(query, data, today):
             "avg_post_upvote_ratio": avg_post_upvote_ratio,
             "avg_comment_ratio": avg_comment_ratio,
             "avg_total_ratio": avg_total_ratio,
+            "own_comments": own_comments,
         }
     }
