@@ -66,6 +66,7 @@ class Comment(models.Model):
     score = models.IntegerField()
     subreddit = models.CharField(max_length=100)
     permalink = models.URLField()
+    is_submitter = models.BooleanField()
     created_date = models.DateTimeField()
 
     def __str__(self):
