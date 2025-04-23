@@ -109,25 +109,29 @@
 					</p>
 				</div>
 				<div class="box">
-					<p class="statistic-title">Post count | <span class="orange">Post karma</span></p>
+					<p class="statistic-title">Post count | <span class="orange">Post upvotes</span></p>
 					<p class="statistic">{{ data.post_count }}〡<span class="orange number">{{ data.post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
+					<p class="subtext">Click to switch to karma</p>
 					<div class="separator-line"></div>
-					<p class="statistic-title">Comment count | <span class="orange">Comment karma</span></p>
+					<p class="statistic-title">Comment count | <span class="orange">Comment upvotes</span></p>
 					<p class="statistic">{{ data.comment_count }}〡<span class="orange number">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
-					<p class="subtext"><span class="bold">{{data.own_comments}}</span> comments on user's own posts</p>
+					<p class="subtext">Click to switch to karma</p>
 				</div>
 			</div>
 		</div>
 		<div class="flex-container", style="flex-direction: row;">
 			<div class="box">
-				<p class="statistic-title">Showing statistics for: 
-					<select class="select-bar" id="statistics_select", style="margin-left: 0;">
-						<option class="select-option">Posts + comments</option>
-						<option class="select-option">Posts</option>
-						<option class="select-option">Comments</option>
-					</select>
-				</p>
-				<div class="separator-line"></div>
+				<form>
+					<p class="statistic-title">Showing statistics for: 
+						<select class="select-bar" id="statistics_select", style="margin-left: 0;">
+							<option class="select-option">Posts + comments</option>
+							<option class="select-option">Posts</option>
+							<option class="select-option">Comments</option>
+						</select>
+					</p>
+				</form>
+				<div style="flex-grow: 1; align-items: center;">
+				</div>
 				<p class="statistic-title" id="posting-frequency-title"></p>
 				<div class="statistic-outline">
 					<div class="statistic-bar" id="posting-frequency"></div>
@@ -161,7 +165,7 @@
 					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
 				{% if data.subreddit_activity|length > 3 %}
-					<p class="subtext"><br>- {{ data.k }} subreddits total -</p>
+					<p class="subtext">- {{ data.j }} subreddits total -</p>
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}

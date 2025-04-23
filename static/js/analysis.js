@@ -262,49 +262,59 @@ function convert_date(value) {
       }).format(date);
 }
 
+function clamp(value, min, max) {
+    if (value <= 0) {
+        return 0
+    }
+    else {
+        return Math.max(Math.min(value, max), min)
+    }
+}
+
 // Core functions
 
 function fill_statistics(criteria) {
-    const max_post_frequency = 4;
+    const max_post_frequency = 2;
+    const max_comment_frequency = 4;
     const max_upvotes_post = 3000;
     const max_comments = 300;
+    const max_own_comments = 50;
     const max_upvotes_comment = 500;
     const max_ratio = 1;
 
     if (criteria == "Posts + comments") {
         document.getElementById("posting-frequency-title").innerHTML = "Activity frequency: <span class='orange bold'>" + django_data.total_frequency + "</span> per day";
-        document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per submission: <span class='orange bold'>" + django_data.up + "</span>";
-        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comment_amount + "</span>";
-        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_total_ratio + "</span>";
+        document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per submission: <span class='orange bold'>" + django_data.overall_upvotes + "</span>";
+        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comments_under_post_amount + "</span>";
+        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
+
+        document.getElementById("posting-frequency").style.width = clamp(django_data.total_frequency / max_post_frequency * 100, 4, 100) + "%";
+        document.getElementById("average-upvotes").style.width = clamp(django_data.overall_upvotes / max_upvotes_post * 100, 4, 100) + "%";
+        document.getElementById("average-comments").style.width = clamp(django_data.comments_under_post_amount / max_comments * 100, 4, 100) + "%";
+        document.getElementById("upvotes-ratio").style.width = clamp(django_data.avg_post_ratio / max_ratio * 100, 4, 100) + "%";
     }
     if (criteria == "Posts") {
         document.getElementById("posting-frequency-title").innerHTML = "Posting frequency: <span class='orange bold'>" + django_data.posting_frequency + "</span> per day";
         document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per post: <span class='orange bold'>" + django_data.up + "</span>";
-        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comment_amount + "</span>";
-        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio for posts: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
+        document.getElementById("average-comments-title").innerHTML = "Average comments per post: <span class='orange bold'>" + django_data.comments_under_post_amount + "</span>";
+        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
+
+        document.getElementById("posting-frequency").style.width = clamp(django_data.posting_frequency / max_post_frequency * 100, 4, 100) + "%";
+        document.getElementById("average-upvotes").style.width = clamp(django_data.up / max_upvotes_post * 100, 4, 100) + "%";
+        document.getElementById("average-comments").style.width = clamp(django_data.comments_under_post_amount / max_comments * 100, 4, 100) + "%";
+        document.getElementById("upvotes-ratio").style.width = clamp(django_data.avg_post_ratio / max_ratio * 100, 4, 100) + "%";
     }
     if (criteria == "Comments") {
         document.getElementById("posting-frequency-title").innerHTML = "Commenting frequency: <span class='orange bold'>" + django_data.comment_frequency + "</span>";
         document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per comment: <span class='orange bold'>" + django_data.up_comment + "</span>";
-        document.getElementById("average-comments-title").innerHTML = "Comments under user's own posts: <span class='orange bold'>" + django_data.own_comments + "</span>";
-        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio for comments: <span class='orange bold'>" + django_data.avg_comment_ratio + "</span>";
-    }
+        document.getElementById("average-comments-title").innerHTML = "User's comments under own posts: <span class='orange bold'>" + django_data.own_comments + "</span>";
+        document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
 
-    document.getElementById("posting-frequency").style.width = Math.max(Math.min((django_data['posting_frequency'] / max_post_frequency) * 100, 100), 4) + "%";
-    if(django_data['up'] > 0) {
-        document.getElementById("average-upvotes-post").style.width = Math.max(Math.min((django_data['up'] / max_upvotes_post) * 100, 100), 4) + "%";
+        document.getElementById("posting-frequency").style.width = clamp(django_data.comment_frequency / max_comment_frequency * 100, 4, 100) + "%";
+        document.getElementById("average-upvotes").style.width = clamp(django_data.up_comment / max_upvotes_comment * 100, 4, 100) + "%";
+        document.getElementById("average-comments").style.width = clamp(django_data.own_comments / max_own_comments * 100, 4, 100) + "%";
+        document.getElementById("upvotes-ratio").style.width = clamp(django_data.avg_post_ratio / max_ratio * 100, 4, 100) + "%";
     }
-    else {
-        document.getElementById("average-upvotes-post").style.width = '0%'
-    }
-    document.getElementById("average-comments").style.width = Math.max(Math.min((django_data['comment_amount'] / max_comments) * 100, 100), 4) + "%";
-    if(django_data['up_comment'] > 0) {
-        document.getElementById("average-upvotes-comment").style.width = Math.max(Math.min((django_data['up_comment'] / max_upvotes_comment) * 100, 100), 4) + "%";
-    }
-    else {
-        document.getElementById("average-upvotes-comment").style.width = '0%'
-    }
-    document.getElementById("upvotes-ratio").style.width = Math.max(Math.min((django_data['up_v_down'] / max_ratio) * 100, 100), 4) + "%";
 }
 
 function fill_subreddits_table(sort_criteria) {

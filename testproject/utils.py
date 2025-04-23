@@ -139,7 +139,7 @@ def prepare_data_analysis_page(query, data, today):
             "comment_count": comment_amount,
             "comment_karma": comment_karma,
             "up": round(up / n, 2),
-            "comments_under_post_amount": round(comments_under_post / c, 2),
+            "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
             "averal_comments": comment_amount,
             "j": j,
             "k": j - 3,
