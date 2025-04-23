@@ -108,14 +108,13 @@
 						 old
 					</p>
 				</div>
-				<div class="box">
-					<p class="statistic-title">Post count | <span class="orange">Post upvotes</span></p>
-					<p class="statistic">{{ data.post_count }}〡<span class="orange number">{{ data.post_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
-					<p class="subtext">Click to switch to karma</p>
+				<div class="box" onclick="toggle_upvotes()", style="cursor: pointer;">
+					<p class="statistic-title">Post count | <span class="orange" id="post_upvotes_title">Post karma</span></p>
+					<p class="statistic">{{ data.post_count }}〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
 					<div class="separator-line"></div>
-					<p class="statistic-title">Comment count | <span class="orange">Comment upvotes</span></p>
-					<p class="statistic">{{ data.comment_count }}〡<span class="orange number">{{ data.comment_karma }}<img src="{% static 'img/upvote.png' %}", width="25", class="icon"></span></p>
-					<p class="subtext">Click to switch to karma</p>
+					<p class="statistic-title">Comment count | <span class="orange" id="comment_upvotes_title">Comment karma</span></p>
+					<p class="statistic">{{ data.comment_count }}〡<span class="orange number" id="comment_upvotes">{{ data.comment_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
+					<p class="subtext" id="upvotes_switch_text">Click to switch to sum of upvotes</p>
 				</div>
 			</div>
 		</div>

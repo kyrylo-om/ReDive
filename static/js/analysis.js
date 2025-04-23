@@ -42,15 +42,20 @@ const submission_image = document.getElementById("submission_image")
 const submission_video = document.getElementById("submission_video");
 const submission_link = document.getElementById("submission_link");
 const factor_description = document.getElementById("factor_description");
+const post_upvotes = document.getElementById("post_upvotes");
+const post_upvotes_title = document.getElementById("post_upvotes_title");
+const comment_upvotes = document.getElementById("comment_upvotes");
+const comment_upvotes_title = document.getElementById("comment_upvotes_title");
+const upvotes_switch_text = document.getElementById("upvotes_switch_text");
 
 // Variables
 
+var show_karma = true;
 var search_pool = posts;
 var search_results = search_pool;
 var search_target = "posts";
 var browser_index = 0;
 var browser_step = 10;
-
 var viewed_url = "";
 
 // Filter options
@@ -272,6 +277,25 @@ function clamp(value, min, max) {
 }
 
 // Core functions
+
+function toggle_upvotes() {
+    show_karma = !show_karma;
+
+    if (show_karma) {
+        post_upvotes_title.textContent = "Post karma";
+        comment_upvotes_title.textContent = "Comment karma";
+        post_upvotes.textContent = django_data.post_karma;
+        comment_upvotes.textContent = django_data.comment_karma;
+        upvotes_switch_text.textContent = "Click to switch to sum of upvotes";
+    }
+    else {
+        post_upvotes_title.textContent = "Post upvotes";
+        comment_upvotes_title.textContent = "Comment upvotes";
+        post_upvotes.textContent = django_data.post_upvotes;
+        comment_upvotes.textContent = django_data.comment_upvotes;
+        upvotes_switch_text.textContent = "Click to switch to karma";
+    }
+}
 
 function fill_statistics(criteria) {
     const max_post_frequency = 2;
@@ -941,5 +965,6 @@ document.addEventListener('DOMContentLoaded', function() {
     reset_browser();
     plot.resize();
 
+    // should add a delay
     fill_statistics("Posts + comments");
 })

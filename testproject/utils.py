@@ -7,20 +7,17 @@ from data_app.services import set_bot_likelihood
 
 
 def prepare_data_analysis_page(query, data, today):
+    post_upvotes = 0
+    comment_upvotes = 0
     up_v_down = 0
     up = 0
-    n = 0
-    c = 0
     comments_under_post=0
     up_comment = 0
     comment_amount = 0
     own_comments = 0
-    post_text = ""
     post_times = []
     comment_times = []
     post_upvote_ratios = []
-    comment_total_score = 0
-    comment_total_score = 0
     total_items = 0
     date_today = today
     date_of_creation = data.get("created_date", [])
@@ -41,13 +38,9 @@ def prepare_data_analysis_page(query, data, today):
         up_v_down += i.get("upvotes_ratio", 0)
         up += i.get("score", 0)
         post_upvote_ratios.append(i.get("upvotes_ratio", 0))
-        comment_total_score += i.get("score", 0)
+        post_upvotes += up
         comments_under_post += i ["num_comments"]
         total_items += 1
-        if n < 50:
-            post_text += i.get("title", "") + " "
-            post_text += i.get("body", "") + " "
-        n += 1
         sr = i["subreddit"]
         subreddits_stats[sr]["posts"] += 1
         subreddits_stats[sr]["upvotes"] += i.get("score", 0)
@@ -58,11 +51,8 @@ def prepare_data_analysis_page(query, data, today):
     for i in data.get("recent_comments", []):
         score = i.get("score", 0)
         up_comment += score
-        comment_total_score += score
+        comment_upvotes += score
         total_items += 1
-        if c < 50:
-            post_text += i.get("body", "") + " "
-        c += 1
         sr = i["subreddit"]
         subreddits_stats[sr]["comments"] += 1
         subreddits_stats[sr]["upvotes"] += score
@@ -108,11 +98,11 @@ def prepare_data_analysis_page(query, data, today):
         if post_upvote_ratios
         else 0
     )
-    avg_comment_upvote_ratio = round(up_comment / c, 2) if c else 0
+    avg_comment_upvote_ratio = round(up_comment / comment_amount, 2) if comment_amount else 0
     avg_total_upvote_ratio = round(up + up_comment / total_items, 2) if total_items else 0
 
-    if n == 0:
-        n = 1
+    if posts_amount == 0:
+        posts_amount = 1
 
     bot_analysis = estimate_bot_likelihood(data)
     set_bot_likelihood(username, bot_analysis["bot_likelihood_percent"])
@@ -136,14 +126,16 @@ def prepare_data_analysis_page(query, data, today):
             "name": name,
             "post_count": posts_amount,
             "post_karma": post_karma,
+            "post_upvotes": post_upvotes,
             "comment_count": comment_amount,
             "comment_karma": comment_karma,
-            "up": round(up / n, 2),
+            "comment_upvotes": comment_upvotes,
+            "up": round(up / posts_amount, 2),
             "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
             "averal_comments": comment_amount,
             "j": j,
             "k": j - 3,
-            "up_comment": round(up_comment / c, 2),
+            "up_comment": round(up_comment / comment_amount, 2),
             "subreddit_activity": subreddit_activity,
             "subreddit_names": [sub["name"] for sub in subreddit_activity],
             "query": query,
@@ -162,7 +154,7 @@ def prepare_data_analysis_page(query, data, today):
             "avg_comment_ratio": avg_comment_upvote_ratio,
             "avg_total_ratio": avg_total_upvote_ratio,
             "own_comments": own_comments,
-            "overall_upvotes": round((up + up_comment) / (n + c), 2),
+            "overall_upvotes": round((up + up_comment) / (posts_amount + comment_amount), 2),
             "total_up_v_down": up_v_down,
         }
     }
