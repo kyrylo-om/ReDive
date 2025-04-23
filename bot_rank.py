@@ -108,66 +108,117 @@ def extract_user_features(user_data: dict) -> dict:
 def estimate_bot_likelihood(data):
     """Heuristic model that returns bot_likelihood_percent with explanation."""
     user_data = extract_user_features(data)
-    human_points = {}
-    bot_points = {}
+    human_points = []
+    bot_points = []
 
-    # Тут те що він людина
     if user_data.get("is_mod"):
-        human_points["moderator_status"] = 150
+        human_points.append({
+            'name':'Moderator',
+            'value':150,
+            'description': 'User is a moderator of reddit.'
+            })
 
     if user_data.get("has_verified_email"):
-        human_points["verified_email"] = 100
-
+        human_points.append({
+            'name':'Verified email',
+            'value':100,
+            'description':'User has a verified email.'
+            })
     if user_data.get("verified"):
-        human_points["verified_user"] = 50
-
+        human_points.append({
+            'name':'Verified user',
+            'value':50,
+            'description':'User has been verified by reddit.'
+            })
     if user_data.get("is_gold"):
-        human_points["reddit_premium"] = 100
-
+        human_points.append({
+            'name':'Gold user',
+            'value':100,
+            'description':'User has a gold profile status.'
+            })
     post_bonus = sum(3 for post in user_data.get("recent_posts", []) if post.get("score", 0) > 100)
     if post_bonus:
-        human_points["popular_posts"] = post_bonus
-
+        human_points.append({
+            'name':'Popular posts',
+            'value':post_bonus,
+            'description':f'User has {post_bonus//3} popular posts.'
+            })
     comment_bonus = sum(2 for comment in user_data.get("recent_comments", []) if comment.get("score", 0) > 50)
     if comment_bonus:
-        human_points["popular_comments"] = comment_bonus
-
+        human_points.append({
+            'name':'Popular comments',
+            'value':comment_bonus,
+            'description':f'User has {comment_bonus//2} popular comments.'
+            })
     if not user_data.get("repetitive_posts", False):
-        human_points["unique_posts"] = 200
-
+        human_points.append({
+            'name':'Unique posts',
+            'value':200,
+            'description':'Almost all posts are unique.'
+            })
     if not user_data.get("repetitive_comments", False):
-        human_points["unique_comments"] = 200
-
+        human_points.append({
+            'name':'Unique comments',
+            'value':200,
+            'description':'Almost all comments are unique.'
+            })
     years_old = user_data.get("account_age_days", 0) // 365
     if years_old:
-        human_points["account_age"] = years_old * 50
-
+        human_points.append({
+            'name':'Old account',
+            'value':years_old * 50,
+            'description':f'Account was created {years_old} year ago.'
+            })
     num_trophies = len(user_data.get("trophies", []))
     if num_trophies:
-        human_points["trophies"] = num_trophies * 40
-
+        human_points.append({
+            'name':'Trophies',
+            'value':num_trophies * 40,
+            'description':f'User has {num_trophies} trophies.'
+            })
     if user_data.get("pic") and "default" not in user_data["pic"]:
-        human_points["has_profile_picture"] = 100
-
+        human_points.append({
+            'name':'Profile picture',
+            'value':100,
+            'description':'User has a profile picture.'
+            })
     if user_data.get("post_to_comment_ratio", 1) < 0.5:
-        human_points["commenter_ratio"] = 100
-
+        human_points.append({
+            'name':'Commenter ratio',
+            'value':100,
+            'description':f'User has healthy post to comment ratio of {user_data.get("post_to_comment_ratio", 1)}.'
+            })
     if user_data.get("avg_comment_score", 0) > 2:
-        human_points["good_comment_karma"] = 100
-
-    if user_data.get("avg_post_score", 0) > 2:
-        human_points["good_post_karma"] = 100
-
+        human_points.append({
+            'name':'Average comment score',
+            'value':100,
+            'description':f'User has an average comment score of {user_data.get("avg_comment_score", 0)}.'
+            })
+    if user_data.get("avg_post_score", 0) > 5:
+        human_points.append({
+            'name':'Average post score',
+            'value':100,
+            'description':f'User has an average post score of {user_data.get("avg_post_score", 0)}.'
+            })
     if user_data.get("avg_post_length", 0) > 100:
-        human_points["long_posts"] = 75
-
+        human_points.append({
+            'name':'Long posts',
+            'value':75,
+            'description':f'User posts has an average length of {user_data.get("avg_post_length", 0)}.'
+            })
     if user_data.get("avg_comment_length", 0) > 50:
-        human_points["long_comments"] = 75
-
+        human_points.append({
+            'name':'Long comments',
+            'value':50,
+            'description':f'User posts has an average length of {user_data.get("avg_comment_length", 0)}.'
+            })
     # Тут те що каже що юзер бот
     if not user_data.get("pic") or "default" in user_data["pic"]:
-        bot_points["no_profile_picture"] = 100
-
+        bot_points.append({
+            'name':'No profile picture',
+            'value':100,
+            'description':f'User has a default profile picture.'
+            })
     subreddits = set()
     for post in user_data.get("recent_posts", []):
         subreddits.add(post.get("subreddit"))
@@ -175,32 +226,57 @@ def estimate_bot_likelihood(data):
         subreddits.add(comment.get("subreddit"))
 
     if len(subreddits) > 30:
-        bot_points["too_many_subreddits"] = (len(subreddits) - 30) * 2.5
+        bot_points.append({
+            'name':'Too many subreddits',
+            'value':(len(subreddits) - 30) * 2.5,
+            'description':f'User was active in {(len(subreddits) - 30) * 2.5} subreddits.'
+            })
 
     if user_data["name"].lower().startswith("user") and user_data["name"][4:].isdigit():
-        bot_points["generic_username"] = 150
-
+        bot_points.append({
+            'name':'Generic username',
+            'value':150,
+            'description':f'User has a generic username.'
+            })
     if user_data.get("repetitive_posts", False):
-        bot_points["repetitive_posts"] = 250
-
+        bot_points.append({
+            'name':'Repetitive posts',
+            'value':250,
+            'description':f'User repetitively posts the same.'
+            })
     if user_data.get("repetitive_comments", False):
-        bot_points["repetitive_comments"] = 250
-
+        bot_points.append({
+            'name':'Repetitive comments',
+            'value':250,
+            'description':f'User repetitively comments the same.'
+            })
     if user_data.get("avg_time_between_actions", 0) < 1:
-        bot_points["hyperactive_behavior"] = 200
-
+        bot_points.append({
+            'name':'Hyperactive behavior',
+            'value':200,
+            'description':f'User has a hyperactive behavior.'
+            })
     if user_data.get("post_to_comment_ratio", 1) > 10:
-        bot_points["spammy_poster_ratio"] = 150
-
+        bot_points.append({
+            'name':'Post to comment ratio',
+            'value':150,
+            'description':f'User has weird post to comment ratio.'
+            })
     if user_data.get("avg_post_length", 0) < 20:
-        bot_points["short_posts"] = 50
-
+        bot_points.append({
+            'name':'Short posts',
+            'value':50,
+            'description':f'User post are {user_data.get("avg_post_length", 0)} characters long on average.'
+            })
     if user_data.get("avg_comment_length", 0) < 10:
-        bot_points["short_comments"] = 50
-
+        bot_points.append({
+            'name':'Short comments',
+            'value':50,
+            'description':f'User comments are {user_data.get("avg_post_length", 0)} characters long on average.'
+            })
     # --- Score calculation ---
-    total_human = sum(human_points.values())
-    total_bot = sum(bot_points.values())
+    total_human = sum(factor['value'] for factor in human_points)
+    total_bot = sum(factor['value'] for factor in bot_points)
 
     score = total_bot / (total_human + total_bot + 1e-5)
     bot_likelihood_percent = round(score * 100)
