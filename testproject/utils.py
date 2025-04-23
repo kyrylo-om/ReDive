@@ -11,6 +11,7 @@ def prepare_data_analysis_page(query, data, today):
     up = 0
     n = 0
     c = 0
+    comments_under_post=0
     up_comment = 0
     comment_amount = 0
     own_comments = 0
@@ -41,6 +42,7 @@ def prepare_data_analysis_page(query, data, today):
         up += i.get("score", 0)
         post_upvote_ratios.append(i.get("upvotes_ratio", 0))
         comment_total_score += i.get("score", 0)
+        comments_under_post += i ["num_comments"]
         total_items += 1
         if n < 50:
             post_text += i.get("title", "") + " "
@@ -106,8 +108,8 @@ def prepare_data_analysis_page(query, data, today):
         if post_upvote_ratios
         else 0
     )
-    avg_comment_ratio = round(comment_total_score / c, 2) if c else 0
-    avg_total_ratio = round(comment_total_score / total_items, 2) if total_items else 0
+    avg_comment_upvote_ratio = round(up_comment / c, 2) if c else 0
+    avg_total_upvote_ratio = round(up + up_comment / total_items, 2) if total_items else 0
 
     if n == 0:
         n = 1
@@ -137,7 +139,7 @@ def prepare_data_analysis_page(query, data, today):
             "comment_count": comment_amount,
             "comment_karma": comment_karma,
             "up": round(up / n, 2),
-            "comment_amount": round(comment_amount / c, 2),
+            "comments_under_post_amount": round(comments_under_post / c, 2),
             "averal_comments": comment_amount,
             "j": j,
             "k": j - 3,
@@ -157,8 +159,10 @@ def prepare_data_analysis_page(query, data, today):
             "posting_frequency": posting_frequency,
             "comment_frequency": comment_frequency,
             "avg_post_ratio": avg_post_upvote_ratio,
-            "avg_comment_ratio": avg_comment_ratio,
-            "avg_total_ratio": avg_total_ratio,
+            "avg_comment_ratio": avg_comment_upvote_ratio,
+            "avg_total_ratio": avg_total_upvote_ratio,
             "own_comments": own_comments,
+            "overall_upvotes": round((up + up_comment) / (n + c), 2),
+            "total_up_v_down": up_v_down,
         }
     }
