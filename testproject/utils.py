@@ -147,6 +147,7 @@ def prepare_data_analysis_page(query, data, today):
             "query": query,
             "posts": data["recent_posts"],
             "comments": data["recent_comments"],
+            "human_likelihood_percentage": 100 - bot_analysis["bot_likelihood_percent"],
             "bot_likelihood_percentage": bot_analysis["bot_likelihood_percent"],
             "human_points": bot_analysis["human_points"],
             "bot_points": bot_analysis["bot_points"],
