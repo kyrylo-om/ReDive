@@ -621,7 +621,7 @@ tr:nth-child(even) {
 .factors-div {
 	justify-content: center;
 	margin-bottom: 1.5rem;
-	flex-grow: 0;
+	flex-grow: 1;
 }
 
 .factor-container {
@@ -644,4 +644,8 @@ tr:nth-child(even) {
 
 .factor:hover {
 	font-weight: 500;
+}
+
+.bot-rank-info {
+	width: 5rem;
 }

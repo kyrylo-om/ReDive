@@ -6,6 +6,8 @@ const subreddits = django_data['subreddit_activity'];
 const posts = django_data['posts'];
 const comments = django_data['comments'];
 const posts_and_comments = posts.concat(comments);
+const human_factors = django_data['human_points'];
+const bot_factors = django_data['bot_points'];
 
 // Elements
 
@@ -38,6 +40,7 @@ const submission_tags = submission_info.children[2];
 const submission_image = document.getElementById("submission_image")
 const submission_video = document.getElementById("submission_video");
 const submission_link = document.getElementById("submission_link");
+const factor_description = document.getElementById("factor_description");
 
 // Variables
 
@@ -169,17 +172,17 @@ const pie_options = {
             itemStyle: {
                 borderRadius: 5
             },
-            data: [
-                { value: 1048, name: 'User is a moderator', itemStyle: {color: '#8ad184'} },
-                { value: 735, name: 'Many upvotes on posts', itemStyle: {color: '#8ad184'} },
-                { value: 580, name: 'Many upvotes on comments', itemStyle: {color: '#8ad184'} },
-                { value: 484, name: 'Each post is unique', itemStyle: {color: '#8ad184'} },
-                { value: 300, name: 'Account is 4 years old', itemStyle: {color: '#8ad184'} },
-                { value: 1048, name: 'Account has 22 trophies', itemStyle: {color: '#8ad184'} },
-                { value: 300, name: 'No profile picture', itemStyle: {color: '#ffa8a8'} },
-                { value: 1048, name: 'User is active in too many subreddits', itemStyle: {color: '#ffa8a8'} },
-                { value: 735, name: 'Generic username', itemStyle: {color: '#ffa8a8'} }
-            ]
+            data: human_factors.map(item => ({
+                ...item,
+                itemStyle: {
+                  color: '#8ad184'
+                }
+              })).concat(bot_factors.map(item => ({
+                ...item,
+                itemStyle: {
+                  color: '#ffa8a8'
+                }
+              })))
         }
     ],
     graphic: [{
@@ -187,7 +190,7 @@ const pie_options = {
         left: 'center',
         top: '40%',
         style: {
-            text: '18%',
+            text: django_data.bot_likelihood_percentage + '%',
             textAlign: 'center',
             fontSize: 48,
             fontWeight: 'bold',
@@ -199,7 +202,21 @@ const pie_options = {
         left: 'center',
         top: '55%',
         style: {
-            text: 'Very likely not a bot',
+            text: (function () {
+                let percent = django_data.bot_likelihood_percentage;
+                if (percent < 20) {
+                    return "Very likely not a bot"
+                }
+                else if (percent < 50) {
+                    return "Likely not a bot"
+                }
+                else if (percent < 80) {
+                    return "Could be a bot"
+                }
+                else {
+                    return "Likely is a bot"
+                }
+            })(),
             textAlign: 'center',
             fontSize: 12,
             fill: '#fff'
@@ -772,6 +789,10 @@ function fill_statistics() {
     document.getElementById("upvotes-ratio").style.width = Math.max(Math.min((django_data['up_v_down'] / max_ratio) * 100, 100), 4) + "%";
 }
 
+function change_factor_description(message) {
+    factor_description.textContent = message;
+}
+
 // Event listeners
 
 window.addEventListener('resize', () => {
@@ -867,7 +888,6 @@ trophies_button.addEventListener('click', (e) => {
     trophies_popup.classList.toggle('active');
 });
 
-// Закриття попапу при кліку поза ним
 trophies_popup.addEventListener('click', (e) => {
     if (e.target === trophies_popup) {
         trophies_popup.classList.remove('active');
