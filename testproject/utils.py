@@ -27,6 +27,7 @@ def prepare_data_analysis_page(query, data, today):
     post_karma=data.get('link_karma')
     comment_amount= len(data.get('recent_comments', []))
     comment_karma=data.get('comment_karma')
+    subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
     for i in data.get('recent_posts', []):
         up_v_down +=i['upvotes_ratio']
         up+=i["score"]
@@ -37,6 +38,9 @@ def prepare_data_analysis_page(query, data, today):
             except KeyError:
                 pass
         n+=1
+        sr = i['subreddit']
+        subreddits_stats[sr]["posts"] += 1
+        subreddits_stats[sr]["upvotes"] += i["score"]
     for i in data.get('recent_comments', []):
         up_comment+=i["score"]
         if c<50:
@@ -45,19 +49,9 @@ def prepare_data_analysis_page(query, data, today):
             except KeyError:
                 pass
         c+=1
-    subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
-
-    # ??? why do you iterate over the same lists twice
-    for post in data.get('recent_posts', []):
-        sr = post['subreddit']
-        subreddits_stats[sr]["posts"] += 1
-        subreddits_stats[sr]["upvotes"] += post["score"]
-
-    for comment in data.get('recent_comments', []):
-        sr = comment['subreddit']
+        sr = i['subreddit']
         subreddits_stats[sr]["comments"] += 1
-        subreddits_stats[sr]["upvotes"] += comment["score"]
-
+        subreddits_stats[sr]["upvotes"] += i["score"]
     subreddit_activity = sorted([{"name": f"r/{k}", **v} for k, v in subreddits_stats.items()],key=lambda x: x["upvotes"],reverse=True)
     j = len(subreddit_activity)
     posts = data.get('recent_posts', [])
@@ -76,8 +70,6 @@ def prepare_data_analysis_page(query, data, today):
                 posting_frequency = round(len(post_times) / total_days * 7, 2)
     except Exception as e:
         print("Error calculating weekly posting frequency:", e)
-    # will be needed when we will use semantics:
-    # semantics_list, semantics_analysis = d.semantics_analysis(post_text)
     if n == 0:
         n = 1
     bot_analysis = estimate_bot_likelihood(data)
@@ -110,6 +102,6 @@ def prepare_data_analysis_page(query, data, today):
             'comments': data['recent_comments'],
             'bot_likelihood_percentage' : bot_analysis['bot_likelihood_percent'],
             'human_points' : bot_analysis['human_points'],
-            "bot_points" : bot_analysis['"bot_points"']
+            "bot_points" : bot_analysis['"bot_points"'],
         }
     }
