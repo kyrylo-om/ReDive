@@ -19,7 +19,7 @@ def prepare_data_analysis_page(query, data, today):
     comment_times = []
     post_upvote_ratios = []
     comment_total_score = 0
-    total_upvotes = 0
+    comment_total_score = 0
     total_items = 0
     date_today = today
     date_of_creation = data.get("created_date", [])
@@ -40,7 +40,7 @@ def prepare_data_analysis_page(query, data, today):
         up_v_down += i.get("upvotes_ratio", 0)
         up += i.get("score", 0)
         post_upvote_ratios.append(i.get("upvotes_ratio", 0))
-        total_upvotes += i.get("score", 0)
+        comment_total_score += i.get("score", 0)
         total_items += 1
         if n < 50:
             post_text += i.get("title", "") + " "
@@ -57,7 +57,6 @@ def prepare_data_analysis_page(query, data, today):
         score = i.get("score", 0)
         up_comment += score
         comment_total_score += score
-        total_upvotes += score
         total_items += 1
         if c < 50:
             post_text += i.get("body", "") + " "
@@ -108,7 +107,7 @@ def prepare_data_analysis_page(query, data, today):
         else 0
     )
     avg_comment_ratio = round(comment_total_score / c, 2) if c else 0
-    avg_total_ratio = round(total_upvotes / total_items, 2) if total_items else 0
+    avg_total_ratio = round(comment_total_score / total_items, 2) if total_items else 0
 
     if n == 0:
         n = 1
@@ -124,7 +123,6 @@ def prepare_data_analysis_page(query, data, today):
     full_text = posts_text + " " + comments_text
 
     word_counts, analysis = semantics_analysis(full_text)
-
     return {
         "data": {
             "pic": data["pic"],
@@ -140,11 +138,11 @@ def prepare_data_analysis_page(query, data, today):
             "comment_karma": comment_karma,
             "up": round(up / n, 2),
             "up_v_down": round(up_v_down / n, 2),
-            "comment_amount": round(comment_amount / n, 2),
+            "comment_amount": round(comment_amount / c, 2),
             "averal_comments": comment_amount,
             "j": j,
             "k": j - 3,
-            "up_comment": round(up_comment / n, 2),
+            "up_comment": round(up_comment / c, 2),
             "subreddit_activity": subreddit_activity,
             "subreddit_names": [sub["name"] for sub in subreddit_activity],
             "query": query,
