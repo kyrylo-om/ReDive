@@ -7,8 +7,6 @@ from data_app.services import set_bot_likelihood
 
 
 def prepare_data_analysis_page(query, data, today):
-    post_upvotes = 0
-    comment_upvotes = 0
     up_v_down = 0
     up = 0
     comments_under_post=0
@@ -38,7 +36,6 @@ def prepare_data_analysis_page(query, data, today):
         up_v_down += i.get("upvotes_ratio", 0)
         up += i.get("score", 0)
         post_upvote_ratios.append(i.get("upvotes_ratio", 0))
-        post_upvotes += up
         comments_under_post += i ["num_comments"]
         total_items += 1
         sr = i["subreddit"]
@@ -51,7 +48,6 @@ def prepare_data_analysis_page(query, data, today):
     for i in data.get("recent_comments", []):
         score = i.get("score", 0)
         up_comment += score
-        comment_upvotes += score
         total_items += 1
         sr = i["subreddit"]
         subreddits_stats[sr]["comments"] += 1
@@ -126,10 +122,10 @@ def prepare_data_analysis_page(query, data, today):
             "name": name,
             "post_count": posts_amount,
             "post_karma": post_karma,
-            "post_upvotes": post_upvotes,
+            "post_upvotes": up,
             "comment_count": comment_amount,
             "comment_karma": comment_karma,
-            "comment_upvotes": comment_upvotes,
+            "comment_upvotes": up_comment,
             "up": round(up / posts_amount, 2),
             "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
             "averal_comments": comment_amount,
