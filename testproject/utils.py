@@ -6,18 +6,16 @@ from bot_rank import estimate_bot_likelihood
 from data_app.services import set_bot_likelihood
 
 
-def prepare_data_analysis_page(query, data, today):
+def prepare_data_analysis_page(query, data, analysis_date):
     up_v_down = 0
     up = 0
     comments_under_post=0
     up_comment = 0
-    comment_amount = 0
     own_comments = 0
     post_times = []
     comment_times = []
     post_upvote_ratios = []
     total_items = 0
-    date_today = today
     date_of_creation = data.get("created_date", [])
     account_age = datetime.today().year - date_of_creation.year
     trophies = data.get("trophies", [])
@@ -26,9 +24,9 @@ def prepare_data_analysis_page(query, data, today):
         name = data.get("subreddit")["title"]
     else:
         name = username
-    posts_amount = len(data.get("recent_posts", []))
+    posts_amount = max(1, len(data.get("recent_posts", [])))
     post_karma = data.get("link_karma")
-    comment_amount = len(data.get("recent_comments", []))
+    comment_amount = max(1, len(data.get("recent_comments", [])))
     comment_karma = data.get("comment_karma")
 
     subreddits_stats = defaultdict(lambda: {"posts": 0, "comments": 0, "upvotes": 0})
@@ -61,9 +59,7 @@ def prepare_data_analysis_page(query, data, today):
         key=lambda x: x["upvotes"],
         reverse=True,
     )
-    j = len(subreddit_activity)
-    posts = data.get("recent_posts", [])
-    posts_amount = len(posts)
+    num_subreddits = len(subreddit_activity)
 
     posting_frequency = 0
     if len(post_times) >= 2:
@@ -97,9 +93,6 @@ def prepare_data_analysis_page(query, data, today):
     avg_comment_upvote_ratio = round(up_comment / comment_amount, 2) if comment_amount else 0
     avg_total_upvote_ratio = round(up + up_comment / total_items, 2) if total_items else 0
 
-    if posts_amount == 0:
-        posts_amount = 1
-
     bot_analysis = estimate_bot_likelihood(data)
     set_bot_likelihood(username, bot_analysis["bot_likelihood_percent"])
 
@@ -114,7 +107,7 @@ def prepare_data_analysis_page(query, data, today):
     return {
         "data": {
             "pic": data["pic"],
-            "date_today": date_today,
+            "analysis_date": analysis_date,
             "date_of_creation": date_of_creation,
             "account_age": account_age,
             "trophies": trophies,
@@ -129,8 +122,7 @@ def prepare_data_analysis_page(query, data, today):
             "up": round(up / posts_amount, 2),
             "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
             "averal_comments": comment_amount,
-            "j": j,
-            "k": j - 3,
+            "num_subreddits": num_subreddits,
             "up_comment": round(up_comment / comment_amount, 2),
             "subreddit_activity": subreddit_activity,
             "subreddit_names": [sub["name"] for sub in subreddit_activity],

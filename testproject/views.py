@@ -52,7 +52,7 @@ def analysispage(request):
         return render(request, 'analysis.html', prepare_data_analysis_page(query,get_analysis_entry(query), get_date_of_last_analysis(query)))
     data = d.get_user_analysis(query)
     save_analysis_entry(data)
-    info = prepare_data_analysis_page(query, data, datetime.today().strftime("%B %d %Y"))
+    info = prepare_data_analysis_page(query, data, "just now")
     return render(request, 'analysis.html', info)
 
 def infopage(request):

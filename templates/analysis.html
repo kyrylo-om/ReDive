@@ -82,7 +82,7 @@
 				<div class="profile-info">
 					<p class="username">{{ data.name }}</p>
         			<a class="username2" href="https://www.reddit.com/user/{{ data.username }}" target="_blank">u/{{ data.username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span class="bold">{{ data.date_today }}</span>. 
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span id="analysis_date"></span>. 
 						<!-- <a href="" style="color: inherit">Analyze again &#8635</a> -->
 					</p>
 				</div>
@@ -108,7 +108,7 @@
 						 old
 					</p>
 				</div>
-				<div class="box" onclick="toggle_upvotes()", style="cursor: pointer;">
+				<div class="box user-score" onclick="toggle_upvotes()">
 					<p class="statistic-title">Post count | <span class="orange" id="post_upvotes_title">Post karma</span></p>
 					<p class="statistic">{{ data.post_count }}〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
 					<div class="separator-line"></div>
@@ -164,7 +164,7 @@
 					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
 				{% if data.subreddit_activity|length > 3 %}
-					<p class="subtext">- {{ data.j }} subreddits total -</p>
+					<p class="subtext">- {{ data.num_subreddits }} subreddits total -</p>
 				{% else %}
 					<p class="subtext">No subreddits</p>
 				{% endif %}

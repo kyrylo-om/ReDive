@@ -229,6 +229,12 @@
 	font-weight: 500;
 }
 
+.user-score {
+	cursor: pointer;
+	user-select: none;
+	border: rgba(255, 136, 0, 0.8) 1px solid;
+}
+
 .statistic-outline {
 	height: 1rem;
 	background-color: rgba(0, 0, 0, 0);

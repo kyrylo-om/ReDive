@@ -13,6 +13,7 @@ const bot_factors = django_data['bot_points'];
 
 const trophies_button = document.getElementById('trophies_button');
 const trophies_popup = document.getElementById('trophies_popup');
+const analysis_date = document.getElementById('analysis_date');
 const statistics_select = document.getElementById('statistics_select');
 const browser = document.getElementById('browser');
 const analysis_section = document.getElementById('behaviour-analysis');
@@ -278,6 +279,24 @@ function clamp(value, min, max) {
 
 // Core functions
 
+function set_analysis_date() {
+    if (django_data.analysis_date == "just now") {
+        analysis_date.innerHTML = '<b>just now</b>';
+    }
+    else {
+        const utc_date = new Date(django_data.analysis_date);
+
+        const local_date = utc_date.toLocaleString(undefined, {
+            year: "numeric", month: "long", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false
+        }).split(' at ');
+    
+        const date = local_date[0];
+        const time = local_date[1];
+    
+        analysis_date.innerHTML = '<b>' + date + '</b>, ' + time;
+    }
+}
+
 function toggle_upvotes() {
     show_karma = !show_karma;
 
@@ -302,7 +321,7 @@ function fill_statistics(criteria) {
     const max_comment_frequency = 4;
     const max_upvotes_post = 3000;
     const max_comments = 300;
-    const max_own_comments = 50;
+    const max_own_comments = comments.length;
     const max_upvotes_comment = 500;
     const max_ratio = 1;
 
@@ -956,6 +975,8 @@ trophies_popup.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('form').forEach(form => form.reset());
+
+    set_analysis_date();
 
     plot.setOption(plot_options);
     update_plot();

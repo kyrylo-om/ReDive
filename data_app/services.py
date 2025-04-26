@@ -173,7 +173,7 @@ def check_if_user_exists(username: str) -> bool:
 
 def get_date_of_last_analysis(username: str):
     person = Person.objects.filter(name=username).select_related('last_analysis').first()
-    return person.last_analysis.analyzed_at.strftime("%B %d %Y")
+    return person.last_analysis.analyzed_at
 
 def is_last_analysis_recent(username:str):
     person = Person.objects.filter(name=username).select_related('last_analysis').first()
