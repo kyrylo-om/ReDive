@@ -133,7 +133,7 @@ class DataGetter:
             ],
             "recent_comments": [
                 {
-                    "body": comment.body,
+                    "body": re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", comment.body),
                     "html": comment.body_html,
                     "score": comment.score,
                     "subreddit": comment.subreddit.display_name,
