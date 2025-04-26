@@ -59,7 +59,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
         key=lambda x: x["upvotes"],
         reverse=True,
     )
-    num_subreddits = len(subreddit_activity)
 
     posting_frequency = 0
     if len(post_times) >= 2:
@@ -122,7 +121,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "up": round(up / posts_amount, 2),
             "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
             "averal_comments": comment_amount,
-            "num_subreddits": num_subreddits,
             "up_comment": round(up_comment / comment_amount, 2),
             "subreddit_activity": subreddit_activity,
             "subreddit_names": [sub["name"] for sub in subreddit_activity],

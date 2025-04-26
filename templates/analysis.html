@@ -160,15 +160,10 @@
 				<button class="section-button" onclick="scroll_to_analysis()">Detailed analysis&nbsp;⬇</button>
 				<div class="separator-line"></div>
 				<p class="title">Active in:</p>
-				{% for sr in data.subreddit_names|slice:":3" %}
+				{% for sr in data.subreddit_names|slice:":4" %}
 					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
 				{% endfor %}
-				{% if data.subreddit_activity|length > 3 %}
-					<p class="subtext">- {{ data.num_subreddits }} subreddits total -</p>
-				{% else %}
-					<p class="subtext">No subreddits</p>
-				{% endif %}
-				<button class="section-button", style="margin-bottom: 0;" onclick="scroll_to_monitor()">Activity monitor&nbsp;⬇</button>
+				<button class="section-button", style="margin-bottom: 0;" onclick="scroll_to_monitor()">More subreddits&nbsp;⬇</button>
 			</div>
 		</div>
 	</div>
