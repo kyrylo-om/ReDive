@@ -8,6 +8,9 @@ const comments = django_data['comments'];
 const posts_and_comments = posts.concat(comments);
 const human_factors = django_data['human_points'];
 const bot_factors = django_data['bot_points'];
+const top_words = django_data['top_words'];
+const themes = django_data['themes'];
+const sentiment = django_data['sentiment'];
 
 // Elements
 
@@ -76,6 +79,7 @@ var sort_direction = "down"
 
 const plot = echarts.init(document.getElementById('plot'));
 const pie_chart = echarts.init(document.getElementById('pie_chart'));
+const word_cloud = echarts.init(document.getElementById('word_cloud'));
 
 const plot_options = {
     tooltip: {
@@ -161,6 +165,34 @@ const plot_options = {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderColor: 'rgba(161, 0, 0, 0.8)'
     },
+};
+
+
+const cloud_options = {
+    tooltip: {
+        show: true
+    },
+    series: [{
+        type: 'wordCloud',
+        gridSize: 8,
+        sizeRange: [12, 50],
+        rotationRange: [0, 0],
+        shape: 'circle',
+        textStyle: {
+            color: function () {
+                return 'rgb(' + [
+                    Math.round(180 + Math.random() * 70),
+                    Math.round(180 + Math.random() * 70),
+                    Math.round(180 + Math.random() * 70)
+                  ].join(',') + ')';
+    
+            }
+        },
+        data: Object.entries(themes).map(([key, value]) => ({
+            name: key,
+            value: value
+          }))
+    }]
 };
 
 const pie_options = {
@@ -363,21 +395,17 @@ function fill_statistics(criteria) {
 function fill_subreddits_table(sort_criteria) {
     const table = document.getElementById('subreddits-body')
     function clear_criterias() {
-        document.getElementById('subreddits-head').children[0].textContent = "Subreddit"
-        if(search_target == "posts") {
-            document.getElementById('subreddits-head').children[1].textContent = "Posts"
-        }
-        else {
-            document.getElementById('subreddits-head').children[1].textContent = "Comments"
-        }
-        document.getElementById('subreddits-head').children[2].textContent = "Upvotes"
+        document.getElementById('subreddits-head').children[0].textContent = "Name"
+        document.getElementById('subreddits-head').children[1].textContent = "Posts"
+        document.getElementById('subreddits-head').children[2].textContent = "Comments"
+        document.getElementById('subreddits-head').children[3].textContent = "Upvotes"
     }
     table.replaceChildren();
 
     if (sort_criteria == "name") {
         subreddits.sort((a, b) => a.name.localeCompare(b.name));
         clear_criterias();
-        document.getElementById('subreddits-head').children[0].innerHTML = "Subreddit&nbsp;↓"
+        document.getElementById('subreddits-head').children[0].innerHTML = "Name&nbsp;↓"
     }
     else if (sort_criteria == "posts") {
         subreddits.sort((a, b) => b.posts - a.posts);
@@ -387,20 +415,22 @@ function fill_subreddits_table(sort_criteria) {
     else if (sort_criteria == "comments") {
         subreddits.sort((a, b) => b.comments - a.comments);
         clear_criterias();
-        document.getElementById('subreddits-head').children[1].innerHTML = "Comments&nbsp;↓"
+        document.getElementById('subreddits-head').children[2].innerHTML = "Comments&nbsp;↓"
     }
     else if (sort_criteria == "upvotes") {
         subreddits.sort((a, b) => b.upvotes - a.upvotes);
         clear_criterias();
-        document.getElementById('subreddits-head').children[2].innerHTML = "Upvotes&nbsp;↓"
+        document.getElementById('subreddits-head').children[3].innerHTML = "Upvotes&nbsp;↓"
     }
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
         sub.innerHTML = `
-            <td>${subreddits[i].name}</td>
-            <td>${subreddits[i].posts}</td>
-            <td>${subreddits[i].upvotes}</td>
+            <td class="subreddit-cell ">${subreddits[i].name}</td>
+            <td class="subreddit-cell number">${subreddits[i].posts}</td>
+            <td class="subreddit-cell number">${subreddits[i].comments}</td>
+            <td class="subreddit-cell orange number">${subreddits[i].upvotes}</td>
         `;
+        sub.className = "subreddit"
         table.appendChild(sub)
     }
 }
@@ -980,9 +1010,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     plot.setOption(plot_options);
     update_plot();
+    word_cloud.setOption(cloud_options);
     pie_chart.setOption(pie_options);
 
-    // fill_subreddits_table("upvotes")
+    fill_subreddits_table("upvotes")
     reset_browser();
     plot.resize();
 

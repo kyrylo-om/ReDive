@@ -28,12 +28,14 @@ def semantics_analysis(text: str):
             continue
         if word in stop_words:
             continue
+        if len(word) < 2:
+            continue
         lemma = lemmatizer.lemmatize(word)
         word_counts[lemma] = word_counts.get(lemma, 0) + 1
 
     # Prepare analysis summary
     analysis = {
-        "top_words": sorted(word_counts.items(), key=lambda x: x[1], reverse=True),
+        "top_words": sorted(word_counts.items(), key=lambda x: x[1], reverse=True)[:100],
         "themes": {},
         "sentiment": {"polarity": 0.0, "subjectivity": 0.0}
     }
@@ -44,7 +46,7 @@ def semantics_analysis(text: str):
         if synsets:
             # Choose most frequent synset as best guess
             synset = max(synsets, key=lambda s: s.lemmas()[0].count() if s.lemmas() else 0)
-            topic = synset.lexname()
+            topic = synset.lexname().split('.')[1].capitalize()
             analysis["themes"][topic] = analysis["themes"].get(topic, 0) + freq
 
     # Sentiment analysis on the full original sentence
@@ -52,4 +54,4 @@ def semantics_analysis(text: str):
     analysis["sentiment"]["polarity"] = round(blob.sentiment.polarity, 2)
     analysis["sentiment"]["subjectivity"] = round(blob.sentiment.subjectivity, 2)
 
-    return word_counts, analysis
+    return analysis
