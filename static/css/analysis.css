@@ -467,6 +467,11 @@
 	padding-left: 0.5rem;
 	/* border: white 1px solid; */
 	background-color: rgba(128, 128, 128, 0.127);
+	cursor: pointer;
+}
+
+.word:hover {
+	text-decoration: underline;
 }
 
 .word-count {

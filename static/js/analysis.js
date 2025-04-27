@@ -21,6 +21,9 @@ const statistics_select = document.getElementById('statistics_select');
 const browser = document.getElementById('browser');
 const analysis_section = document.getElementById('behaviour-analysis');
 const monitor_section = document.getElementById('activity-monitor');
+const posts_switch = document.getElementById('posts_switch');
+const comments_switch = document.getElementById('comments_switch');
+const everything_switch = document.getElementById('everything_switch');
 const submissions = document.getElementById('submissions');
 const search_bar = document.getElementById('submissions-search')
 const image_checkbox = document.getElementById('image_checkbox');
@@ -445,6 +448,20 @@ function view_subreddit(name) {
     subreddit_select.value = name;
 }
 
+function view_word(word) {
+    search_query = word;
+    include_body = false;
+    toggle_body_search();
+    if (search_target != "everything") {
+        switch_to_everything();
+    }
+    filter_submissions();
+    sort_submissions();
+    reset_browser();
+    scroll_to_submissions();
+    search_bar.value = word;
+}
+
 function filter_submissions() {
     search_results = []
     for (let i = 0; i < search_pool.length; i += 1) {
@@ -794,16 +811,16 @@ function block_post_filters() {
     }
 }
 
-function switch_to_posts(option) {
+function switch_to_posts() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        posts_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    posts_switch.classList.add('active');
 
     slider.style.transform = `translateX(0%)`;
-    option.style.color = "orange";
+    posts_switch.style.color = "orange";
 
     document.querySelectorAll('.posts-only').forEach(el => {
         el.disabled = false;
@@ -832,16 +849,16 @@ function switch_to_posts(option) {
     reset_browser();
 }
 
-function switch_to_comments(option) {
+function switch_to_comments() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        comments_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    comments_switch.classList.add('active');
 
     slider.style.transform = `translateX(100%)`;
-    option.style.color = "lightblue";
+    comments_switch.style.color = "lightblue";
 
     block_post_filters();
 
@@ -863,16 +880,16 @@ function switch_to_comments(option) {
     reset_browser();
 }
 
-function switch_to_everything(option) {
+function switch_to_everything() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        everything_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    everything_switch.classList.add('active');
 
     slider.style.transform = `translateX(200%)`;
-    option.style.color = "lightgreen";
+    everything_switch.style.color = "lightgreen";
 
     block_post_filters();
 

@@ -205,7 +205,7 @@
 							<tbody id="words-body">
 								{% for word in data.top_words %}
 									<tr>
-										<td class="word">{{ word.0 }}</td>
+										<td class="word" onclick="view_word('{{ word.0 }}')">{{ word.0 }}</td>
 										<td class="word-count">{{ word.1 }}</td>
 									</tr>
 								{% endfor %}
@@ -235,9 +235,9 @@
 		<div class="browser-container">
 			<div class="switch-container">
 				<div class="switch-options">
-					<div class="switch-option" onclick="switch_to_posts(this)", style="color: orange;">Posts</div>
-					<div class="switch-option" onclick="switch_to_comments(this)">Comments</div>
-					<div class="switch-option" onclick="switch_to_everything(this)">Everything</div>
+					<div class="switch-option" id="posts_switch" onclick="switch_to_posts()", style="color: orange;">Posts</div>
+					<div class="switch-option" id="comments_switch" onclick="switch_to_comments()">Comments</div>
+					<div class="switch-option" id="everything_switch" onclick="switch_to_everything()">Everything</div>
 				</div>
 				<div id="slider"></div>
 			</div>
