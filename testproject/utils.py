@@ -102,7 +102,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
 
     full_text = posts_text + " " + comments_text
 
-    word_counts, analysis = semantics_analysis(full_text)
+    semantics = semantics_analysis(full_text)
     return {
         "data": {
             "pic": data["pic"],
@@ -131,8 +131,9 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "bot_likelihood_percentage": bot_analysis["bot_likelihood_percent"],
             "human_points": bot_analysis["human_points"],
             "bot_points": bot_analysis["bot_points"],
-            "word_counts": word_counts,
-            "analysis": analysis,
+            "top_words": semantics['top_words'],
+            "themes": semantics['themes'],
+            "sentiment": semantics['sentiment'],
             "total_frequency": total_frequency,
             "posting_frequency": posting_frequency,
             "comment_frequency": comment_frequency,

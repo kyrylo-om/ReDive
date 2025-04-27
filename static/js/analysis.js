@@ -8,6 +8,9 @@ const comments = django_data['comments'];
 const posts_and_comments = posts.concat(comments);
 const human_factors = django_data['human_points'];
 const bot_factors = django_data['bot_points'];
+const top_words = django_data['top_words'];
+const themes = django_data['themes'];
+const sentiment = django_data['sentiment'];
 
 // Elements
 
@@ -18,6 +21,10 @@ const statistics_select = document.getElementById('statistics_select');
 const browser = document.getElementById('browser');
 const analysis_section = document.getElementById('behaviour-analysis');
 const monitor_section = document.getElementById('activity-monitor');
+const posts_switch = document.getElementById('posts_switch');
+const comments_switch = document.getElementById('comments_switch');
+const everything_switch = document.getElementById('everything_switch');
+const submissions = document.getElementById('submissions');
 const search_bar = document.getElementById('submissions-search')
 const image_checkbox = document.getElementById('image_checkbox');
 const spoiler_checkbox = document.getElementById('spoiler_checkbox');
@@ -44,8 +51,10 @@ const submission_video = document.getElementById("submission_video");
 const submission_link = document.getElementById("submission_link");
 const factor_description = document.getElementById("factor_description");
 const post_upvotes = document.getElementById("post_upvotes");
+const post_count = document.getElementById("post_count");
 const post_upvotes_title = document.getElementById("post_upvotes_title");
 const comment_upvotes = document.getElementById("comment_upvotes");
+const comment_count = document.getElementById("comment_count");
 const comment_upvotes_title = document.getElementById("comment_upvotes_title");
 const upvotes_switch_text = document.getElementById("upvotes_switch_text");
 
@@ -76,6 +85,7 @@ var sort_direction = "down"
 
 const plot = echarts.init(document.getElementById('plot'));
 const pie_chart = echarts.init(document.getElementById('pie_chart'));
+const word_cloud = echarts.init(document.getElementById('word_cloud'));
 
 const plot_options = {
     tooltip: {
@@ -161,6 +171,34 @@ const plot_options = {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderColor: 'rgba(161, 0, 0, 0.8)'
     },
+};
+
+
+const cloud_options = {
+    tooltip: {
+        show: true
+    },
+    series: [{
+        type: 'wordCloud',
+        gridSize: 8,
+        sizeRange: [12, 50],
+        rotationRange: [0, 0],
+        shape: 'circle',
+        textStyle: {
+            color: function () {
+                return 'rgb(' + [
+                    Math.round(180 + Math.random() * 70),
+                    Math.round(180 + Math.random() * 70),
+                    Math.round(180 + Math.random() * 70)
+                  ].join(',') + ')';
+    
+            }
+        },
+        data: Object.entries(themes).map(([key, value]) => ({
+            name: key,
+            value: value
+          }))
+    }]
 };
 
 const pie_options = {
@@ -279,6 +317,28 @@ function clamp(value, min, max) {
 
 // Core functions
 
+function animateNumber(finalNumber, duration = 1000, startNumber = 0, callback) {
+    const startTime = performance.now();
+    
+    function easeOutQuad(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutQuad(progress);
+        const currentNumber = Math.floor(easedProgress * (finalNumber - startNumber) + startNumber);
+      
+        callback(currentNumber);
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    requestAnimationFrame(update);
+}
+
 function set_analysis_date() {
     if (django_data.analysis_date == "just now") {
         analysis_date.innerHTML = '<b>just now</b>';
@@ -363,21 +423,17 @@ function fill_statistics(criteria) {
 function fill_subreddits_table(sort_criteria) {
     const table = document.getElementById('subreddits-body')
     function clear_criterias() {
-        document.getElementById('subreddits-head').children[0].textContent = "Subreddit"
-        if(search_target == "posts") {
-            document.getElementById('subreddits-head').children[1].textContent = "Posts"
-        }
-        else {
-            document.getElementById('subreddits-head').children[1].textContent = "Comments"
-        }
-        document.getElementById('subreddits-head').children[2].textContent = "Upvotes"
+        document.getElementById('subreddits-head').children[0].textContent = "Name"
+        document.getElementById('subreddits-head').children[1].textContent = "Posts"
+        document.getElementById('subreddits-head').children[2].textContent = "Comments"
+        document.getElementById('subreddits-head').children[3].textContent = "Upvotes"
     }
     table.replaceChildren();
 
     if (sort_criteria == "name") {
         subreddits.sort((a, b) => a.name.localeCompare(b.name));
         clear_criterias();
-        document.getElementById('subreddits-head').children[0].innerHTML = "Subreddit&nbsp;↓"
+        document.getElementById('subreddits-head').children[0].innerHTML = "Name&nbsp;↓"
     }
     else if (sort_criteria == "posts") {
         subreddits.sort((a, b) => b.posts - a.posts);
@@ -387,22 +443,47 @@ function fill_subreddits_table(sort_criteria) {
     else if (sort_criteria == "comments") {
         subreddits.sort((a, b) => b.comments - a.comments);
         clear_criterias();
-        document.getElementById('subreddits-head').children[1].innerHTML = "Comments&nbsp;↓"
+        document.getElementById('subreddits-head').children[2].innerHTML = "Comments&nbsp;↓"
     }
     else if (sort_criteria == "upvotes") {
         subreddits.sort((a, b) => b.upvotes - a.upvotes);
         clear_criterias();
-        document.getElementById('subreddits-head').children[2].innerHTML = "Upvotes&nbsp;↓"
+        document.getElementById('subreddits-head').children[3].innerHTML = "Upvotes&nbsp;↓"
     }
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
         sub.innerHTML = `
-            <td>${subreddits[i].name}</td>
-            <td>${subreddits[i].posts}</td>
-            <td>${subreddits[i].upvotes}</td>
+            <td onclick="view_subreddit('${subreddits[i].name}')" class="subreddit-cell subreddit-cell-name">${subreddits[i].name}</td>
+            <td class="subreddit-cell number">${subreddits[i].posts}</td>
+            <td class="subreddit-cell number">${subreddits[i].comments}</td>
+            <td class="subreddit-cell orange number">${subreddits[i].upvotes}</td>
         `;
+        sub.className = "subreddit"
         table.appendChild(sub)
     }
+}
+
+function view_subreddit(name) {
+    subreddit_filter = name.slice(2);
+    filter_submissions();
+    sort_submissions();
+    reset_browser();
+    scroll_to_submissions();
+    subreddit_select.value = name;
+}
+
+function view_word(word) {
+    search_query = word;
+    include_body = false;
+    toggle_body_search();
+    if (search_target != "everything") {
+        switch_to_everything();
+    }
+    filter_submissions();
+    sort_submissions();
+    reset_browser();
+    scroll_to_submissions();
+    search_bar.value = word;
 }
 
 function filter_submissions() {
@@ -754,16 +835,16 @@ function block_post_filters() {
     }
 }
 
-function switch_to_posts(option) {
+function switch_to_posts() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        posts_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    posts_switch.classList.add('active');
 
     slider.style.transform = `translateX(0%)`;
-    option.style.color = "orange";
+    posts_switch.style.color = "orange";
 
     document.querySelectorAll('.posts-only').forEach(el => {
         el.disabled = false;
@@ -792,16 +873,16 @@ function switch_to_posts(option) {
     reset_browser();
 }
 
-function switch_to_comments(option) {
+function switch_to_comments() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        comments_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    comments_switch.classList.add('active');
 
     slider.style.transform = `translateX(100%)`;
-    option.style.color = "lightblue";
+    comments_switch.style.color = "lightblue";
 
     block_post_filters();
 
@@ -823,16 +904,16 @@ function switch_to_comments(option) {
     reset_browser();
 }
 
-function switch_to_everything(option) {
+function switch_to_everything() {
     document.querySelectorAll('.switch-option').forEach(opt => {
         opt.classList.remove('active');
         opt.style.color = "white";
-        option.style.fontWeight = "normal"
+        everything_switch.style.fontWeight = "normal"
     });
-    option.classList.add('active');
+    everything_switch.classList.add('active');
 
     slider.style.transform = `translateX(200%)`;
-    option.style.color = "lightgreen";
+    everything_switch.style.color = "lightgreen";
 
     block_post_filters();
 
@@ -860,6 +941,10 @@ function scroll_to_analysis() {
 
 function scroll_to_monitor() {
     monitor_section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function scroll_to_submissions() {
+    submissions.scrollIntoView({ behavior: 'smooth' });
 }
 
 function change_factor_description(message) {
@@ -980,12 +1065,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     plot.setOption(plot_options);
     update_plot();
+    word_cloud.setOption(cloud_options);
     pie_chart.setOption(pie_options);
 
-    // fill_subreddits_table("upvotes")
+    fill_subreddits_table("upvotes")
     reset_browser();
     plot.resize();
 
-    // should add a delay
     fill_statistics("Posts + comments");
+
+    animateNumber(django_data.post_karma, 1000, 0, (n) => {
+        post_upvotes.textContent = n;
+    });
+    animateNumber(django_data.comment_karma, 1000, 0, (n) => {
+        comment_upvotes.textContent = n;
+    });
+    animateNumber(django_data.posts.length, 1000, 0, (n) => {
+        post_count.textContent = n;
+    });
+    animateNumber(django_data.comments.length, 1000, 0, (n) => {
+        comment_count.textContent = n;
+    });
 })

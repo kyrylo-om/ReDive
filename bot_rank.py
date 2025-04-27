@@ -186,31 +186,31 @@ def estimate_bot_likelihood(data):
         human_points.append({
             'name':'Commenter ratio',
             'value':100,
-            'description':f'User has healthy post to comment ratio of {user_data.get("post_to_comment_ratio", 1)}.'
+            'description':f'User has healthy post to comment ratio of {round(user_data.get("post_to_comment_ratio", 1),2)}.'
             })
     if user_data.get("avg_comment_score", 0) > 2:
         human_points.append({
             'name':'Average comment score',
             'value':100,
-            'description':f'User has an average comment score of {user_data.get("avg_comment_score", 0)}.'
+            'description':f'User has an average comment score of {round(user_data.get("avg_comment_score", 0))}.'
             })
     if user_data.get("avg_post_score", 0) > 5:
         human_points.append({
             'name':'Average post score',
             'value':100,
-            'description':f'User has an average post score of {user_data.get("avg_post_score", 0)}.'
+            'description':f'User has an average post score of {round(user_data.get("avg_post_score", 0))}.'
             })
     if user_data.get("avg_post_length", 0) > 100:
         human_points.append({
             'name':'Long posts',
             'value':75,
-            'description':f'User posts has an average length of {user_data.get("avg_post_length", 0)}.'
+            'description':f'User posts has an average length of {round(user_data.get("avg_post_length", 0))}.'
             })
     if user_data.get("avg_comment_length", 0) > 50:
         human_points.append({
             'name':'Long comments',
             'value':50,
-            'description':f'User posts has an average length of {user_data.get("avg_comment_length", 0)}.'
+            'description':f'User posts has an average length of {round(user_data.get("avg_comment_length", 0))}.'
             })
     # Тут те що каже що юзер бот
     if not user_data.get("pic") or "default" in user_data["pic"]:
@@ -260,19 +260,19 @@ def estimate_bot_likelihood(data):
         bot_points.append({
             'name':'Post to comment ratio',
             'value':150,
-            'description':f'User has weird post to comment ratio.'
+            'description':f'User has weird post to comment ratio of {round(user_data.get("post_to_comment_ratio", 1),2)}.'
             })
     if user_data.get("avg_post_length", 0) < 20:
         bot_points.append({
             'name':'Short posts',
             'value':50,
-            'description':f'User post are {user_data.get("avg_post_length", 0)} characters long on average.'
+            'description':f'User post are {round(user_data.get("avg_post_length", 0))} characters long on average.'
             })
     if user_data.get("avg_comment_length", 0) < 10:
         bot_points.append({
             'name':'Short comments',
             'value':50,
-            'description':f'User comments are {user_data.get("avg_post_length", 0)} characters long on average.'
+            'description':f'User comments are {round(user_data.get("avg_post_length", 0))} characters long on average.'
             })
     # --- Score calculation ---
     total_human = sum(factor['value'] for factor in human_points)

@@ -52,6 +52,7 @@
 	<link rel="stylesheet" href="{% static 'css/common.css' %}">
 	<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
 	<script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
 	<script src="{% static 'js/analysis.js' %}" defer></script>
 	<script src="{% static 'js/theme.js' %}" defer></script>
 	<title>ReDive analysis</title>
@@ -110,10 +111,10 @@
 				</div>
 				<div class="box user-score" onclick="toggle_upvotes()">
 					<p class="statistic-title">Post count | <span class="orange" id="post_upvotes_title">Post karma</span></p>
-					<p class="statistic">{{ data.post_count }}〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
+					<p class="statistic"><span id="post_count" class="number">{{ data.post_count }}</span>〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange" id="comment_upvotes_title">Comment karma</span></p>
-					<p class="statistic">{{ data.comment_count }}〡<span class="orange number" id="comment_upvotes">{{ data.comment_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
+					<p class="statistic"><span id="comment_count" class="number">{{ data.comment_count }}</span>〡<span class="orange number" id="comment_upvotes">{{ data.comment_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
 					<p class="subtext" id="upvotes_switch_text">Click to switch to sum of upvotes</p>
 				</div>
 			</div>
@@ -155,13 +156,13 @@
 				</div>
 			</div>
 			<div class="box", style="align-items: center; flex-shrink: 1; flex-grow: 0;">
-				<p class="title">Bot rank</p>
+				<p class="title", style="margin-bottom: 0.5rem;">Bot rank</p>
 				<p class="statistic", style="color: lightgreen;">{{data.bot_likelihood_percentage}}%</p>
 				<button class="section-button" onclick="scroll_to_analysis()">Detailed analysis&nbsp;⬇</button>
 				<div class="separator-line"></div>
-				<p class="title">Active in:</p>
+				<p class="title", style="margin: 0.5rem 0;">Active in:</p>
 				{% for sr in data.subreddit_names|slice:":4" %}
-					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
+					<p class="subtext link" onclick="view_subreddit('{{ sr }}')">{{ sr }}</p>
 				{% endfor %}
 				<button class="section-button", style="margin-bottom: 0;" onclick="scroll_to_monitor()">More subreddits&nbsp;⬇</button>
 			</div>
@@ -171,42 +172,72 @@
 		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
 		<div class="section-line"></div>
 	</div>
-	<div class="box", style="flex-grow: 0;">
-		<div class="flex-container">
-			<div>
-				<p class="title">Search options</p>
-				<div id="price-slider" class="slider-container"></div>
+	<div class="topics">
+		<div class="box", style="flex-grow: 0; display: flex;">
+			<p class="title">Subreddits <span style="color: lightgray; font-weight: 300;">({{ data.subreddit_names|length }} total)</span></p>
+			<div class="subreddits-table-container custom-scrollbar">
+				<table class="subreddits-table">
+					<thead>
+						<tr id="subreddits-head">
+							<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
+						</tr>
+					</thead>
+					<tbody id="subreddits-body"></tbody>
+				</table>
 			</div>
-			<div style="display:flex; flex-grow: 1; justify-content: center;">
-				<div class="separator-line-vertical"></div>
-			</div>
-			<div class="flex-container", style="flex-direction: column; flex-grow: 0;">
-				<div class="subreddits-table-container custom-scrollbar">
-					<table class="subreddits-table">
-						<thead>
-							<tr id="subreddits-head">
-								<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Subreddit</th>
-								<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
-								<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
-							</tr>
-						</thead>
-						<tbody id="subreddits-body"></tbody>
-					</table>
+			<p class="subtext" id="upvotes_switch_text">Select a subreddit to view submissions</p>
+		</div>
+		<div class="box">
+			<div class="flex-container semantics">
+				<div class="top-words">
+					<p class="title">Frequently used words</p>
+					<div class="words-table-container custom-scrollbar">
+						<table class="words-table">
+							<!-- <thead>
+								<tr id="subreddits-head">
+									<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Word</th>
+									<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Encounters</th>
+								</tr>
+							</thead> -->
+							<tbody id="words-body">
+								{% for word in data.top_words %}
+									<tr>
+										<td class="word" onclick="view_word('{{ word.0 }}')">{{ word.0 }}</td>
+										<td class="word-count">{{ word.1 }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<p class="subtext" id="upvotes_switch_text">Select a word to see it in context</p>
 				</div>
+				<div style="display:flex; justify-content: center;">
+					<div class="separator-line-vertical"></div>
+				</div>
+				<div style="flex-grow: 1; align-items: center;">
+					<p class="title" style="text-align: center;">Most popular themes</p>
+					<div id="word_cloud" style="height: 100%; width: 100%;"></div>
+				</div>
+				<!-- <div>
+					<p class="title">Sentiment</p>
+				</div> -->
 			</div>
 		</div>
 	</div>
 	<div class="section-title">
-		<h2 class="section-text" id="activity-monitor">SUBMISSIONS</h2>
+		<h2 class="section-text" id="submissions">SUBMISSIONS</h2>
 		<div class="section-line"></div>
 	</div>
 	<div class="flex-container width-responsive">
 		<div class="browser-container">
 			<div class="switch-container">
 				<div class="switch-options">
-					<div class="switch-option" onclick="switch_to_posts(this)", style="color: orange;">Posts</div>
-					<div class="switch-option" onclick="switch_to_comments(this)">Comments</div>
-					<div class="switch-option" onclick="switch_to_everything(this)">Everything</div>
+					<div class="switch-option" id="posts_switch" onclick="switch_to_posts()", style="color: orange;">Posts</div>
+					<div class="switch-option" id="comments_switch" onclick="switch_to_comments()">Comments</div>
+					<div class="switch-option" id="everything_switch" onclick="switch_to_everything()">Everything</div>
 				</div>
 				<div id="slider"></div>
 			</div>
@@ -294,7 +325,6 @@
 				</div>
 			</div>
 			<div class="box", style="flex-grow: 1;">
-				<!-- <p class="title" style="line-height: 1.8rem; margin-bottom: 0.5rem;">Submission history</p> -->
 				<div id="plot" class="plot"></div>
 			</div>
 		</div>
@@ -314,7 +344,7 @@
 			<div class="flex-container", style="flex-direction: column;">
 				<div class="flex-container factors-div">
 					<div class="factor-container">
-						<p class="title", style="line-height: 1.8rem;">Human: <span style="color: #8ad184;">{{data.human_likelihood_percentage}}%</span></p>
+						<p class="title">Human: <span style="color: #8ad184;">{{data.human_likelihood_percentage}}%</span></p>
 						<div class="factor-list">
 							{% for point in data.human_points %}
 							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">{{point.name}}</p>
@@ -325,7 +355,7 @@
 						<div class="separator-line-vertical"></div>
 					</div>
 					<div class="factor-container">
-						<p class="title", style="line-height: 1.8rem;">Bot: <span style="color: #ffa8a8;">{{data.bot_likelihood_percentage}}%</span></p>
+						<p class="title">Bot: <span style="color: #ffa8a8;">{{data.bot_likelihood_percentage}}%</span></p>
 						<div class="factor-list">
 							{% for point in data.bot_points %}
 							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/cross.png' %}", width="15", style="margin-right: 10px">{{point.name}}</p>
@@ -339,10 +369,18 @@
 			
 		</div>
 		<div class="box bot-rank-info">
-			<p class="title", style="line-height: 1.8rem; text-align: center;">Bot rank</p>
+			<p class="title", style="text-align: center; margin-bottom: 0.5rem;">Bot rank</p>
 			<p style="text-align: center; overflow-y: auto;">We examine behaviour patterns to evaluate the possibility of a user being a bot. There is always room for error, and no program can tell for sure if an account is run by a bot. We only provide you with useful analysis, making your verdict easier to make.</p>
 		</div>
 	</div>
+
+	<footer class="footer" style="margin-top: 2rem">
+        <p>&copy; 2025 ReDive</p>
+        <div class="support">
+            <span>Support:</span>
+            <a href="mailto:redive_support@gmail.com">redive_support@gmail.com</a>
+        </div>
+    </footer>
 
 	<div class="trophies-popup" id="trophies_popup">
         <div class="trophies-content custom-scrollbar">
@@ -351,7 +389,7 @@
 			{% for trophy in data.trophies %}
 				<div class="trophy">
 					<img src="{{ trophy.icon_40 }}">
-					<p class="title" style="line-height: 1.8rem; margin-left: 1rem; font-size: 1.5rem;">{{ trophy.name }}</p>
+					<p class="title" style="margin-left: 1rem; font-size: 1.5rem;">{{ trophy.name }}</p>
 				</div>
 			{% endfor %}
 		</div>

@@ -188,3 +188,4 @@ def set_bot_likelihood(name, bot_likelihood_percent):
     person = Person.objects.filter(name=name).first()
     history = person.last_analysis
     history.bot_likelihood_percent = bot_likelihood_percent
+    history.save()
