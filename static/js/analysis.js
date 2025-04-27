@@ -51,8 +51,10 @@ const submission_video = document.getElementById("submission_video");
 const submission_link = document.getElementById("submission_link");
 const factor_description = document.getElementById("factor_description");
 const post_upvotes = document.getElementById("post_upvotes");
+const post_count = document.getElementById("post_count");
 const post_upvotes_title = document.getElementById("post_upvotes_title");
 const comment_upvotes = document.getElementById("comment_upvotes");
+const comment_count = document.getElementById("comment_count");
 const comment_upvotes_title = document.getElementById("comment_upvotes_title");
 const upvotes_switch_text = document.getElementById("upvotes_switch_text");
 
@@ -314,6 +316,28 @@ function clamp(value, min, max) {
 }
 
 // Core functions
+
+function animateNumber(finalNumber, duration = 1000, startNumber = 0, callback) {
+    const startTime = performance.now();
+    
+    function easeOutQuad(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutQuad(progress);
+        const currentNumber = Math.floor(easedProgress * (finalNumber - startNumber) + startNumber);
+      
+        callback(currentNumber);
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    requestAnimationFrame(update);
+}
 
 function set_analysis_date() {
     if (django_data.analysis_date == "just now") {
@@ -1049,4 +1073,17 @@ document.addEventListener('DOMContentLoaded', function() {
     plot.resize();
 
     fill_statistics("Posts + comments");
+
+    animateNumber(django_data.post_karma, 1000, 0, (n) => {
+        post_upvotes.textContent = n;
+    });
+    animateNumber(django_data.comment_karma, 1000, 0, (n) => {
+        comment_upvotes.textContent = n;
+    });
+    animateNumber(django_data.posts.length, 1000, 0, (n) => {
+        post_count.textContent = n;
+    });
+    animateNumber(django_data.comments.length, 1000, 0, (n) => {
+        comment_count.textContent = n;
+    });
 })
