@@ -21,6 +21,7 @@ const statistics_select = document.getElementById('statistics_select');
 const browser = document.getElementById('browser');
 const analysis_section = document.getElementById('behaviour-analysis');
 const monitor_section = document.getElementById('activity-monitor');
+const submissions = document.getElementById('submissions');
 const search_bar = document.getElementById('submissions-search')
 const image_checkbox = document.getElementById('image_checkbox');
 const spoiler_checkbox = document.getElementById('spoiler_checkbox');
@@ -425,7 +426,7 @@ function fill_subreddits_table(sort_criteria) {
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
         sub.innerHTML = `
-            <td class="subreddit-cell ">${subreddits[i].name}</td>
+            <td onclick="view_subreddit('${subreddits[i].name}')" class="subreddit-cell subreddit-cell-name">${subreddits[i].name}</td>
             <td class="subreddit-cell number">${subreddits[i].posts}</td>
             <td class="subreddit-cell number">${subreddits[i].comments}</td>
             <td class="subreddit-cell orange number">${subreddits[i].upvotes}</td>
@@ -433,6 +434,15 @@ function fill_subreddits_table(sort_criteria) {
         sub.className = "subreddit"
         table.appendChild(sub)
     }
+}
+
+function view_subreddit(name) {
+    subreddit_filter = name.slice(2);
+    filter_submissions();
+    sort_submissions();
+    reset_browser();
+    scroll_to_submissions();
+    subreddit_select.value = name;
 }
 
 function filter_submissions() {
@@ -890,6 +900,10 @@ function scroll_to_analysis() {
 
 function scroll_to_monitor() {
     monitor_section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function scroll_to_submissions() {
+    submissions.scrollIntoView({ behavior: 'smooth' });
 }
 
 function change_factor_description(message) {

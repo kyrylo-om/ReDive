@@ -491,6 +491,14 @@
 	padding: 0.5rem;
 }
 
+.subreddit-cell-name {
+	cursor: pointer;
+}
+
+.subreddit-cell-name:hover {
+	text-decoration: underline;
+}
+
 th {
 	padding: 0.5rem;
 	text-align: left;
