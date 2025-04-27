@@ -162,7 +162,7 @@
 				<div class="separator-line"></div>
 				<p class="title", style="margin: 0.5rem 0;">Active in:</p>
 				{% for sr in data.subreddit_names|slice:":4" %}
-					<a class="subtext link" href="https://www.reddit.com/{{ sr }}" target="_blank">{{ sr }}</a>
+					<p class="subtext link" onclick="view_subreddit('{{ sr }}')">{{ sr }}</p>
 				{% endfor %}
 				<button class="section-button", style="margin-bottom: 0;" onclick="scroll_to_monitor()">More subreddits&nbsp;⬇</button>
 			</div>
