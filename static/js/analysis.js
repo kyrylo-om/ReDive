@@ -1048,6 +1048,5 @@ document.addEventListener('DOMContentLoaded', function() {
     reset_browser();
     plot.resize();
 
-    // should add a delay
     fill_statistics("Posts + comments");
 })
