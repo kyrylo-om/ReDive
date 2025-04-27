@@ -1,0 +1,98 @@
+@media (max-width: 768px) {
+    .main-container, 
+    .top-container, 
+    .how-to-use, 
+    .about-us, 
+    .our-team {
+      width: 95%;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      border-radius: 1rem;
+    }
+  
+    .top-container {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+  
+    .top-container h1 {
+      font-size: 3rem;
+    }
+  
+    .top-container p {
+      margin-left: 0;
+      font-size: 1.2rem;
+    }
+  
+    .main-container h2 {
+      font-size: 2rem;
+    }
+  
+    .main-container p {
+      font-size: 1.2rem;
+    }
+  
+    .searchbar {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .database-btn {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    /* database */
+    .search-container {
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+  
+    .filters-btn {
+      margin-right: 0;
+      width: 100%;
+    }
+  
+    .account {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+  
+    .stats {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    /* infopage */
+    .team-members {
+      gap: 2rem;
+    }
+  
+    .member img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    html {
+      font-size: 14px;
+    }
+  
+    .top-container h1 {
+      font-size: 2.5rem;
+    }
+  
+    .how-to-use h2,
+    .about-us h2,
+    .our-team h2 {
+      font-size: 2rem;
+    }
+  
+    .step h3 {
+      font-size: 1.4rem;
+    }
+  }
