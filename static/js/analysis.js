@@ -14,6 +14,7 @@ const sentiment = django_data['sentiment'];
 
 // Elements
 
+const trophies_count = document.getElementById('trophies_count');
 const trophies_button = document.getElementById('trophies_button');
 const trophies_popup = document.getElementById('trophies_popup');
 const analysis_date = document.getElementById('analysis_date');
@@ -363,15 +364,23 @@ function toggle_upvotes() {
     if (show_karma) {
         post_upvotes_title.textContent = "Post karma";
         comment_upvotes_title.textContent = "Comment karma";
-        post_upvotes.textContent = django_data.post_karma;
-        comment_upvotes.textContent = django_data.comment_karma;
+        animateNumber(django_data.post_karma, 100, 0, (n) => {
+            post_upvotes.textContent = n;
+        });
+        animateNumber(django_data.comment_karma, 100, 0, (n) => {
+            comment_upvotes.textContent = n;
+        });
         upvotes_switch_text.textContent = "Click to switch to sum of upvotes";
     }
     else {
         post_upvotes_title.textContent = "Post upvotes";
         comment_upvotes_title.textContent = "Comment upvotes";
-        post_upvotes.textContent = django_data.post_upvotes;
-        comment_upvotes.textContent = django_data.comment_upvotes;
+        animateNumber(django_data.post_upvotes, 100, 0, (n) => {
+            post_upvotes.textContent = n;
+        });
+        animateNumber(django_data.comment_upvotes, 100, 0, (n) => {
+            comment_upvotes.textContent = n;
+        });
         upvotes_switch_text.textContent = "Click to switch to karma";
     }
 }
@@ -1085,5 +1094,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     animateNumber(django_data.comments.length, 1000, 0, (n) => {
         comment_count.textContent = n;
+    });
+    animateNumber(django_data.trophies.length, 1000, 0, (n) => {
+        trophies_count.textContent = n;
     });
 })
