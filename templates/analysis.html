@@ -169,65 +169,6 @@
 		</div>
 	</div>
 	<div class="section-title">
-		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
-		<div class="section-line"></div>
-	</div>
-	<div class="topics">
-		<div class="box", style="flex-grow: 0; display: flex;">
-			<p class="title">Subreddits <span style="color: lightgray; font-weight: 300;">({{ data.subreddit_names|length }} total)</span></p>
-			<div class="subreddits-table-container custom-scrollbar">
-				<table class="subreddits-table">
-					<thead>
-						<tr id="subreddits-head">
-							<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
-						</tr>
-					</thead>
-					<tbody id="subreddits-body"></tbody>
-				</table>
-			</div>
-			<p class="subtext" id="upvotes_switch_text">Select a subreddit to view submissions</p>
-		</div>
-		<div class="box">
-			<div class="flex-container semantics">
-				<div class="top-words">
-					<p class="title">Frequently used words</p>
-					<div class="words-table-container custom-scrollbar">
-						<table class="words-table">
-							<!-- <thead>
-								<tr id="subreddits-head">
-									<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Word</th>
-									<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Encounters</th>
-								</tr>
-							</thead> -->
-							<tbody id="words-body">
-								{% for word in data.top_words %}
-									<tr>
-										<td class="word" onclick="view_word('{{ word.0 }}')">{{ word.0 }}</td>
-										<td class="word-count">{{ word.1 }}</td>
-									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-					<p class="subtext" id="upvotes_switch_text">Select a word to see it in context</p>
-				</div>
-				<div style="display:flex; justify-content: center;">
-					<div class="separator-line-vertical"></div>
-				</div>
-				<div style="flex-grow: 1; align-items: center;">
-					<p class="title" style="text-align: center;">Most popular themes</p>
-					<div id="word_cloud" style="height: 100%; width: 100%;"></div>
-				</div>
-				<!-- <div>
-					<p class="title">Sentiment</p>
-				</div> -->
-			</div>
-		</div>
-	</div>
-	<div class="section-title">
 		<h2 class="section-text" id="submissions">SUBMISSIONS</h2>
 		<div class="section-line"></div>
 	</div>
@@ -326,6 +267,65 @@
 			</div>
 			<div class="box", style="flex-grow: 1;">
 				<div id="plot" class="plot"></div>
+			</div>
+		</div>
+	</div>
+	<div class="section-title">
+		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
+		<div class="section-line"></div>
+	</div>
+	<div class="topics">
+		<div class="box", style="flex-grow: 0; display: flex;">
+			<p class="title">Subreddits <span style="color: lightgray; font-weight: 300;">({{ data.subreddit_names|length }} total)</span></p>
+			<div class="subreddits-table-container custom-scrollbar">
+				<table class="subreddits-table">
+					<thead>
+						<tr id="subreddits-head">
+							<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
+							<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
+						</tr>
+					</thead>
+					<tbody id="subreddits-body"></tbody>
+				</table>
+			</div>
+			<p class="subtext" id="upvotes_switch_text">Select a subreddit to view submissions</p>
+		</div>
+		<div class="box">
+			<div class="flex-container semantics">
+				<div class="top-words">
+					<p class="title">Frequently used words</p>
+					<div class="words-table-container custom-scrollbar">
+						<table class="words-table">
+							<!-- <thead>
+								<tr id="subreddits-head">
+									<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Word</th>
+									<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Encounters</th>
+								</tr>
+							</thead> -->
+							<tbody id="words-body">
+								{% for word in data.top_words %}
+									<tr>
+										<td class="word" onclick="view_word('{{ word.0 }}')">{{ word.0 }}</td>
+										<td class="word-count">{{ word.1 }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<p class="subtext" id="upvotes_switch_text">Select a word to see it in context</p>
+				</div>
+				<div style="display:flex; justify-content: center;">
+					<div class="separator-line-vertical"></div>
+				</div>
+				<div style="flex-grow: 1; align-items: center;">
+					<p class="title" style="text-align: center;">Most popular themes</p>
+					<div id="word_cloud" style="height: 100%; width: 100%;"></div>
+				</div>
+				<!-- <div>
+					<p class="title">Sentiment</p>
+				</div> -->
 			</div>
 		</div>
 	</div>
