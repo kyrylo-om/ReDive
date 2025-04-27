@@ -84,17 +84,25 @@
     </header>
 
     <div class="main-container">
-        <h2>DIVE INTO ACCOUNT ANALYSIS</h2>
-        <p>JUST IN A FEW CLICKS</p>
+        <div>
+            <p style="font-size: 1.2rem;">Search across millions of accounts on Reddit</p>
+            <h2 class="dive-into">AND DIVE INTO <span style="color: rgb(255, 207, 189);">ANALYSIS</span></h2>
+            <div class="separator-line"></div>
+        </div>
+        <p style="margin: 2rem 0 3rem 0;"><span style="font-size: 2.5rem; color: orangered; line-height: 2.5rem;">•386</span> users already analyzed</p>
         
-        <form id="user-search-form">
-            <div class="searchbar">
-                <input type="text" name="query" placeholder="U/USERNAME" required>
-                <button type="submit" class="search-btn"></button>
-            </div>
-        </form>
+        <div class="search-container">
+            <form id="user-search-form">
+                <input class="searchbar" type="text" name="query" placeholder="Reddit username" required>
+                <br>
+                <button class="analyze-button">ANALYZE</button>
+            </form>
+        </div>
 
-        <a href="{% url 'datapage' %}" class="database-btn">DATABASE</a>
+        <a href="{% url 'datapage' %}" class="database-btn" style="margin: 0.5rem; 0">View a random analysis</a>
+        <a href="{% url 'datapage' %}" class="database-btn" style="font-weight: 500;">Database</a>
+
+        
     </div>
 
     <footer class="footer">
