@@ -89,7 +89,7 @@
             <h2 class="dive-into">AND DIVE INTO <span style="color: rgb(255, 207, 189);">ANALYSIS</span></h2>
             <div class="separator-line"></div>
         </div>
-        <p style="margin: 2rem 0 3rem 0;"><span style="color: orangered; font-size: 2.5rem;">•</span><span style="font-size: 2.5rem; color: orangered; line-height: 2.5rem;" id="live_users">386</span> users already analyzed</p>
+        <p style="margin-bottom: 3rem; line-height: 0;"><span style="color: rgb(255, 136, 0); font-size: 2.5rem;">•</span><span id="live_users">386</span> users already analyzed</p>
         
         <div class="search-container">
             <form id="user-search-form">
@@ -98,9 +98,13 @@
                 <button class="analyze-button">ANALYZE</button>
             </form>
         </div>
-
-        <a href="{% url 'datapage' %}" class="database-btn" style="margin: 0.5rem; 0">View a random analysis</a>
-        <a href="{% url 'datapage' %}" class="database-btn" style="font-weight: 500;">Database</a>
+        <!-- <div class="separator-line" style="width: 5%;"></div> -->
+        <p style="font-size: 1rem; color: lightgray;">- or -</p>
+        
+        <div style="border-radius: 2rem; padding: 0.5rem 2rem;">
+            <a href="{% url 'datapage' %}" class="database-btn" style="margin-bottom: 0.5rem;">View a random analysis</a><br>
+            <a href="{% url 'datapage' %}" class="database-btn" style="font-weight: 500;">Database</a>
+        </div>
 
         
     </div>

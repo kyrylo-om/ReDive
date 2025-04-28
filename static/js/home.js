@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoUrl = infoButton.dataset.infoUrl;
     infoButton.style.backgroundImage = `url('${infoUrl}')`;
 
-    animateNumber(386, 1000, 0, (n) => {
+    animateNumber(386, 2000, 0, (n) => {
         live_users.textContent = n;
     });
 });

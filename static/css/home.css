@@ -17,10 +17,9 @@
     justify-content: center;
     flex: 1;
 
-    width: 80%;
-    max-width: 90%;
+    width: 90%;
     margin: 1rem auto;
-    border-radius: 2rem;
+    border-radius: 4rem;
     padding: 2.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
 
@@ -165,7 +164,7 @@
     font-size: 1.25rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(90deg, #7033ff, #ec8338, #7033ff);
+    background: linear-gradient(90deg, #8b70c9, #e8985f, #8b70c9);
     background-size: 200%;
     background-position: 0px 0;
     /* background-repeat: repeat-x; */
@@ -186,6 +185,14 @@
 .search-container {
     width: 100%;
     border-radius: 1rem;
-    background-color: rgba(255, 255, 255, 0.05);
+    /* background-color: rgba(255, 255, 255, 0.05); */
     padding: 1rem;
+}
+
+#live_users {
+    font-size: 2.5rem;
+    color: rgb(255, 136, 0);
+    line-height: 2.5rem;
+    /* font-family: Arial; */
+    font-weight: 500;
 }
