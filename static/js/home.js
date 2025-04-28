@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = url;
         });
     }
+
+    document.querySelectorAll('form').forEach(form => form.reset());
 });
 
 document.addEventListener('DOMContentLoaded', () => {
