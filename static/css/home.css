@@ -17,15 +17,31 @@
     justify-content: center;
     flex: 1;
 
-    width: 90%;
+    width: 85%;
     margin: 1rem auto;
     border-radius: 4rem;
     padding: 2.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
 
+    opacity: 80%;
+    animation: fadeIn 1s ease-out forwards, toWidth 0.8s ease-out forwards;
+}
+  
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.dive-into {
+@keyframes toWidth {
+    to {
+        width: 90%;
+    }
+}
+  
+
+.main-text {
     font-size: 3.5rem;
     line-height: 3.5rem;
     text-align: center;
@@ -33,6 +49,15 @@
     /* margin-top: 3rem; */
 
     color: var(--text-color);
+
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.second-text {
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 .main-container p {
@@ -51,6 +76,9 @@
     border-radius: 0.7rem;
     transition: background 0.3s;
     font-size: 0.9rem;
+
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 .database-btn:hover {
@@ -61,10 +89,12 @@
 .separator-line {
 	background-color: rgb(185, 185, 185);
 	opacity: 30%;
-	margin: 0.5rem 0;
+    margin-top: 0.2rem;
+	margin-bottom: 0.5rem;
 	padding: 0;
 	height: 0.1rem;
-	width: 100%
+	width: 0%;
+    animation: toWidth 1s ease-out forwards;
 }
 
 .searchbar {
@@ -87,6 +117,9 @@
     font-size: 1.2rem;
     outline: none;
     transition: width 0.3s;
+
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 .searchbar::placeholder {
@@ -174,6 +207,10 @@
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.6s ease;
     margin-top: 1rem;
+
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s ease-out forwards;
 }
   
 .analyze-button:hover {
