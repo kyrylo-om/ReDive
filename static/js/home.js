@@ -42,5 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
     animateNumber(386, 2000, 0, (n) => {
         live_users.textContent = n;
     });
+
+    const changing_text = document.getElementById('changing-text');
+
+    const words = ['ANALYSIS', 'STATISTICS', 'BEHAVIOR'];
+    const word_colors = ['rgb(255, 207, 189)', 'rgb(197, 255, 189)', 'rgb(255, 189, 225)'];
+    let currentIndex = 0;
+    
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % words.length;
+        changing_text.textContent = words[currentIndex];
+        changing_text.style.color = word_colors[currentIndex];
+    }, 5000);
 });
   

@@ -196,3 +196,11 @@
     /* font-family: Arial; */
     font-weight: 500;
 }
+
+@keyframes fadeText {
+    20%, 80% { opacity: 1; }
+    0%, 100% { opacity: 0; }
+}
+#changing-text {
+    animation: fadeText 5s infinite;
+}
