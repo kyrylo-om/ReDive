@@ -364,10 +364,10 @@ function toggle_upvotes() {
     if (show_karma) {
         post_upvotes_title.textContent = "Post karma";
         comment_upvotes_title.textContent = "Comment karma";
-        animateNumber(django_data.post_karma, 100, django_data.post_upvotes, (n) => {
+        animateNumber(django_data.post_karma, 300, django_data.post_upvotes, (n) => {
             post_upvotes.textContent = n;
         });
-        animateNumber(django_data.comment_karma, 100, django_data.comment_upvotes, (n) => {
+        animateNumber(django_data.comment_karma, 300, django_data.comment_upvotes, (n) => {
             comment_upvotes.textContent = n;
         });
         upvotes_switch_text.textContent = "Click to switch to sum of upvotes";
@@ -375,10 +375,10 @@ function toggle_upvotes() {
     else {
         post_upvotes_title.textContent = "Post upvotes";
         comment_upvotes_title.textContent = "Comment upvotes";
-        animateNumber(django_data.post_upvotes, 100, django_data.post_karma, (n) => {
+        animateNumber(django_data.post_upvotes, 300, django_data.post_karma, (n) => {
             post_upvotes.textContent = n;
         });
-        animateNumber(django_data.comment_upvotes, 100, django_data.comment_karma, (n) => {
+        animateNumber(django_data.comment_upvotes, 300, django_data.comment_karma, (n) => {
             comment_upvotes.textContent = n;
         });
         upvotes_switch_text.textContent = "Click to switch to karma";
