@@ -195,7 +195,7 @@
     100% { transform: rotate(360deg); }
 }
 
-.analyze-button {
+#analyze-button {
     width: 30%;
     padding: 1rem 0;
     font-size: 1.25rem;
@@ -209,7 +209,7 @@
     border-radius: 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.6s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.6s ease, scale 0.1s ease, outline 0.1s ease;
     margin-top: 1rem;
 
     opacity: 0;
@@ -217,10 +217,15 @@
     animation: fadeIn 1s ease-out forwards;
 }
   
-.analyze-button:hover {
-    transform: scale(1.05);
+#analyze-button:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     background-position: -300px 0;
+    outline: 0.1rem solid rgba(255, 255, 255, 0.5);
+    outline-offset: -0.1rem;
+}
+
+#analyze-button.active {
+    scale: 0.9 !important;
 }
 
 .search-container {

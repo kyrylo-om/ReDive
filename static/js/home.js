@@ -1,4 +1,5 @@
 const live_users = document.getElementById("live_users");
+const analyzeButton = document.getElementById("analyze-button");
 
 function animateNumber(finalNumber, duration = 1000, startNumber = 0, callback) {
     const startTime = performance.now();
@@ -55,4 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         changing_text.style.color = word_colors[currentIndex];
     }, 5000);
 });
-  
+
+window.addEventListener("pageshow", function () {
+    document.getElementById("analyze-button").classList.remove("active");
+});
+
+analyzeButton.addEventListener("mousedown", () => {
+    analyzeButton.classList.add("active");
+});
+
+analyzeButton.addEventListener("mouseup", () => {
+    analyzeButton.classList.remove("active");
+});
