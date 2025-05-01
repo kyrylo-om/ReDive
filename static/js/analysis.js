@@ -93,7 +93,8 @@ const plot_options = {
         trigger: 'item',
         backgroundColor: "rgba(20, 20, 20, 0.7)",
         textStyle: {
-            color: '#fff'
+            color: '#fff',
+            fontSize: rem_to_px(0.9)
         },
         formatter: function (params) {
             return `
@@ -118,6 +119,7 @@ const plot_options = {
         },
         axisLabel: {
             color: 'rgb(196, 196, 196)',
+            fontSize: rem_to_px(0.9)
         }
     },
     yAxis: {
@@ -129,6 +131,7 @@ const plot_options = {
         },
         axisLabel: {
             color: 'rgb(196, 196, 196)',
+            fontSize: rem_to_px(0.9),
             formatter: (value) => {
                 const absValue = Math.abs(value);
                 if (absValue >= 1_000_000) return (value / 1_000_000) + 'M';
@@ -148,6 +151,7 @@ const plot_options = {
             xAxisIndex: [0],
             start: 0,
             end: 100,
+            height: rem_to_px(2),
             handleStyle: {
                 color: 'rgb(255, 255, 255)',
                 borderColor: 'rgb(197, 197, 197)',
@@ -238,7 +242,7 @@ const pie_options = {
         style: {
             text: django_data.bot_likelihood_percentage + '%',
             textAlign: 'center',
-            fontSize: 48,
+            fontSize: rem_to_px(2.5),
             fontWeight: 'bold',
             fill: '#fff'
         }
@@ -264,7 +268,7 @@ const pie_options = {
                 }
             })(),
             textAlign: 'center',
-            fontSize: 12,
+            fontSize: rem_to_px(0.8),
             fill: '#fff'
         }
     }],
@@ -315,6 +319,11 @@ function clamp(value, min, max) {
         return Math.max(Math.min(value, max), min)
     }
 }
+
+function rem_to_px(rem) {
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    return rem * rootFontSize;
+  }
 
 // Core functions
 
@@ -822,7 +831,7 @@ function update_plot() {
                 }
               }),
             type: 'scatter',
-            symbolSize: 10,
+            symbolSize: rem_to_px(0.7),
             itemStyle: {
                 color: function(params) {
                     return params.data.is_post ? 'rgb(255, 102, 0)' : 'rgb(185, 227, 255)';

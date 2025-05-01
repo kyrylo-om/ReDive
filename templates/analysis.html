@@ -82,8 +82,8 @@
 				</div>
 				<div class="profile-info">
 					<p class="username">{{ data.name }}</p>
-        			<a class="username2" href="https://www.reddit.com/user/{{ data.username }}" target="_blank">u/{{ data.username }}<img src="{% static 'img/external-link.png' %}", width="15", class="icon"></a>
-        			<p class="subtext"><img src="{% static 'img/clock.png' %}", width="10", class="icon"> Data from <span id="analysis_date"></span>. 
+        			<a class="username2" href="https://www.reddit.com/user/{{ data.username }}" target="_blank">u/{{ data.username }}<img src="{% static 'img/external-link.png' %}", style="width: 1rem;" class="icon"></a>
+        			<p class="subtext"><img src="{% static 'img/clock.png' %}", class="icon" style="width: 0.5rem;"> Data from <span id="analysis_date"></span>. 
 						<!-- <a href="" style="color: inherit">Analyze again &#8635</a> -->
 					</p>
 				</div>
@@ -111,10 +111,10 @@
 				</div>
 				<div class="box user-score" onclick="toggle_upvotes()">
 					<p class="statistic-title">Post count | <span class="orange" id="post_upvotes_title">Post karma</span></p>
-					<p class="statistic"><span id="post_count" class="number">{{ data.post_count }}</span>〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
+					<p class="statistic"><span id="post_count" class="number">{{ data.post_count }}</span>〡<span class="orange number" id="post_upvotes">{{ data.post_karma }}</span><img src="{% static 'img/upvote.png' %}", class="icon"></p>
 					<div class="separator-line"></div>
 					<p class="statistic-title">Comment count | <span class="orange" id="comment_upvotes_title">Comment karma</span></p>
-					<p class="statistic"><span id="comment_count" class="number">{{ data.comment_count }}</span>〡<span class="orange number" id="comment_upvotes">{{ data.comment_karma }}</span><img src="{% static 'img/upvote.png' %}", width="25", class="icon"></p>
+					<p class="statistic"><span id="comment_count" class="number">{{ data.comment_count }}</span>〡<span class="orange number" id="comment_upvotes">{{ data.comment_karma }}</span><img src="{% static 'img/upvote.png' %}", class="icon"></p>
 					<p class="subtext" id="upvotes_switch_text">Click to switch to sum of upvotes</p>
 				</div>
 			</div>
@@ -187,7 +187,7 @@
 					<div class="flex-container", style="flex-direction: row;">
 						<input type="text" class="search-bar" id="submissions-search" placeholder="Search titles...">
 						<div class="search-bar-button" onclick="toggle_body_search()" title="Include post body text">
-							<img src="{% static 'img/post-body.png' %}" width="15" id="search-bar-button">
+							<img src="{% static 'img/post-body.png' %}" style="width: 1.3rem;" id="search-bar-button">
 						</div>
 					</div>
 					<div class="flex-container filters", style="justify-content: space-between;">
@@ -212,7 +212,7 @@
 							<input type="checkbox" class="posts-only" id="nsfw_checkbox">
 							NSFW
 						</label>
-						<label class="checkbox">
+						<label class="checkbox" style="margin-right: 1rem;">
 							<input type="checkbox" class="posts-only" id="oc_checkbox">
 							OC
 						</label>
@@ -274,23 +274,25 @@
 		<h2 class="section-text" id="activity-monitor">TOPICS</h2>
 		<div class="section-line"></div>
 	</div>
-	<div class="topics">
+	<div class="topics width-responsive">
 		<div class="box", style="flex-grow: 0; display: flex;">
-			<p class="title">Subreddits <span style="color: lightgray; font-weight: 300;">({{ data.subreddit_names|length }} total)</span></p>
-			<div class="subreddits-table-container custom-scrollbar">
-				<table class="subreddits-table">
-					<thead>
-						<tr id="subreddits-head">
-							<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
-							<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
-						</tr>
-					</thead>
-					<tbody id="subreddits-body"></tbody>
-				</table>
+			<div class="subreddits-container">
+				<p class="title">Subreddits <span style="color: lightgray; font-weight: 300;">({{ data.subreddit_names|length }} total)</span></p>
+				<div class="subreddits-table-container custom-scrollbar">
+					<table class="subreddits-table">
+						<thead>
+							<tr id="subreddits-head">
+								<th class="sort-criteria" onclick='fill_subreddits_table("name")'>Name</th>
+								<th class="sort-criteria" onclick='fill_subreddits_table("posts")'>Posts</th>
+								<th class="sort-criteria" onclick='fill_subreddits_table("comments")'>Comments</th>
+								<th class="sort-criteria" onclick='fill_subreddits_table("upvotes")'>Upvotes</th>
+							</tr>
+						</thead>
+						<tbody id="subreddits-body"></tbody>
+					</table>
+				</div>
+				<p class="subtext" id="upvotes_switch_text">Select a subreddit to view submissions</p>
 			</div>
-			<p class="subtext" id="upvotes_switch_text">Select a subreddit to view submissions</p>
 		</div>
 		<div class="box">
 			<div class="flex-container semantics">
@@ -333,8 +335,8 @@
 		<h2 class="section-text" id="behaviour-analysis">BEHAVIOUR ANALYSIS</h2>
 		<div class="section-line"></div>
 	</div>
-	<div class="flex-container width-responsive">
-		<div class="box", style="flex-direction: row; justify-content: start; flex-grow: 1;">
+	<div class="flex-container">
+		<div class="box behavior-container width-responsive">
 			<div class="pie-container">
 				<div id="pie_chart" class="pie-chart"></div>
 			</div>
@@ -347,7 +349,7 @@
 						<p class="title">Human: <span style="color: #8ad184;">{{data.human_likelihood_percentage}}%</span></p>
 						<div class="factor-list">
 							{% for point in data.human_points %}
-							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/checkmark.png' %}", width="15", style="margin-right: 10px">{{point.name}}</p>
+							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/checkmark.png' %}", style="margin-right: 10px; width: 1rem;">{{point.name}}</p>
 							{% endfor %}
 						</div>
 					</div>
@@ -358,7 +360,7 @@
 						<p class="title">Bot: <span style="color: #ffa8a8;">{{data.bot_likelihood_percentage}}%</span></p>
 						<div class="factor-list">
 							{% for point in data.bot_points %}
-							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/cross.png' %}", width="15", style="margin-right: 10px">{{point.name}}</p>
+							<p class="factor" onmouseover="change_factor_description('{{point.description}}')"><img src="{% static 'img/cross.png' %}", style="margin-right: 10px; width: 1rem">{{point.name}}</p>
 							{% endfor %}
 						</div>
 					</div>

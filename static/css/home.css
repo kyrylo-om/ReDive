@@ -26,6 +26,10 @@
     opacity: 80%;
     animation: fadeIn 1s ease-out forwards, toWidth 0.8s ease-out forwards;
 }
+
+:root {
+    font-size: 0.8rem;
+}
   
 @keyframes fadeIn {
     to {
