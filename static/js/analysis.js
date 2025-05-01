@@ -1054,12 +1054,22 @@ document.querySelectorAll('.factor').forEach(factor => {
             type: 'select',
             name: itemName
         });
+
+        pie_chart.dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: pie_chart.getOption().series[0].data.findIndex(item => item.name === itemName)
+        });
     });
     
-      factor.addEventListener('mouseleave', function () {
+    factor.addEventListener('mouseleave', function () {
         pie_chart.dispatchAction({
             type: 'unselect',
             name: itemName
+        });
+        
+        pie_chart.dispatchAction({
+            type: 'hideTip'
         });
     });
 });
