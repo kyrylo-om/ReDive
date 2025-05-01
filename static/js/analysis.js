@@ -210,6 +210,9 @@ const pie_options = {
     tooltip: {
         trigger: 'item',
         confine: true,
+        textStyle: {
+            fontSize: rem_to_px(0.9)
+        },
     },
     series: [
         {
@@ -1067,7 +1070,7 @@ document.querySelectorAll('.factor').forEach(factor => {
             type: 'unselect',
             name: itemName
         });
-        
+
         pie_chart.dispatchAction({
             type: 'hideTip'
         });

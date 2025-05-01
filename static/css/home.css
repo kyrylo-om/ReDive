@@ -3,7 +3,6 @@
 
 .main-container {
     background: var(--container-bg);
-    /* background: none; */
     color: var(--text-color);
 
     backdrop-filter: blur(15px) saturate(160%);
@@ -25,10 +24,6 @@
 
     opacity: 80%;
     animation: fadeIn 1s ease-out forwards, toWidth 0.8s ease-out forwards;
-}
-
-:root {
-    font-size: 0.8rem;
 }
   
 @keyframes fadeIn {
@@ -213,7 +208,7 @@
     margin-top: 1rem;
 
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1rem);
     animation: fadeIn 1s ease-out forwards;
 }
   
@@ -258,4 +253,22 @@
 
 #live_dot {
     animation: liveEffect 4s infinite;
+}
+
+@media (max-width: 35rem) {
+	:root {
+		font-size: 0.6rem;
+	}
+    .database-btn {
+        font-size: 1.2rem;
+    }
+    .searchbar {
+        width: 80%;
+    }
+    .searchbar:focus {
+        width: 100%;
+    }
+    #analyze-button {
+        width: 80%;
+    }
 }
