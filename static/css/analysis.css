@@ -216,6 +216,7 @@
 
 .number {
 	font-family: Arial;
+	font-weight: 700;
 }
 
 .bold {
@@ -522,10 +523,16 @@ th {
 .subreddit {
 	background-color: #0000000c;
 	padding: 0.5rem;
+	transition: background-color 0.2s ease;
+	cursor: pointer;
 }
 
 .subreddit:nth-child(even) {
 	background-color: #0000001b;
+}
+
+.subreddit:hover {
+	background-color: #ffffff25;
 }
 
 .sort-criteria {

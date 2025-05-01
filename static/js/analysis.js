@@ -471,12 +471,13 @@ function fill_subreddits_table(sort_criteria) {
     for (let i = 0; i < subreddits.length; i += 1) {
         var sub = document.createElement('tr')
         sub.innerHTML = `
-            <td onclick="view_subreddit('${subreddits[i].name}')" class="subreddit-cell subreddit-cell-name">${subreddits[i].name}</td>
+            <td class="subreddit-cell subreddit-cell-name">${subreddits[i].name}</td>
             <td class="subreddit-cell number">${subreddits[i].posts}</td>
             <td class="subreddit-cell number">${subreddits[i].comments}</td>
             <td class="subreddit-cell orange number">${subreddits[i].upvotes}</td>
         `;
-        sub.className = "subreddit"
+        sub.className = "subreddit";
+        sub.onclick = () => view_subreddit(subreddits[i].name);
         table.appendChild(sub)
     }
 }
