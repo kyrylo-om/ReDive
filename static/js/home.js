@@ -13,7 +13,7 @@ function animateNumber(finalNumber, duration = 1000, startNumber = 0, callback) 
         const progress = Math.min(elapsed / duration, 1);
         const easedProgress = easeOutQuad(progress);
         const currentNumber = Math.floor(easedProgress * (finalNumber - startNumber) + startNumber);
-      
+
         callback(currentNumber);
         
         if (progress < 1) {
@@ -55,6 +55,36 @@ document.addEventListener('DOMContentLoaded', () => {
         changing_text.textContent = words[currentIndex];
         changing_text.style.color = word_colors[currentIndex];
     }, 5000);
+
+    const randomAnalysisBtn = document.querySelector('.random-analysis-btn');
+    if (randomAnalysisBtn) {
+        randomAnalysisBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const loadingPopup = document.getElementById('loading-popup');
+            if (loadingPopup) loadingPopup.style.display = 'flex';
+            
+            try {
+                const response = await fetch('/api/get-random-analysis/');
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('No URL returned from server');
+                }
+            } catch (error) {
+                console.error('Error fetching random analysis:', error);
+                
+                window.location.href = randomAnalysisBtn.href;
+            }
+        });
+    }
 });
 
 window.addEventListener("pageshow", function () {

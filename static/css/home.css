@@ -65,7 +65,8 @@
     color: var(--text-color);
 }
 
-.database-btn {
+.database-btn,
+.random-analysis-btn  {
     display: inline-block;
     background: #48455bad;
     padding: 0.2rem 2rem;
@@ -83,6 +84,16 @@
 .database-btn:hover {
     background-color: white;    
     color: #6c5ce7
+}
+
+.random-analysis-btn:hover {
+    background-color: white;    
+    color: #6c5ce7;
+}
+
+.random-analysis-btn {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
 }
 
 .separator-line {
@@ -259,7 +270,8 @@
 	:root {
 		font-size: 0.6rem;
 	}
-    .database-btn {
+    .database-btn,
+    .random-analysis-btn {
         font-size: 1.2rem;
     }
     .searchbar {
