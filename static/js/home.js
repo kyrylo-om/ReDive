@@ -24,6 +24,24 @@ function animateNumber(finalNumber, duration = 1000, startNumber = 0, callback) 
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    fetch('/api/analyses-count/')
+        .then(response => response.json())
+        .then(data => {
+            const count = data.count;
+
+            animateNumber(count, 2000, 0, (n) => {
+                document.getElementById('live_users').textContent = n;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching analyses count:', error);
+
+            animateNumber(386, 2000, 0, (n) => {
+                document.getElementById('live_users').textContent = n;
+            });
+        });
+
     const infoBtn = document.getElementById("info-button");
     if (infoBtn) {
         infoBtn.addEventListener("click", () => {
