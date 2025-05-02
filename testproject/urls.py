@@ -27,4 +27,4 @@ urlpatterns = [
     path('api/check-user/', views.check_username, name='check_username'),
     path('api/accounts/search/', views.search_data_base_for_account, name='search_database'),
     path('infopage/', views.infopage, name='infopage'),
-    path('random_analysis', views.get_random_account, name='random_account')]
+    path('random_analysis/', views.get_random_account, name='random_account')]
