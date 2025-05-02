@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/accounts/search/', views.search_data_base_for_account, name='search_database'),
     path('infopage/', views.infopage, name='infopage'),
     path('random_analysis/', views.get_random_account, name='random_analysis'),
+    path('api/analyses-count/'), views.get_analyses_count, name='analyses_count'
     ]

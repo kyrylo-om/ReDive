@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import JsonResponse
 from reddit_request import DataGetter, NotFound
-from data_app.services import save_analysis_entry, get_analysis_entry, check_if_user_exists, get_date_of_last_analysis, is_last_analysis_recent, serialize_the_persons_data, get_persons_with_query, set_bot_likelihood, random_user_name
+from data_app.services import save_analysis_entry, get_analysis_entry, check_if_user_exists, get_date_of_last_analysis, is_last_analysis_recent, serialize_the_persons_data, get_persons_with_query, set_bot_likelihood, random_user_name, get_amount_of_users
 from testproject.utils import prepare_data_analysis_page
 
 def homepage(request):
@@ -61,3 +61,7 @@ def infopage(request):
 def get_random_account(request):
     name = random_user_name()
     return render(request, 'analysis.html', prepare_data_analysis_page(name, get_analysis_entry(name), get_date_of_last_analysis(name)))
+
+def get_analyses_count(request):
+    amount = get_amount_of_users()
+    return JsonResponse({'count': amount})

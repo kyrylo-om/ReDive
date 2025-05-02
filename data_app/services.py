@@ -191,6 +191,10 @@ def set_bot_likelihood(name, bot_likelihood_percent):
     history.save()
 
 def random_user_name():
-    person  = Person.objects.order_by('?').first()
+    person = Person.objects.order_by('?').first()
     name = person.name
     return name
+
+def get_amount_of_users():
+    amount = Person.objects.count()
+    return amount
