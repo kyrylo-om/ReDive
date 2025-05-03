@@ -1105,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', function() {
     reset_browser();
     plot.resize();
 
-    fill_statistics("Posts + comments");
+    fill_statistics("Posts");
 
     const percentage = django_data.bot_likelihood_percentage;
     if (percentage <= 25) {
