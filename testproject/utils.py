@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from sematics import semantics_analysis
 from bot_rank import estimate_bot_likelihood
 from data_app.services import set_bot_likelihood
+import numpy as np
 
 
 def prepare_data_analysis_page(query, data, analysis_date):
@@ -102,6 +103,11 @@ def prepare_data_analysis_page(query, data, analysis_date):
     full_text = posts_text + " " + comments_text
 
     semantics = semantics_analysis(full_text)
+
+    avg_post_length = int(np.mean([len(p.get("body", "")) + len(p.get("title", "")) for p in data["recent_posts"]]) if len(data.get("recent_posts", [])) > 0 else 0)
+    avg_comment_length = int(np.mean([len(c["body"]) for c in data["recent_comments"]]) if len(data.get("recent_comments", [])) > 0 else 0)
+    avg_submission_length = int(np.mean([len(p.get("body", "")) + len(p.get("title", "")) for p in data["recent_posts"]] + 
+                                  [len(c["body"]) for c in data["recent_comments"]]) if total_items > 0 else 0)
     return {
         "data": {
             "pic": data["pic"],
@@ -142,5 +148,8 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "own_comments": own_comments,
             "overall_upvotes": round((up + up_comment) / (posts_amount + comment_amount), 2),
             "total_up_v_down": up_v_down,
+            "avg_post_length": avg_post_length,
+            "avg_comment_length": avg_comment_length,
+            "avg_submission_length": avg_submission_length
         }
     }
