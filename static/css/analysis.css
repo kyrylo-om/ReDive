@@ -171,6 +171,11 @@
     border: 0.1rem solid white;
     cursor: pointer;
     box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s ease;
+}
+
+.trophies-button:hover {
+	transform: scale(1.05);
 }
 
 .trophies-popup {
@@ -227,6 +232,11 @@
 	cursor: pointer;
 	user-select: none;
 	border: rgba(255, 136, 0, 0.8) 0.05rem solid;
+	transition: border 0.2s ease;
+}
+
+.user-score:hover {
+	border: white 0.05rem solid;
 }
 
 .statistic-outline {
@@ -339,6 +349,11 @@
 	user-select: none;
 	display: flex;
 	gap: 0.2rem;
+	transition: color 0.2s ease;
+}
+
+.checkbox:hover {
+	color: rgb(183, 183, 183);
 }
 
 .select-bar {
@@ -350,6 +365,11 @@
 	cursor: pointer;
 	margin: 0 0.5rem;
 	font-size: 0.9rem;
+	transition: border 0.2s ease;
+}
+
+.select-bar:hover {
+	border: 0.1rem solid #d8d8d8;
 }
 
 .select-sort-button {
@@ -361,6 +381,11 @@
 	padding: 0rem 0.5rem;
     cursor: pointer;
 	font-size: 0.8rem;
+	transition: background 0.2s ease;
+}
+
+.select-sort-button:hover {
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 .main-select-option {
