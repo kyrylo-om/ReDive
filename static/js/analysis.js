@@ -58,6 +58,7 @@ const comment_upvotes = document.getElementById("comment_upvotes");
 const comment_count = document.getElementById("comment_count");
 const comment_upvotes_title = document.getElementById("comment_upvotes_title");
 const upvotes_switch_text = document.getElementById("upvotes_switch_text");
+const bot_percent = document.getElementById('bot-likelihood-percentage');
 
 // Variables
 
@@ -1105,6 +1106,19 @@ document.addEventListener('DOMContentLoaded', function() {
     plot.resize();
 
     fill_statistics("Posts + comments");
+
+    const percentage = django_data.bot_likelihood_percentage;
+    if (percentage <= 25) {
+        const r = Math.floor((255 * percentage) / 25);
+        const g = 255;
+        const b = 0;
+        bot_percent.style.color = `rgb(${r},${g},${b})`;
+    } else {
+        const r = 255;
+        const g = Math.floor(255 * (75 - percentage) / 50);
+        const b = 0;
+        bot_percent.style.color = `rgb(${r},${g},${b})`;
+    }
 
     animateNumber(django_data.post_karma, 1000, 0, (n) => {
         post_upvotes.textContent = n;
