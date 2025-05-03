@@ -63,27 +63,26 @@ def prepare_data_analysis_page(query, data, analysis_date):
     posting_frequency = 0
     if len(post_times) >= 2:
         post_times.sort()
-        total_days = (post_times[-1] - post_times[0]).total_seconds() / (3600 * 24)
-        if total_days >= 1:
-            posting_frequency = round(len(post_times) / total_days, 2)
+        total_days = max((post_times[-1] - post_times[0]).total_seconds() / (
+            3600 * 24
+        ), 1)
+        posting_frequency = round(len(post_times) / total_days, 2)
 
     comment_frequency = 0
     if len(comment_times) >= 2:
         comment_times.sort()
-        total_days_c = (comment_times[-1] - comment_times[0]).total_seconds() / (
+        total_days_c = max((comment_times[-1] - comment_times[0]).total_seconds() / (
             3600 * 24
-        )
-        if total_days_c >= 1:
-            comment_frequency = round(len(comment_times) / total_days_c, 2)
+        ), 1)
+        comment_frequency = round(len(comment_times) / total_days_c, 2)
     total_times = post_times + comment_times
     total_frequency = 0
     if len(total_times) >= 2:
         total_times.sort()
-        total_days_all = (total_times[-1] - total_times[0]).total_seconds() / (
+        total_days_all = max((total_times[-1] - total_times[0]).total_seconds() / (
             3600 * 24
-        )
-        if total_days_all >= 1:
-            total_frequency = round(len(total_times) / total_days_all, 2)
+        ), 1)
+        total_frequency = round(len(total_times) / total_days_all, 2)
     avg_post_upvote_ratio = (
         round(sum(post_upvote_ratios) / len(post_upvote_ratios), 2)
         if post_upvote_ratios
