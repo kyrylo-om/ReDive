@@ -430,7 +430,7 @@ function fill_statistics(criteria) {
         document.getElementById("upvotes-ratio").style.width = clamp(django_data.avg_post_ratio / max_ratio * 100, 4, 100) + "%";
     }
     if (criteria == "Comments") {
-        document.getElementById("posting-frequency-title").innerHTML = "Commenting frequency: <span class='orange bold'>" + django_data.comment_frequency + "</span>";
+        document.getElementById("posting-frequency-title").innerHTML = "Commenting frequency: <span class='orange bold'>" + django_data.comment_frequency + "</span> per day";
         document.getElementById("average-upvotes-title").innerHTML = "Average upvotes per comment: <span class='orange bold'>" + django_data.up_comment + "</span>";
         document.getElementById("average-comments-title").innerHTML = "User's comments under own posts: <span class='orange bold'>" + django_data.own_comments + "</span>";
         document.getElementById("upvotes-ratio-title").innerHTML = "Upvotes to downvotes ratio: <span class='orange bold'>" + django_data.avg_post_ratio + "</span>";
