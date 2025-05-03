@@ -52,7 +52,6 @@
 	<link rel="stylesheet" href="{% static 'css/common.css' %}">
 	<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
 	<script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
 	<script src="{% static 'js/analysis.js' %}" defer></script>
 	<script src="{% static 'js/theme.js' %}" defer></script>
 	<title>ReDive analysis</title>
@@ -321,9 +320,19 @@
 				<div style="display:flex; justify-content: center;">
 					<div class="separator-line-vertical"></div>
 				</div>
-				<div style="flex-grow: 1; align-items: center;">
-					<p class="title" style="text-align: center;">Most popular themes</p>
-					<div id="word_cloud" style="height: 100%; width: 100%;"></div>
+				<div style="display: flex; flex-direction: column;">
+					<p class="title">Sentiment</p>
+					<div class="sentiments-div">
+						<div class="sentiment-container">
+							<div class="gauge" id="gauge"></div>
+							<p style="margin-left: 2rem;" class="sentiment-description description">Polarity refers to the emotional orientation expressed in the text. It is measured on a scale from -1.0 to 1.0, where negative values indicate negative sentiment and positive values indicate positive.</p>
+						</div>
+						<div class="separator-line"></div>
+						<div class="sentiment-container">
+							<div class="gauge" id="gauge2"></div>
+							<p style="margin-left: 2rem;" class="sentiment-description description">Subjectivity measures the degree to which the text expresses personal opinions or beliefs rather than objective facts. It ranges from 0.0 (completely objective) to 1.0 (completely subjective).</p>
+						</div>
+					</div>
 				</div>
 				<!-- <div>
 					<p class="title">Sentiment</p>

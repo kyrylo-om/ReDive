@@ -86,8 +86,9 @@ var sort_direction = "down"
 // Charts
 
 const plot = echarts.init(document.getElementById('plot'));
+const gauge = echarts.init(document.getElementById('gauge'));
+const gauge2 = echarts.init(document.getElementById('gauge2'));
 const pie_chart = echarts.init(document.getElementById('pie_chart'));
-const word_cloud = echarts.init(document.getElementById('word_cloud'));
 
 const plot_options = {
     tooltip: {
@@ -179,33 +180,115 @@ const plot_options = {
     },
 };
 
-
-const cloud_options = {
-    tooltip: {
-        show: true
-    },
-    series: [{
-        type: 'wordCloud',
-        gridSize: 8,
-        sizeRange: [12, 50],
-        rotationRange: [0, 0],
-        shape: 'circle',
-        textStyle: {
-            color: function () {
-                return 'rgb(' + [
-                    Math.round(180 + Math.random() * 70),
-                    Math.round(180 + Math.random() * 70),
-                    Math.round(180 + Math.random() * 70)
-                  ].join(',') + ')';
-    
-            }
+const gauge_options = {
+    series: [
+      {
+        type: 'gauge',
+        center: ['50%', '100%'],
+        radius: '200%',
+        startAngle: 180,
+        endAngle: 0,
+        min: -1,
+        max: 1,
+        itemStyle: {
+          color: '#FFAB91'
         },
-        data: Object.entries(themes).map(([key, value]) => ({
-            name: key,
-            value: value
-          }))
-    }]
-};
+        progress: {
+          show: true,
+          width: rem_to_px(2.5)
+        },
+        pointer: {
+            show: false
+        },
+        axisLine: {
+          lineStyle: {
+            width: rem_to_px(2.3)
+          }
+        },
+        axisTick: {
+          distance: -45,
+          splitNumber: 5,
+          lineStyle: {
+            width: 2,
+            color: '#999'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        },
+        axisTick: {
+            show: false
+        },
+        anchor: {
+          show: false
+        },
+        title: {
+          show: false
+        },
+        detail: {
+          width: '60%',
+          lineHeight: 40,
+          borderRadius: 8,
+          offsetCenter: [0, '-15%'],
+          fontSize: rem_to_px(1.2),
+          fontWeight: 'bolder',
+          formatter: 'Polarity',
+          color: 'inherit'
+        },
+        data: [
+          {
+            value: django_data.polarity
+          }
+        ]
+        
+      },
+      {
+        type: 'gauge',
+        center: ['50%', '100%'],
+        radius: '200%',
+        startAngle: 180,
+        endAngle: 0,
+        min: -1,
+        max: 1,
+        itemStyle: {
+          color: '#ff835c'
+        },
+        progress: {
+          show: true,
+          width: rem_to_px(0.5)
+        },
+        pointer: {
+            show: false
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        },
+        axisTick: {
+            show: false
+        },
+        anchor: {
+          show: false
+        },
+        title: {
+          show: false
+        },
+        data: [
+          {
+            value: django_data.polarity
+          }
+        ]
+        
+      }]
+  };
 
 const pie_options = {
     tooltip: {
@@ -1100,7 +1183,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     plot.setOption(plot_options);
     update_plot();
-    word_cloud.setOption(cloud_options);
+    gauge.setOption(gauge_options);
+    gauge2.setOption(gauge_options);
+    gauge2.setOption({
+        series: [{
+            data: [{
+                value: django_data.subjectivity
+        }],
+        detail: {
+            formatter: 'Subjectivity',
+        },
+        itemStyle: {
+            color: 'rgb(184, 182, 253)'
+        }
+        }, 
+        {
+            data: [{
+                value: django_data.subjectivity
+            }],
+            itemStyle: {
+                color: 'rgb(149, 146, 255)'
+            },
+        }]
+    })
     pie_chart.setOption(pie_options);
 
     fill_subreddits_table("upvotes")
