@@ -766,6 +766,7 @@ thead {
 
 .bot-rank-info {
 	width: 5rem;
+	min-width: 15rem;
 }
 
 .gauge {

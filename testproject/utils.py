@@ -115,32 +115,32 @@ def prepare_data_analysis_page(query, data, analysis_date):
             human_points.append({
                 'name':'Moderator',
                 'value':150,
-                'description': 'User is a moderator of reddit.'
+                'description': 'This user is a moderator of one or more subreddits. Bots sometimes can be moderators, but it is more common for people to moderate subreddits.'
                 })
         
         if user_data.get("has_verified_email"):
             human_points.append({
                 'name':'Verified email',
                 'value':100,
-                'description':'User has a verified email.'
+                'description':'This user has verified their email.'
                 })
         if user_data.get("verified"):
             human_points.append({
                 'name':'Verified user',
                 'value':50,
-                'description':'User has been verified by reddit.'
+                'description':'User has been verified by Reddit.'
                 })
         if user_data.get("is_gold"):
             human_points.append({
                 'name':'Gold user',
                 'value':100,
-                'description':'User has a gold profile status.'
+                'description':'This user has subscribed to Reddit Gold.'
                 })
         if account_age > 3:
             human_points.append({
                 'name':'Old account',
                 'value': 50 * account_age - 3,
-                'description':'User has an old account.'
+                'description':'This account was created a long time ago.'
                 })
         num_trophies = len(user_data.get("trophies", []))
         if num_trophies:
@@ -153,7 +153,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
             human_points.append({
                 'name':'High post upvote ratio',
                 'value':100,
-                'description':f'User has a high post upvote ratio of {avg_post_upvote_ratio}.'
+                'description':f'User has a high post upvote ratio of {avg_post_upvote_ratio}. People like their posts!'
                 })
         #Bot points
         if not user_data.get("pic") or "default" in user_data["pic"]:
@@ -178,13 +178,13 @@ def prepare_data_analysis_page(query, data, analysis_date):
             bot_points.append({
                 'name':'Low post upvote ratio',
                 'value': round(50 + 500 * (0.8 - avg_post_upvote_ratio), 2),
-                'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}.'
+                'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}. People dislike their posts.'
                 })
         if comments_under_post_amount < 4 and len(data["recent_posts"]):
             bot_points.append({
                 'name':'Low comments per post',
                 'value':200 * 1/comments_under_post_amount if comments_under_post_amount > 1 else 200,
-                'description':f'User has a low average of {comments_under_post_amount} comments per each of their post.'
+                'description':f'User has a low average of {comments_under_post_amount} comments per each of their post. Not many people are engaging with their submissions.'
                 })
         if comment_frequency > 4:
             bot_points.append({
