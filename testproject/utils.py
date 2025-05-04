@@ -2,7 +2,6 @@ from datetime import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from sematics import semantics_analysis
-from bot_rank import estimate_bot_likelihood
 from data_app.services import set_bot_likelihood
 import numpy as np
 
@@ -92,8 +91,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
     avg_comment_upvote_ratio = round(up_comment / comment_amount, 2) if comment_amount else 0
     avg_total_upvote_ratio = round(up + up_comment / total_items, 2) if total_items else 0
 
-    bot_analysis = estimate_bot_likelihood(data)
-    set_bot_likelihood(username, bot_analysis["bot_likelihood_percent"])
 
     posts_text = " ".join(post["body"] for post in data.get("recent_posts", ""))
     comments_text = " ".join(
@@ -108,6 +105,115 @@ def prepare_data_analysis_page(query, data, analysis_date):
     avg_comment_length = int(np.mean([len(c["body"]) for c in data["recent_comments"]]) if len(data.get("recent_comments", [])) > 0 else 0)
     avg_submission_length = int(np.mean([len(p.get("body", "")) + len(p.get("title", "")) for p in data["recent_posts"]] + 
                                   [len(c["body"]) for c in data["recent_comments"]]) if total_items > 0 else 0)
+
+    def get_bot_likelihood_percent(user_data):
+        """Estimate the likelihood of a user being a bot."""
+        human_points = []
+        bot_points = []
+
+        if user_data.get("is_mod"):
+            human_points.append({
+                'name':'Moderator',
+                'value':150,
+                'description': 'User is a moderator of reddit.'
+                })
+        
+        if user_data.get("has_verified_email"):
+            human_points.append({
+                'name':'Verified email',
+                'value':100,
+                'description':'User has a verified email.'
+                })
+        if user_data.get("verified"):
+            human_points.append({
+                'name':'Verified user',
+                'value':50,
+                'description':'User has been verified by reddit.'
+                })
+        if user_data.get("is_gold"):
+            human_points.append({
+                'name':'Gold user',
+                'value':100,
+                'description':'User has a gold profile status.'
+                })
+        if account_age > 3:
+            human_points.append({
+                'name':'Old account',
+                'value':100,
+                'description':'User has an old account.'
+                })
+        num_trophies = len(user_data.get("trophies", []))
+        if num_trophies:
+            human_points.append({
+                'name':'Trophies',
+                'value':num_trophies * 15,
+                'description':f'User has {num_trophies} trophies.'
+                })
+        if up > 25:
+            human_points.append({
+                'name':'High post upvote ratio',
+                'value':100,
+                'description':f'User has a high post upvote ratio of {avg_post_upvote_ratio}.'
+                })
+        if avg_comment_upvote_ratio > 15:
+            human_points.append({
+                'name':'High comment upvote ratio',
+                'value':100,
+                'description':f'User has a high comment upvote ratio of {avg_comment_upvote_ratio}.'
+                })
+        #Bot points
+        if not user_data.get("pic") or "default" in user_data["pic"]:
+            bot_points.append({
+                'name':'No profile picture',
+                'value':50,
+                'description':f'User has a default profile picture.'
+                })
+        if up <= 10:
+            bot_points.append({
+                'name':'Low post upvote ratio',
+                'value':200 * 1/avg_post_upvote_ratio if avg_post_upvote_ratio > 0 else 200,
+                'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}.'
+                })
+        if avg_comment_upvote_ratio <= 5:
+            bot_points.append({
+                'name':'Low comment upvote ratio',
+                'value':150 * 1/avg_comment_upvote_ratio if avg_comment_upvote_ratio > 0 else 150,
+                'description':f'User has a low comment upvote ratio of {avg_comment_upvote_ratio}.'
+                })
+        comments_per_post = comments_under_post / posts_amount if posts_amount > 0 else 0
+        if comments_per_post < 4:
+            bot_points.append({
+                'name':'Low comments per post',
+                'value':200 * 1/comments_per_post if comments_per_post > 1 else 200,
+                'description':f'User has a low comments per post ratio of {comments_per_post}.'
+                })
+        if comment_frequency > 15:
+            bot_points.append({
+                'name':'High comment frequency',
+                'value':25 * comment_frequency,
+                'description':f'User is high comment frequency of {comment_frequency}.'
+                })
+        if posting_frequency > 15:
+            bot_points.append({
+                'name':'High posting frequency',
+                'value':25 * posting_frequency,
+                'description':f'User is high posting frequency of {posting_frequency}.'
+                })
+
+        total_human = sum(factor['value'] for factor in human_points)
+        total_bot = sum(factor['value'] for factor in bot_points)
+
+        score = total_bot / (total_human + total_bot + 1e-5)
+        bot_likelihood_percent = round(score * 100)
+
+        return {
+            "bot_likelihood_percent": bot_likelihood_percent,
+            "human_points": human_points,
+            "bot_points": bot_points
+        }
+
+    bot_analysis = get_bot_likelihood_percent(data)
+    set_bot_likelihood(username, bot_analysis["bot_likelihood_percent"])
     return {
         "data": {
             "pic": data["pic"],
