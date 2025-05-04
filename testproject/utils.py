@@ -165,7 +165,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if avg_post_upvote_ratio and avg_post_upvote_ratio <= 0.8:
             bot_points.append({
                 'name':'Low post upvote ratio',
-                'value': round(100 + 1000 * (0.8 - avg_post_upvote_ratio), 2),
+                'value': round(50 + 1000 * (0.8 - avg_post_upvote_ratio), 2),
                 'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}.'
                 })
         if comments_under_post_amount < 4 and len(data["recent_posts"]):
@@ -177,14 +177,27 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if comment_frequency > 4:
             bot_points.append({
                 'name':'High comment frequency',
-                'value':25 * comment_frequency,
+                'value':25 * (comment_frequency - 4),
                 'description':f'User comments with a high frequency of {comment_frequency} comments per day.'
                 })
         if posting_frequency > 3:
             bot_points.append({
                 'name':'High posting frequency',
-                'value':25 * posting_frequency,
+                'value':25 * (posting_frequency - 3),
                 'description':f'User posts with a high frequency of {comment_frequency} posts per day.'
+                })
+        if 0 < round(up / posts_amount, 2) < 10:
+            bot_points.append({
+                'name':'Low average upvotes per post',
+                'value':25 * (10 - round(up / posts_amount, 2)),
+                'description':f'User posts receive an average of only {round(up / posts_amount, 2)} upvotes.'
+                })
+
+        if 0 < round(up_comment / comment_amount, 2) < 3:
+            bot_points.append({
+                'name':'Low average upvotes per comment',
+                'value':25 * (3 - round(up_comment / comment_amount, 2)),
+                'description':f'User comments receive an average of only {round(up_comment / comment_amount, 2)} upvotes.'
                 })
 
         total_human = sum(factor['value'] for factor in human_points)
