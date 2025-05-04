@@ -60,6 +60,8 @@ def prepare_data_analysis_page(query, data, analysis_date):
         reverse=True,
     )
 
+    comments_under_post_amount = round(comments_under_post / posts_amount, 2)
+
     posting_frequency = 0
     if len(post_times) >= 2:
         post_times.sort()
@@ -139,7 +141,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if account_age > 3:
             human_points.append({
                 'name':'Old account',
-                'value':100,
+                'value': 50 * account_age - 3,
                 'description':'User has an old account.'
                 })
         num_trophies = len(user_data.get("trophies", []))
@@ -149,7 +151,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
                 'value':num_trophies * 15,
                 'description':f'User has {num_trophies} trophies.'
                 })
-        if up > 25:
+        if avg_post_upvote_ratio > 0.95:
             human_points.append({
                 'name':'High post upvote ratio',
                 'value':100,
@@ -168,10 +170,10 @@ def prepare_data_analysis_page(query, data, analysis_date):
                 'value':50,
                 'description':f'User has a default profile picture.'
                 })
-        if up <= 10:
+        if avg_post_upvote_ratio and avg_post_upvote_ratio <= 0.8:
             bot_points.append({
                 'name':'Low post upvote ratio',
-                'value':200 * 1/avg_post_upvote_ratio if avg_post_upvote_ratio > 0 else 200,
+                'value': round(100 + 1000 * (0.8 - avg_post_upvote_ratio), 2),
                 'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}.'
                 })
         if avg_comment_upvote_ratio <= 5:
@@ -184,20 +186,20 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if comments_per_post < 4:
             bot_points.append({
                 'name':'Low comments per post',
-                'value':200 * 1/comments_per_post if comments_per_post > 1 else 200,
-                'description':f'User has a low comments per post ratio of {comments_per_post}.'
+                'value':200 * 1/comments_under_post_amount if comments_under_post_amount > 1 else 200,
+                'description':f'User has a low average of {comments_under_post_amount} comments per each of their post.'
                 })
-        if comment_frequency > 15:
+        if comment_frequency > 4:
             bot_points.append({
                 'name':'High comment frequency',
                 'value':25 * comment_frequency,
-                'description':f'User is high comment frequency of {comment_frequency}.'
+                'description':f'User comments with a high frequency of {comment_frequency} comments per day.'
                 })
-        if posting_frequency > 15:
+        if posting_frequency > 3:
             bot_points.append({
                 'name':'High posting frequency',
                 'value':25 * posting_frequency,
-                'description':f'User is high posting frequency of {posting_frequency}.'
+                'description':f'User posts with a high frequency of {comment_frequency} posts per day.'
                 })
 
         total_human = sum(factor['value'] for factor in human_points)
@@ -230,7 +232,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "comment_karma": comment_karma,
             "comment_upvotes": up_comment,
             "up": round(up / posts_amount, 2),
-            "comments_under_post_amount": round(comments_under_post / posts_amount, 2),
+            "comments_under_post_amount": comments_under_post_amount,
             "averal_comments": comment_amount,
             "up_comment": round(up_comment / comment_amount, 2),
             "subreddit_activity": subreddit_activity,
