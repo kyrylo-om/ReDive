@@ -243,7 +243,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "human_points": bot_analysis["human_points"],
             "bot_points": bot_analysis["bot_points"],
             "top_words": semantics['top_words'],
-            "themes": semantics['themes'],
             "polarity": semantics['sentiment']['polarity'],
             "subjectivity": semantics['sentiment']['subjectivity'],
             "total_frequency": total_frequency,

@@ -36,18 +36,17 @@ def semantics_analysis(text: str):
     # Prepare analysis summary
     analysis = {
         "top_words": sorted(word_counts.items(), key=lambda x: x[1], reverse=True)[:100],
-        "themes": {},
         "sentiment": {"polarity": 0.0, "subjectivity": 0.0}
     }
 
     # Semantic themes based on WordNet lexical categories
-    for word, freq in analysis["top_words"]:
-        synsets = wn.synsets(word)
-        if synsets:
-            # Choose most frequent synset as best guess
-            synset = max(synsets, key=lambda s: s.lemmas()[0].count() if s.lemmas() else 0)
-            topic = synset.lexname().split('.')[1].capitalize()
-            analysis["themes"][topic] = analysis["themes"].get(topic, 0) + freq
+    # for word, freq in analysis["top_words"]:
+    #     synsets = wn.synsets(word)
+    #     if synsets:
+    #         # Choose most frequent synset as best guess
+    #         synset = max(synsets, key=lambda s: s.lemmas()[0].count() if s.lemmas() else 0)
+    #         topic = synset.lexname().split('.')[1].capitalize()
+    #         analysis["themes"][topic] = analysis["themes"].get(topic, 0) + freq
 
     # Sentiment analysis on the full original sentence
     blob = TextBlob(text)
