@@ -117,7 +117,12 @@ def prepare_data_analysis_page(query, data, analysis_date):
                 'value':150,
                 'description': 'This user is a moderator of one or more subreddits. Bots sometimes can be moderators, but it is more common for people to moderate subreddits.'
                 })
-        
+        if user_data.get("is_employee"):
+            human_points.append({
+                'name':'Employee of Reddit',
+                'value':99999999,
+                'description': 'This is an official employee of Reddit! There is no way this user could be a bot.'
+                })
         if user_data.get("has_verified_email"):
             human_points.append({
                 'name':'Verified email',
