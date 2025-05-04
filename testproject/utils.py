@@ -90,8 +90,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if post_upvote_ratios
         else 0
     )
-    avg_comment_upvote_ratio = round(up_comment / comment_amount, 2) if comment_amount else 0
-    avg_total_upvote_ratio = round(up + up_comment / total_items, 2) if total_items else 0
 
 
     posts_text = " ".join(post["body"] for post in data.get("recent_posts", ""))
@@ -157,12 +155,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
                 'value':100,
                 'description':f'User has a high post upvote ratio of {avg_post_upvote_ratio}.'
                 })
-        if avg_comment_upvote_ratio > 15:
-            human_points.append({
-                'name':'High comment upvote ratio',
-                'value':100,
-                'description':f'User has a high comment upvote ratio of {avg_comment_upvote_ratio}.'
-                })
         #Bot points
         if not user_data.get("pic") or "default" in user_data["pic"]:
             bot_points.append({
@@ -176,14 +168,7 @@ def prepare_data_analysis_page(query, data, analysis_date):
                 'value': round(100 + 1000 * (0.8 - avg_post_upvote_ratio), 2),
                 'description':f'User has a low post upvote ratio of {avg_post_upvote_ratio}.'
                 })
-        if avg_comment_upvote_ratio <= 5:
-            bot_points.append({
-                'name':'Low comment upvote ratio',
-                'value':150 * 1/avg_comment_upvote_ratio if avg_comment_upvote_ratio > 0 else 150,
-                'description':f'User has a low comment upvote ratio of {avg_comment_upvote_ratio}.'
-                })
-        comments_per_post = comments_under_post / posts_amount if posts_amount > 0 else 0
-        if comments_per_post < 4:
+        if comments_under_post_amount < 4 and len(data["recent_posts"]):
             bot_points.append({
                 'name':'Low comments per post',
                 'value':200 * 1/comments_under_post_amount if comments_under_post_amount > 1 else 200,
@@ -251,8 +236,6 @@ def prepare_data_analysis_page(query, data, analysis_date):
             "posting_frequency": posting_frequency,
             "comment_frequency": comment_frequency,
             "avg_post_ratio": avg_post_upvote_ratio,
-            "avg_comment_ratio": avg_comment_upvote_ratio,
-            "avg_total_ratio": avg_total_upvote_ratio,
             "own_comments": own_comments,
             "overall_upvotes": round((up + up_comment) / (posts_amount + comment_amount), 2),
             "total_up_v_down": up_v_down,
