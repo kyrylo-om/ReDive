@@ -1130,7 +1130,7 @@ sort_select.addEventListener('change', () => {
 browser.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = browser;
   
-    if (scrollTop + clientHeight >= scrollHeight - 10 && browser_index + browser_step < search_results.length) {
+    if (scrollTop + clientHeight >= scrollHeight - 10 && browser_index < search_results.length) {
         fill_browser();
     }
 });
