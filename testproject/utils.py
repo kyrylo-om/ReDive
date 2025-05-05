@@ -200,8 +200,8 @@ def prepare_data_analysis_page(query, data, analysis_date):
         if posting_frequency > 3:
             bot_points.append({
                 'name':'High posting frequency',
-                'value':25 * (posting_frequency - 3),
-                'description':f'User posts with a high frequency of {comment_frequency} posts per day.'
+                'value':50 * (posting_frequency - 3),
+                'description':f'User posts with a high frequency of {posting_frequency} posts per day.'
                 })
         if 0 < round(up / posts_amount, 2) < 10:
             bot_points.append({
